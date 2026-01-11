@@ -116,9 +116,9 @@ export default function AdminSettings() {
             <CardHeader>
               <CardTitle>基本設定</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-6">
               <div>
-                <Label>会社ロゴ</Label>
+                <Label>会社ロゴ（ヘッダー用）</Label>
                 <div className="mt-2 flex items-center gap-4">
                   {settings.logo_url && (
                     <img src={settings.logo_url} alt="Logo" className="h-12 object-contain" />
@@ -138,6 +138,36 @@ export default function AdminSettings() {
                       disabled={isUploading.logo_url}
                     >
                       {isUploading.logo_url ? 'アップロード中...' : (
+                        <>
+                          <Upload className="w-4 h-4 mr-2" />
+                          ロゴを変更
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <Label>会社ロゴ（フッター用）</Label>
+                <div className="mt-2 flex items-center gap-4">
+                  {settings.footer_logo_url && (
+                    <img src={settings.footer_logo_url} alt="Footer Logo" className="h-12 object-contain" />
+                  )}
+                  <div>
+                    <input
+                      type="file"
+                      id="footerLogoUpload"
+                      accept="image/*"
+                      onChange={(e) => handleImageUpload(e, 'footer_logo_url')}
+                      className="hidden"
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => document.getElementById('footerLogoUpload').click()}
+                      disabled={isUploading.footer_logo_url}
+                    >
+                      {isUploading.footer_logo_url ? 'アップロード中...' : (
                         <>
                           <Upload className="w-4 h-4 mr-2" />
                           ロゴを変更

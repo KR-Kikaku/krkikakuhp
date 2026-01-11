@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
+import { Checkbox } from '@/components/ui/checkbox';
 import { toast } from 'sonner';
 import { Loader2, CheckCircle } from 'lucide-react';
 
@@ -15,6 +16,7 @@ export default function ContactSection() {
     phone: '',
     message: ''
   });
+  const [agreedToPrivacy, setAgreedToPrivacy] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
@@ -23,6 +25,11 @@ export default function ContactSection() {
     
     if (!formData.name || !formData.email || !formData.message) {
       toast.error('必須項目を入力してください');
+      return;
+    }
+
+    if (!agreedToPrivacy) {
+      toast.error('プライバシーポリシーに同意してください');
       return;
     }
 
@@ -56,9 +63,12 @@ export default function ContactSection() {
   return (
     <section id="contact" className="py-20 md:py-32 bg-gray-50">
       <div className="max-w-2xl mx-auto px-4">
-        <h2 className="text-2xl md:text-3xl font-light text-center mb-12 tracking-wide text-gray-800">
+        <h2 className="text-2xl md:text-3xl font-semibold text-center mb-3 tracking-wide text-gray-800">
           お問い合わせ
         </h2>
+        <p className="text-sm text-gray-600 text-center mb-12">
+          弊社へのお問い合わせはこちらよりお願い致します。２営業日以内にご返信させて頂きます。
+        </p>
 
         <form onSubmit={handleSubmit} className="space-y-6 bg-white p-8 rounded-lg shadow-sm">
           <div>
@@ -127,10 +137,27 @@ export default function ContactSection() {
             />
           </div>
 
+          <div className="flex items-start gap-3">
+            <Checkbox
+              id="privacy"
+              checked={agreedToPrivacy}
+              onCheckedChange={setAgreedToPrivacy}
+              className="mt-1"
+            />
+            <Label htmlFor="privacy" className="text-sm text-gray-700 cursor-pointer">
+              プライバシーポリシーに同意する <span className="text-red-500">*</span>
+            </Label>
+          </div>
+
+          <div className="text-xs text-gray-500 text-center pt-2">
+            入力確認画面や自動返信メールはございません。<br />
+            ご入力内容を確認の上、送信ボタンを押して下さい。
+          </div>
+
           <Button
             type="submit"
-            disabled={isSubmitting}
-            className="w-full bg-gray-900 hover:bg-gray-800 text-white py-6"
+            disabled={isSubmitting || !agreedToPrivacy}
+            className="w-full bg-gray-900 hover:bg-gray-800 text-white py-6 font-semibold"
           >
             {isSubmitting ? (
               <>

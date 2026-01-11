@@ -22,11 +22,11 @@ export default function GreetingSection() {
   return (
     <section id="greeting" className="py-20 md:py-32 bg-white">
       <div className="max-w-4xl mx-auto px-4">
-        <h2 className="text-2xl md:text-3xl font-light text-center mb-12 tracking-wide text-gray-800">
+        <h2 className="text-2xl md:text-3xl font-semibold text-center mb-12 tracking-wide text-gray-800">
           {settings?.greeting_title || defaultTitle}
         </h2>
         
-        <div className="text-gray-600 leading-relaxed text-center whitespace-pre-line text-sm md:text-base">
+        <div className="text-gray-700 leading-relaxed text-center whitespace-pre-line text-sm md:text-base font-medium">
           {settings?.greeting_text || defaultText}
         </div>
 

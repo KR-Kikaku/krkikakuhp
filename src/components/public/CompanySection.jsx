@@ -38,7 +38,7 @@ export default function CompanySection() {
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
-          <h2 className="text-3xl md:text-4xl font-light text-white tracking-widest">
+          <h2 className="text-3xl md:text-4xl font-semibold text-white tracking-widest">
             会社情報
           </h2>
         </div>
@@ -48,13 +48,13 @@ export default function CompanySection() {
         <div className="max-w-4xl mx-auto px-4">
           {/* CEO Message */}
           <div className="mb-20">
-            <h3 className="text-xl md:text-2xl font-light text-center mb-8 text-gray-800">
+            <h3 className="text-xl md:text-2xl font-semibold text-center mb-8 text-gray-800">
               {settings?.ceo_title || defaultCeoTitle}
             </h3>
-            <p className="text-gray-600 leading-relaxed text-center whitespace-pre-line">
+            <p className="text-gray-700 leading-relaxed text-center whitespace-pre-line font-medium">
               {settings?.ceo_message || defaultCeoMessage}
             </p>
-            <p className="text-right mt-8 text-gray-700 font-medium">
+            <p className="text-right mt-8 text-gray-800 font-semibold">
               {settings?.ceo_name || defaultCeoName}
             </p>
           </div>

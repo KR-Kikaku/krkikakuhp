@@ -27,7 +27,7 @@ export default function BusinessSection() {
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
-          <h2 className="text-3xl md:text-4xl font-light text-white tracking-widest">
+          <h2 className="text-3xl md:text-4xl font-semibold text-white tracking-widest">
             私たちの仕事
           </h2>
         </div>
