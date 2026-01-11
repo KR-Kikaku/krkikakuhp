@@ -66,7 +66,7 @@ export default function ContactSection() {
         <h2 className="text-2xl md:text-3xl font-semibold text-center mb-3 tracking-wide text-gray-800">
           お問い合わせ
         </h2>
-        <p className="text-xs text-gray-600 text-center mb-12" style={{ lineHeight: '1.8' }}>
+        <p className="text-xs text-gray-600 text-center mb-8" style={{ lineHeight: '1.8' }}>
           弊社へのお問い合わせはこちらよりお願い致します。<br />
           ２営業日以内にご返信させて頂きます。
         </p>

@@ -64,7 +64,7 @@ export default function NewsSection() {
           <div className="text-center mt-12">
             <Link
               to={createPageUrl('NewsList')}
-              className="inline-flex items-center gap-2 px-8 py-3 border-2 border-gray-300 rounded-full text-sm font-semibold text-gray-700 hover:bg-gray-100 hover:border-gray-400 transition-all"
+              className="inline-flex items-center gap-2 px-8 py-3 border-2 border-gray-800 rounded-full text-sm font-semibold text-gray-800 hover:bg-gray-800 hover:text-white transition-all"
             >
               more <span className="text-lg">+</span>
             </Link>

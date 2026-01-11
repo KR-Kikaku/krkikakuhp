@@ -51,9 +51,11 @@ export default function CompanySection() {
             <h3 className="text-xl md:text-2xl font-semibold text-center mb-8 text-gray-800 tracking-wide">
               {settings?.ceo_title || defaultCeoTitle}
             </h3>
-            <p className="text-gray-700 text-center whitespace-pre-line font-medium tracking-wide" style={{ lineHeight: '2' }}>
-              {settings?.ceo_message || defaultCeoMessage}
-            </p>
+            <div className="max-w-4xl mx-auto">
+              <p className="text-gray-700 text-left whitespace-pre-line font-medium tracking-wide" style={{ lineHeight: '2' }}>
+                {settings?.ceo_message || defaultCeoMessage}
+              </p>
+            </div>
             <p className="text-right mt-8 text-gray-800 font-semibold tracking-wide">
               {settings?.ceo_name || defaultCeoName}
             </p>

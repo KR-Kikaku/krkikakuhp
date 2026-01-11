@@ -22,15 +22,17 @@ export default function GreetingSection() {
   return (
     <section className="py-20 md:py-32 bg-white">
       <div className="max-w-4xl mx-auto px-4">
-        <p id="greeting" className="text-sm font-semibold text-center mb-6 tracking-widest text-gray-500 uppercase">
+        <p id="greeting" className="text-2xl md:text-3xl font-semibold text-center mb-6 tracking-wide text-gray-800">
           ご挨拶
         </p>
-        <h2 className="text-2xl md:text-3xl font-semibold text-center mb-12 tracking-wide text-gray-800">
+        <h2 className="text-xl md:text-2xl font-medium text-center mb-12 tracking-wide text-gray-700">
           {settings?.greeting_title || defaultTitle}
         </h2>
         
-        <div className="text-gray-700 text-center whitespace-pre-line text-sm md:text-base font-medium tracking-wide" style={{ lineHeight: '2' }}>
-          {settings?.greeting_text || defaultText}
+        <div className="max-w-4xl mx-auto">
+          <div className="text-gray-700 text-left whitespace-pre-line text-sm md:text-base font-medium tracking-wide" style={{ lineHeight: '2' }}>
+            {settings?.greeting_text || defaultText}
+          </div>
         </div>
 
         {(settings?.greeting_image_url || !settings) && (

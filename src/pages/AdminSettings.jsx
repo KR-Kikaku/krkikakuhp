@@ -286,7 +286,7 @@ export default function AdminSettings() {
               <div>
                 <Label>「私たちの仕事」バナー</Label>
                 <div className="mt-2 flex items-center gap-4">
-                  {settings.work_banner_url && (
+                  {settings?.work_banner_url && (
                     <img src={settings.work_banner_url} alt="" className="w-48 h-16 object-cover rounded" />
                   )}
                   <div>
@@ -312,7 +312,7 @@ export default function AdminSettings() {
               <div>
                 <Label>「会社情報」バナー</Label>
                 <div className="mt-2 flex items-center gap-4">
-                  {settings.company_banner_url && (
+                  {settings?.company_banner_url && (
                     <img src={settings.company_banner_url} alt="" className="w-48 h-16 object-cover rounded" />
                   )}
                   <div>
@@ -424,9 +424,12 @@ export default function AdminSettings() {
               <CardTitle>プライバシーポリシー</CardTitle>
             </CardHeader>
             <CardContent>
+              <div className="mb-2 text-sm text-gray-500">
+                プライバシーポリシーページに表示される内容
+              </div>
               <ReactQuill
                 theme="snow"
-                value={settings.privacy_policy || ''}
+                value={settings?.privacy_policy || ''}
                 onChange={(value) => setSettings({ ...settings, privacy_policy: value })}
                 className="bg-white"
                 style={{ height: '400px', marginBottom: '50px' }}
