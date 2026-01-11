@@ -21,36 +21,39 @@ export default function GreetingSection() {
 
   return (
     <section className="py-20 md:py-32 bg-white">
-      <div className="max-w-5xl mx-auto px-4">
-        <div id="greeting" className="flex flex-col md:flex-row gap-8 md:gap-12">
-          {/* 左側：縦書き「ご挨拶」 */}
-          <div className="flex-shrink-0">
-            <div className="md:writing-mode-vertical-rl md:text-orientation-upright text-2xl md:text-3xl font-bold tracking-widest text-gray-800 border-l-4 border-gray-800 pl-4 md:pl-0 md:pr-4">
-              ご挨拶
-            </div>
-          </div>
-
-          {/* 右側：コンテンツ */}
-          <div className="flex-1">
-            <h2 className="text-xl md:text-2xl font-medium mb-8 tracking-wide text-gray-800">
-              {settings?.greeting_title || defaultTitle}
-            </h2>
-            
-            <div className="text-gray-700 text-left whitespace-pre-line text-sm md:text-base font-medium tracking-wide mb-8" style={{ lineHeight: '2' }}>
-              {settings?.greeting_text || defaultText}
-            </div>
-
-            {(settings?.greeting_image_url || !settings) && (
-              <div className="mt-8">
-                <img
-                  src={settings?.greeting_image_url || "https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&h=500&fit=crop"}
-                  alt="Greeting"
-                  className="w-full h-64 md:h-80 object-cover rounded-lg"
-                />
-              </div>
-            )}
+      <div className="max-w-4xl mx-auto px-4">
+        <p id="greeting" className="text-2xl md:text-3xl font-semibold text-center mb-6 tracking-wide text-gray-800">
+          ご挨拶
+        </p>
+        <h2 className="text-xl md:text-2xl font-medium text-center mb-12 tracking-wide text-gray-700">
+          {settings?.greeting_title || defaultTitle}
+        </h2>
+        
+        <div className="max-w-4xl mx-auto">
+          <div className="text-gray-700 text-left whitespace-pre-line text-sm md:text-base font-medium tracking-wide" style={{ lineHeight: '2' }}>
+            {settings?.greeting_text || defaultText}
           </div>
         </div>
+
+        {(settings?.greeting_image_url || !settings) && (
+          <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-4">
+            <img
+              src={settings?.greeting_image_url || "https://images.unsplash.com/photo-1497366216548-37526070297c?w=400&h=300&fit=crop"}
+              alt="Greeting"
+              className="w-full h-48 object-cover rounded-lg"
+            />
+            <img
+              src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop"
+              alt="Office"
+              className="w-full h-48 object-cover rounded-lg"
+            />
+            <img
+              src="https://images.unsplash.com/photo-1556761175-b413da4baf72?w=400&h=300&fit=crop"
+              alt="Team"
+              className="w-full h-48 object-cover rounded-lg"
+            />
+          </div>
+        )}
       </div>
     </section>
   );

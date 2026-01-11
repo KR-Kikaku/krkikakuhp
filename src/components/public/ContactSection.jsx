@@ -72,35 +72,33 @@ export default function ContactSection() {
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-6 bg-white p-8 rounded-lg shadow-sm">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <Label htmlFor="company_name" className="text-gray-700">会社名</Label>
-              <Input
-                id="company_name"
-                value={formData.company_name}
-                onChange={(e) => setFormData({ ...formData, company_name: e.target.value })}
-                className="mt-2"
-                placeholder="株式会社〇〇"
-              />
-            </div>
-
-            <div>
-              <Label htmlFor="name" className="text-gray-700">
-                お名前 <span className="text-red-500">*</span>
-              </Label>
-              <Input
-                id="name"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="mt-2"
-                placeholder="山田 太郎"
-                required
-              />
-            </div>
+          <div>
+            <Label htmlFor="company_name" className="text-gray-700 font-medium">会社名</Label>
+            <Input
+              id="company_name"
+              value={formData.company_name}
+              onChange={(e) => setFormData({ ...formData, company_name: e.target.value })}
+              className="mt-2"
+              placeholder="株式会社〇〇"
+            />
           </div>
 
           <div>
-            <Label htmlFor="email" className="text-gray-700">
+            <Label htmlFor="name" className="text-gray-700 font-medium">
+              お名前 <span className="text-red-500">*</span>
+            </Label>
+            <Input
+              id="name"
+              value={formData.name}
+              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              className="mt-2"
+              placeholder="山田 太郎"
+              required
+            />
+          </div>
+
+          <div>
+            <Label htmlFor="email" className="text-gray-700 font-medium">
               メールアドレス <span className="text-red-500">*</span>
             </Label>
             <Input
@@ -115,7 +113,7 @@ export default function ContactSection() {
           </div>
 
           <div>
-            <Label htmlFor="phone" className="text-gray-700">電話番号</Label>
+            <Label htmlFor="phone" className="text-gray-700 font-medium">電話番号</Label>
             <Input
               id="phone"
               type="tel"
@@ -127,7 +125,7 @@ export default function ContactSection() {
           </div>
 
           <div>
-            <Label htmlFor="message" className="text-gray-700">
+            <Label htmlFor="message" className="text-gray-700 font-medium">
               お問い合わせ内容 <span className="text-red-500">*</span>
             </Label>
             <Textarea
