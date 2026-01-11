@@ -62,7 +62,7 @@ export default function AdminCarousel() {
     <AdminLayout currentPage="carousel">
       <div className="mb-8 flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-light text-gray-800">TOP画像管理</h1>
+          <h1 className="text-2xl font-bold text-gray-800">TOP画像管理</h1>
           <p className="text-gray-500 mt-1">カルーセル画像（最大5枚）</p>
         </div>
         <div>

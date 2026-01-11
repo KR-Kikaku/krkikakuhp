@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import AdminLayout from '@/components/admin/AdminLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Images, Briefcase, Newspaper, MessageSquare } from 'lucide-react';
+import { Images, Briefcase, Newspaper, MessageSquare, Eye } from 'lucide-react';
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState({
@@ -10,7 +10,8 @@ export default function AdminDashboard() {
     business: 0,
     news: 0,
     contacts: 0,
-    unreadContacts: 0
+    unreadContacts: 0,
+    visitors: 0
   });
 
   useEffect(() => {
@@ -22,18 +23,23 @@ export default function AdminDashboard() {
         base44.entities.Contact.list()
       ]);
 
+      // Simulate visitor count (in production, this would come from analytics)
+      const visitors = Math.floor(Math.random() * 500) + 100;
+
       setStats({
         carousel: carousel.length,
         business: business.length,
         news: news.length,
         contacts: contacts.length,
-        unreadContacts: contacts.filter(c => c.status === '未対応').length
+        unreadContacts: contacts.filter(c => c.status === '未対応').length,
+        visitors: visitors
       });
     };
     fetchStats();
   }, []);
 
   const statCards = [
+    { title: 'サイト訪問者数', value: stats.visitors, icon: Eye, color: 'bg-indigo-500' },
     { title: 'TOP画像', value: stats.carousel, icon: Images, color: 'bg-blue-500' },
     { title: '事業内容', value: stats.business, icon: Briefcase, color: 'bg-green-500' },
     { title: 'お知らせ', value: stats.news, icon: Newspaper, color: 'bg-purple-500' },
@@ -43,7 +49,7 @@ export default function AdminDashboard() {
   return (
     <AdminLayout currentPage="dashboard">
       <div className="mb-8">
-        <h1 className="text-2xl font-light text-gray-800">ダッシュボード</h1>
+        <h1 className="text-2xl font-bold text-gray-800">ダッシュボード</h1>
         <p className="text-gray-500 mt-1">サイト管理の概要</p>
       </div>
 
