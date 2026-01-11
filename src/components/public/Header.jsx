@@ -37,35 +37,45 @@ export default function Header({ onNavigate }) {
   return (
     <header className="bg-white border-b border-gray-100">
       <div className="max-w-6xl mx-auto px-4">
-        {/* Logo */}
-        <div className="flex justify-center py-6">
-          {settings?.logo_url ? (
-            <img src={settings.logo_url} alt="KR企画" className="h-16 object-contain" />
-          ) : (
-            <div className="text-2xl font-semibold tracking-wider text-gray-800">
-              <span className="font-bold">KR</span>企画
-            </div>
-          )}
+        {/* Logo and Mobile Menu - Desktop */}
+        <div className="hidden md:block">
+          <div className="flex justify-center py-6">
+            {settings?.logo_url ? (
+              <img src={settings.logo_url} alt="KR企画" className="h-16 object-contain" />
+            ) : (
+              <div className="text-2xl font-semibold tracking-wider text-gray-800">
+                <span className="font-bold">KR</span>企画
+              </div>
+            )}
+          </div>
+          <div className="flex items-center justify-between py-3">
+            <nav className="flex items-center justify-center gap-12 w-full">
+              {menuItems.map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => handleClick(item.id)}
+                  className="text-sm font-semibold text-gray-700 hover:text-gray-900 transition-colors tracking-widest"
+                >
+                  {item.label}
+                </button>
+              ))}
+            </nav>
+          </div>
         </div>
 
-        {/* Menu */}
-        <div className="flex items-center justify-between py-3">
-          {/* Desktop Menu */}
-          <nav className="hidden md:flex items-center justify-center gap-12 w-full">
-            {menuItems.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => handleClick(item.id)}
-                className="text-sm font-semibold text-gray-700 hover:text-gray-900 transition-colors tracking-widest"
-              >
-                {item.label}
-              </button>
-            ))}
-          </nav>
-
-          {/* Mobile Menu Button */}
+        {/* Logo and Mobile Menu - Mobile */}
+        <div className="md:hidden flex items-center justify-between py-6">
+          <div>
+            {settings?.logo_url ? (
+              <img src={settings.logo_url} alt="KR企画" className="h-12 object-contain" />
+            ) : (
+              <div className="text-xl font-semibold tracking-wider text-gray-800">
+                <span className="font-bold">KR</span>企画
+              </div>
+            )}
+          </div>
           <button
-            className="md:hidden p-2 ml-auto"
+            className="p-2"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}

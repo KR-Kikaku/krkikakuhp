@@ -37,8 +37,8 @@ export default function CompanySection() {
           alt="会社情報"
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
-          <h2 className="text-3xl md:text-4xl font-semibold text-white tracking-widest">
+        <div className="absolute inset-0 bg-black/30 flex items-start justify-start">
+          <h2 className="text-3xl md:text-4xl font-semibold text-white tracking-widest mt-12 ml-8 md:ml-16">
             会社情報
           </h2>
         </div>
