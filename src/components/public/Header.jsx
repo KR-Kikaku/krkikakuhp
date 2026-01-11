@@ -35,10 +35,10 @@ export default function Header({ onNavigate }) {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-sm z-50 border-b border-gray-100">
+    <header className="bg-white border-b border-gray-100">
       <div className="max-w-6xl mx-auto px-4">
         {/* Logo */}
-        <div className="flex justify-center py-6 border-b border-gray-100">
+        <div className="flex justify-center py-6">
           {settings?.logo_url ? (
             <img src={settings.logo_url} alt="KR企画" className="h-16 object-contain" />
           ) : (
@@ -49,14 +49,14 @@ export default function Header({ onNavigate }) {
         </div>
 
         {/* Menu */}
-        <div className="flex items-center justify-between py-4">
+        <div className="flex items-center justify-between py-3">
           {/* Desktop Menu */}
           <nav className="hidden md:flex items-center justify-center gap-12 w-full">
             {menuItems.map((item) => (
               <button
                 key={item.id}
                 onClick={() => handleClick(item.id)}
-                className="text-sm font-semibold text-gray-700 hover:text-gray-900 transition-colors"
+                className="text-sm font-semibold text-gray-700 hover:text-gray-900 transition-colors tracking-widest"
               >
                 {item.label}
               </button>

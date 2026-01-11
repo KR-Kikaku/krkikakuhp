@@ -66,8 +66,9 @@ export default function ContactSection() {
         <h2 className="text-2xl md:text-3xl font-semibold text-center mb-3 tracking-wide text-gray-800">
           お問い合わせ
         </h2>
-        <p className="text-sm text-gray-600 text-center mb-12">
-          弊社へのお問い合わせはこちらよりお願い致します。２営業日以内にご返信させて頂きます。
+        <p className="text-xs text-gray-600 text-center mb-12" style={{ lineHeight: '1.8' }}>
+          弊社へのお問い合わせはこちらよりお願い致します。<br />
+          ２営業日以内にご返信させて頂きます。
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-6 bg-white p-8 rounded-lg shadow-sm">
@@ -149,7 +150,7 @@ export default function ContactSection() {
             </Label>
           </div>
 
-          <div className="text-xs text-gray-500 text-center pt-2">
+          <div className="text-xs text-gray-500 text-center pt-2 tracking-wide" style={{ lineHeight: '1.8' }}>
             入力確認画面や自動返信メールはございません。<br />
             ご入力内容を確認の上、送信ボタンを押して下さい。
           </div>

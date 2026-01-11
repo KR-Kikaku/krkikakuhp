@@ -37,7 +37,7 @@ export default function NewsDetail() {
   return (
     <div className="min-h-screen bg-white">
       <Header onNavigate={handleNavigate} />
-      <main className="pt-24 pb-20">
+      <main className="pt-8 pb-20">
         <div className="max-w-3xl mx-auto px-4">
           <Link
             to={createPageUrl('NewsList')}

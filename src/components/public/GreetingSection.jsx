@@ -20,13 +20,16 @@ export default function GreetingSection() {
 そして、この事業を通じて、皆さまの日常が少し明るくなる瞬間を増やせたら、これほど嬉しいことはありません。`;
 
   return (
-    <section id="greeting" className="py-20 md:py-32 bg-white">
+    <section className="py-20 md:py-32 bg-white">
       <div className="max-w-4xl mx-auto px-4">
+        <p id="greeting" className="text-sm font-semibold text-center mb-6 tracking-widest text-gray-500 uppercase">
+          ご挨拶
+        </p>
         <h2 className="text-2xl md:text-3xl font-semibold text-center mb-12 tracking-wide text-gray-800">
           {settings?.greeting_title || defaultTitle}
         </h2>
         
-        <div className="text-gray-700 leading-relaxed text-center whitespace-pre-line text-sm md:text-base font-medium">
+        <div className="text-gray-700 text-center whitespace-pre-line text-sm md:text-base font-medium tracking-wide" style={{ lineHeight: '2' }}>
           {settings?.greeting_text || defaultText}
         </div>
 

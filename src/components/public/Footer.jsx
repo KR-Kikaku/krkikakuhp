@@ -37,7 +37,7 @@ export default function Footer({ onNavigate }) {
     <footer className="bg-gray-800 text-white py-12">
       <div className="max-w-6xl mx-auto px-4">
         {/* Menu */}
-        <nav className="flex flex-wrap justify-center items-center gap-8 pb-8 border-b border-gray-700">
+        <nav className="flex flex-wrap justify-center items-center gap-8 pb-8">
           {menuItems.map((item) => (
             <button
               key={item.id}
@@ -50,7 +50,7 @@ export default function Footer({ onNavigate }) {
         </nav>
 
         {/* Logo */}
-        <div className="flex justify-center py-8">
+        <div className="flex justify-center py-6">
           {settings?.footer_logo_url ? (
             <img src={settings.footer_logo_url} alt="KR企画" className="h-16 object-contain" />
           ) : settings?.logo_url ? (

@@ -34,10 +34,12 @@ export default function AdminSidebar({ currentPage }) {
 
   return (
     <div className="w-64 bg-gray-900 min-h-screen flex flex-col">
-      <div className="p-6 border-b border-gray-800">
-        <h1 className="text-white text-xl font-light">
-          <span className="font-medium">KR</span>企画 管理
-        </h1>
+      <div className="p-6 border-b border-gray-800 flex justify-center">
+        <img 
+          src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/696397724eafe2f0916bfdff/b2e3098a5_S__649773062.jpg" 
+          alt="KR企画 管理" 
+          className="h-12 object-contain"
+        />
       </div>
 
       <nav className="flex-1 py-6">
