@@ -28,7 +28,7 @@ export default function NewsList() {
       <Header onNavigate={handleNavigate} />
       <main className="pt-24 pb-20">
         <div className="max-w-5xl mx-auto px-4">
-          <h1 className="text-3xl font-light text-center mb-12 tracking-wide text-gray-800">
+          <h1 className="text-3xl font-bold text-center mb-12 tracking-wide text-gray-800">
             お知らせ
           </h1>
 

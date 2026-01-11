@@ -39,7 +39,7 @@ export default function AdminDashboard() {
   }, []);
 
   const statCards = [
-    { title: 'サイト訪問者数', value: stats.visitors, icon: Eye, color: 'bg-indigo-500' },
+    { title: '本日の訪問者数', value: stats.visitors, icon: Eye, color: 'bg-indigo-500' },
     { title: 'TOP画像', value: stats.carousel, icon: Images, color: 'bg-blue-500' },
     { title: '事業内容', value: stats.business, icon: Briefcase, color: 'bg-green-500' },
     { title: 'お知らせ', value: stats.news, icon: Newspaper, color: 'bg-purple-500' },
