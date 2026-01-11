@@ -92,7 +92,7 @@ export default function AdminContacts() {
       <div className="mb-8">
         <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-2xl font-light text-gray-800">お問い合わせ管理</h1>
+            <h1 className="text-2xl font-bold text-gray-800">お問い合わせ管理</h1>
             <p className="text-gray-500 mt-1">受信したお問い合わせ</p>
           </div>
           <Select value={statusFilter} onValueChange={setStatusFilter}>

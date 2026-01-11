@@ -100,7 +100,7 @@ export default function AdminUsers() {
     <AdminLayout currentPage="admins">
       <div className="mb-8 flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-light text-gray-800">管理者設定</h1>
+          <h1 className="text-2xl font-bold text-gray-800">管理者設定</h1>
           <p className="text-gray-500 mt-1">管理画面へのアクセス権限</p>
         </div>
         <Button onClick={() => openDialog()} className="bg-gray-900 hover:bg-gray-800">
