@@ -73,7 +73,7 @@ export default function ContactSection() {
 
         <form onSubmit={handleSubmit} className="space-y-6 bg-white p-8 rounded-lg shadow-sm">
           <div>
-            <Label htmlFor="company_name" className="text-gray-700 font-medium">会社名</Label>
+            <Label htmlFor="company_name" className="text-gray-700">会社名</Label>
             <Input
               id="company_name"
               value={formData.company_name}
@@ -84,7 +84,7 @@ export default function ContactSection() {
           </div>
 
           <div>
-            <Label htmlFor="name" className="text-gray-700 font-medium">
+            <Label htmlFor="name" className="text-gray-700">
               お名前 <span className="text-red-500">*</span>
             </Label>
             <Input
@@ -98,7 +98,7 @@ export default function ContactSection() {
           </div>
 
           <div>
-            <Label htmlFor="email" className="text-gray-700 font-medium">
+            <Label htmlFor="email" className="text-gray-700">
               メールアドレス <span className="text-red-500">*</span>
             </Label>
             <Input
@@ -113,7 +113,7 @@ export default function ContactSection() {
           </div>
 
           <div>
-            <Label htmlFor="phone" className="text-gray-700 font-medium">電話番号</Label>
+            <Label htmlFor="phone" className="text-gray-700">電話番号</Label>
             <Input
               id="phone"
               type="tel"
@@ -125,7 +125,7 @@ export default function ContactSection() {
           </div>
 
           <div>
-            <Label htmlFor="message" className="text-gray-700 font-medium">
+            <Label htmlFor="message" className="text-gray-700">
               お問い合わせ内容 <span className="text-red-500">*</span>
             </Label>
             <Textarea

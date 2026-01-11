@@ -48,19 +48,17 @@ export default function Header({ onNavigate }) {
               </div>
             )}
           </div>
-          <div className="flex items-center justify-between py-3">
-            <nav className="flex items-center justify-center gap-12 w-full">
-              {menuItems.map((item) => (
-                <button
-                  key={item.id}
-                  onClick={() => handleClick(item.id)}
-                  className="text-sm font-semibold text-gray-700 hover:text-gray-900 transition-colors tracking-widest"
-                >
-                  {item.label}
-                </button>
-              ))}
-            </nav>
-          </div>
+          <nav className="flex items-center justify-center gap-12 w-full py-4">
+            {menuItems.map((item) => (
+              <button
+                key={item.id}
+                onClick={() => handleClick(item.id)}
+                className="text-sm font-semibold text-gray-700 hover:text-gray-900 transition-colors tracking-widest"
+              >
+                {item.label}
+              </button>
+            ))}
+          </nav>
         </div>
 
         {/* Logo and Mobile Menu - Mobile */}

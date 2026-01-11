@@ -25,7 +25,7 @@ export default function GreetingSection() {
         <p id="greeting" className="text-2xl md:text-3xl font-semibold text-center mb-6 tracking-wide text-gray-800">
           ご挨拶
         </p>
-        <h2 className="text-xl md:text-2xl font-medium text-center mb-12 tracking-wide text-gray-700">
+        <h2 className="text-xl md:text-2xl font-medium text-left mb-12 tracking-wide text-gray-700">
           {settings?.greeting_title || defaultTitle}
         </h2>
         
