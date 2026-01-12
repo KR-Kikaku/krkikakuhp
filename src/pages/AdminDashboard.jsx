@@ -23,16 +23,13 @@ export default function AdminDashboard() {
         base44.entities.Contact.list()
       ]);
 
-      // Simulate visitor count (in production, this would come from analytics)
-      const visitors = Math.floor(Math.random() * 500) + 100;
-
       setStats({
         carousel: carousel.length,
         business: business.length,
         news: news.length,
         contacts: contacts.length,
         unreadContacts: contacts.filter(c => c.status === '未対応').length,
-        visitors: visitors
+        visitors: 0
       });
     };
     fetchStats();
