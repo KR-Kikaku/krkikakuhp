@@ -5,13 +5,12 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
-import { Mail, Eye, Trash2, Send, AlertCircle } from 'lucide-react';
+import { Mail, Eye, Trash2, Send, CheckCircle, X } from 'lucide-react';
 import { format } from 'date-fns';
 import { ja } from 'date-fns/locale';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 export default function AdminContacts() {
   const [contacts, setContacts] = useState([]);
@@ -19,7 +18,6 @@ export default function AdminContacts() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [replyText, setReplyText] = useState('');
   const [isSending, setIsSending] = useState(false);
-  const [statusFilter, setStatusFilter] = useState('all');
 
   const fetchContacts = async () => {
     const data = await base44.entities.Contact.list('-created_date');
@@ -30,16 +28,16 @@ export default function AdminContacts() {
     fetchContacts();
   }, []);
 
-  const openDialog = (contact) => {
+  const openDialog = async (contact) => {
     setSelectedContact(contact);
-    setReplyText(contact.reply || '');
+    setReplyText('');
     setIsDialogOpen(true);
-  };
-
-  const handleStatusChange = async (contactId, newStatus) => {
-    await base44.entities.Contact.update(contactId, { status: newStatus });
-    toast.success('ステータスを更新しました');
-    fetchContacts();
+    
+    // Mark as read
+    if (!contact.is_read) {
+      await base44.entities.Contact.update(contact.id, { is_read: true });
+      fetchContacts();
+    }
   };
 
   const handleSendReply = async () => {
@@ -50,23 +48,60 @@ export default function AdminContacts() {
 
     setIsSending(true);
 
+    const newReply = {
+      from: 'support@kr-kikaku.co.jp',
+      message: replyText,
+      timestamp: new Date().toISOString()
+    };
+
+    const updatedReplies = [...(selectedContact.replies || []), newReply];
+
     // Send email
     await base44.integrations.Core.SendEmail({
+      from_name: 'KR企画',
       to: selectedContact.email,
       subject: `【KR企画】お問い合わせへの返信`,
-      body: replyText
+      body: `
+${selectedContact.name} 様
+
+お問い合わせいただきありがとうございます。
+以下の通りご返信いたします。
+
+---
+
+${replyText}
+
+---
+
+引き続きご不明な点がございましたら、お気軽にお問い合わせください。
+
+合同会社KR企画
+support@kr-kikaku.co.jp
+      `
     });
 
     // Update contact record
     await base44.entities.Contact.update(selectedContact.id, {
-      reply: replyText,
-      replied_at: new Date().toISOString(),
-      status: '完了'
+      replies: updatedReplies,
+      needs_reply: false
     });
 
     toast.success('返信を送信しました');
+    setReplyText('');
     setIsSending(false);
-    setIsDialogOpen(false);
+    
+    const updated = { ...selectedContact, replies: updatedReplies, needs_reply: false };
+    setSelectedContact(updated);
+    fetchContacts();
+  };
+
+  const handleNoReplyNeeded = async () => {
+    await base44.entities.Contact.update(selectedContact.id, {
+      needs_reply: false
+    });
+    toast.success('返信不要としてマークしました');
+    const updated = { ...selectedContact, needs_reply: false };
+    setSelectedContact(updated);
     fetchContacts();
   };
 
@@ -77,15 +112,8 @@ export default function AdminContacts() {
     fetchContacts();
   };
 
-  const filteredContacts = statusFilter === 'all' 
-    ? contacts 
-    : contacts.filter(c => c.status === statusFilter);
-
-  const statusColors = {
-    '未対応': 'bg-red-100 text-red-800',
-    '対応中': 'bg-yellow-100 text-yellow-800',
-    '完了': 'bg-green-100 text-green-800'
-  };
+  const unreadCount = contacts.filter(c => !c.is_read).length;
+  const needsReplyCount = contacts.filter(c => c.needs_reply && c.is_read).length;
 
   return (
     <AdminLayout currentPage="contacts">
@@ -93,80 +121,80 @@ export default function AdminContacts() {
         <div className="flex justify-between items-center">
           <div>
             <h1 className="text-2xl font-bold text-gray-800">お問い合わせ管理</h1>
-            <p className="text-gray-500 mt-1">受信したお問い合わせ</p>
+            <p className="text-gray-500 mt-1">
+              受信: {contacts.length}件 | 未読: {unreadCount}件 | 未返信: {needsReplyCount}件
+            </p>
           </div>
-          <Select value={statusFilter} onValueChange={setStatusFilter}>
-            <SelectTrigger className="w-40">
-              <SelectValue placeholder="ステータス" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">すべて</SelectItem>
-              <SelectItem value="未対応">未対応</SelectItem>
-              <SelectItem value="対応中">対応中</SelectItem>
-              <SelectItem value="完了">完了</SelectItem>
-            </SelectContent>
-          </Select>
         </div>
-
-        <Alert className="mt-4">
-          <AlertCircle className="h-4 w-4" />
-          <AlertTitle>メール送信について</AlertTitle>
-          <AlertDescription>
-            返信機能は内蔵のメール送信機能を使用しています。独自のメールサーバーを設定する場合は、バックエンド関数をカスタマイズしてください。
-          </AlertDescription>
-        </Alert>
       </div>
 
       <div className="space-y-4">
-        {filteredContacts.map((contact) => (
-          <Card key={contact.id}>
-            <CardContent className="p-4">
-              <div className="flex items-start justify-between">
-                <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-2">
-                    <span className={`text-xs px-2 py-0.5 rounded ${statusColors[contact.status] || 'bg-gray-100'}`}>
-                      {contact.status}
-                    </span>
-                    <span className="text-xs text-gray-400">
-                      {format(new Date(contact.created_date), 'yyyy/MM/dd HH:mm', { locale: ja })}
-                    </span>
-                  </div>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-sm">
-                    <div>
-                      <span className="text-gray-400">会社名:</span>
-                      <span className="ml-2">{contact.company_name || '-'}</span>
-                    </div>
-                    <div>
-                      <span className="text-gray-400">お名前:</span>
-                      <span className="ml-2">{contact.name}</span>
-                    </div>
-                    <div>
-                      <span className="text-gray-400">メール:</span>
-                      <span className="ml-2">{contact.email}</span>
-                    </div>
-                    <div>
-                      <span className="text-gray-400">電話:</span>
-                      <span className="ml-2">{contact.phone || '-'}</span>
-                    </div>
-                  </div>
-                  <p className="text-sm text-gray-600 mt-2 line-clamp-2">
-                    {contact.message}
-                  </p>
-                </div>
-                <div className="flex items-center gap-2 ml-4">
-                  <Button variant="ghost" size="icon" onClick={() => openDialog(contact)}>
-                    <Eye className="w-4 h-4" />
-                  </Button>
-                  <Button variant="ghost" size="icon" onClick={() => handleDelete(contact.id)} className="text-red-500">
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+        {contacts.map((contact) => {
+          const isUnread = !contact.is_read;
+          const needsReply = contact.needs_reply && contact.is_read;
+          const replyCount = (contact.replies || []).length;
 
-        {filteredContacts.length === 0 && (
+          return (
+            <Card key={contact.id} className={isUnread ? 'border-2 border-blue-500' : ''}>
+              <CardContent className="p-4">
+                <div className="flex items-start justify-between">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-2">
+                      {isUnread && (
+                        <Badge className="bg-blue-500">未読</Badge>
+                      )}
+                      {needsReply && (
+                        <Badge variant="outline" className="border-orange-500 text-orange-700">未返信</Badge>
+                      )}
+                      {!contact.needs_reply && replyCount > 1 && (
+                        <Badge variant="outline" className="border-green-500 text-green-700">対応完了</Badge>
+                      )}
+                      <span className="text-xs text-gray-400">
+                        {format(new Date(contact.created_date), 'yyyy/MM/dd HH:mm', { locale: ja })}
+                      </span>
+                      {replyCount > 1 && (
+                        <span className="text-xs text-gray-500">
+                          ({replyCount - 1}件の返信)
+                        </span>
+                      )}
+                    </div>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-sm">
+                      <div>
+                        <span className="text-gray-400">会社名:</span>
+                        <span className="ml-2">{contact.company_name || '-'}</span>
+                      </div>
+                      <div>
+                        <span className="text-gray-400">お名前:</span>
+                        <span className="ml-2 font-medium">{contact.name}</span>
+                      </div>
+                      <div>
+                        <span className="text-gray-400">メール:</span>
+                        <span className="ml-2">{contact.email}</span>
+                      </div>
+                      <div>
+                        <span className="text-gray-400">電話:</span>
+                        <span className="ml-2">{contact.phone || '-'}</span>
+                      </div>
+                    </div>
+                    <p className="text-sm text-gray-600 mt-2 line-clamp-2">
+                      {contact.message}
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-2 ml-4">
+                    <Button variant="ghost" size="icon" onClick={() => openDialog(contact)}>
+                      <Eye className="w-4 h-4" />
+                    </Button>
+                    <Button variant="ghost" size="icon" onClick={() => handleDelete(contact.id)} className="text-red-500">
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          );
+        })}
+
+        {contacts.length === 0 && (
           <Card>
             <CardContent className="py-12 text-center text-gray-500">
               お問い合わせがありません
@@ -176,7 +204,7 @@ export default function AdminContacts() {
       </div>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="max-w-2xl">
+        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>お問い合わせ詳細</DialogTitle>
           </DialogHeader>
@@ -190,7 +218,7 @@ export default function AdminContacts() {
                 </div>
                 <div>
                   <Label className="text-gray-400">お名前</Label>
-                  <p className="mt-1">{selectedContact.name}</p>
+                  <p className="mt-1 font-medium">{selectedContact.name}</p>
                 </div>
                 <div>
                   <Label className="text-gray-400">メールアドレス</Label>
@@ -202,66 +230,88 @@ export default function AdminContacts() {
                 </div>
               </div>
 
+              {/* Thread Display */}
               <div>
-                <Label className="text-gray-400">お問い合わせ内容</Label>
-                <p className="mt-1 p-3 bg-gray-50 rounded-lg whitespace-pre-wrap">
-                  {selectedContact.message}
-                </p>
+                <Label className="text-gray-400">やり取り履歴</Label>
+                <div className="mt-2 space-y-3">
+                  {(selectedContact.replies || []).map((reply, index) => {
+                    const isFromCustomer = reply.from === selectedContact.email;
+                    return (
+                      <div
+                        key={index}
+                        className={`p-4 rounded-lg ${
+                          isFromCustomer ? 'bg-gray-50 border-l-4 border-gray-400' : 'bg-blue-50 border-l-4 border-blue-500'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-xs font-medium">
+                            {isFromCustomer ? `${selectedContact.name}様` : 'KR企画'}
+                          </span>
+                          <span className="text-xs text-gray-400">
+                            {format(new Date(reply.timestamp), 'yyyy/MM/dd HH:mm', { locale: ja })}
+                          </span>
+                        </div>
+                        <p className="text-sm whitespace-pre-wrap">{reply.message}</p>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
 
-              <div>
-                <Label className="text-gray-400">ステータス</Label>
-                <Select
-                  value={selectedContact.status}
-                  onValueChange={(value) => {
-                    handleStatusChange(selectedContact.id, value);
-                    setSelectedContact({ ...selectedContact, status: value });
-                  }}
-                >
-                  <SelectTrigger className="mt-1 w-40">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="未対応">未対応</SelectItem>
-                    <SelectItem value="対応中">対応中</SelectItem>
-                    <SelectItem value="完了">完了</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+              {/* Reply Form */}
+              {selectedContact.needs_reply && (
+                <div>
+                  <Label className="text-gray-400">返信を作成</Label>
+                  <Textarea
+                    value={replyText}
+                    onChange={(e) => setReplyText(e.target.value)}
+                    className="mt-2 min-h-32"
+                    placeholder="返信内容を入力..."
+                  />
+                </div>
+              )}
 
-              <div>
-                <Label className="text-gray-400">返信</Label>
-                <Textarea
-                  value={replyText}
-                  onChange={(e) => setReplyText(e.target.value)}
-                  className="mt-1 min-h-32"
-                  placeholder="返信内容を入力..."
-                />
-                {selectedContact.replied_at && (
-                  <p className="text-xs text-gray-400 mt-1">
-                    返信済み: {format(new Date(selectedContact.replied_at), 'yyyy/MM/dd HH:mm', { locale: ja })}
-                  </p>
-                )}
-              </div>
+              {!selectedContact.needs_reply && (
+                <div className="p-4 bg-green-50 border border-green-200 rounded-lg text-sm text-green-800">
+                  <CheckCircle className="w-4 h-4 inline mr-2" />
+                  このお問い合わせは対応完了済みです
+                </div>
+              )}
             </div>
           )}
 
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
-              閉じる
-            </Button>
-            <Button
-              onClick={handleSendReply}
-              disabled={isSending}
-              className="bg-gray-900 hover:bg-gray-800"
-            >
-              {isSending ? '送信中...' : (
-                <>
-                  <Send className="w-4 h-4 mr-2" />
-                  返信を送信
-                </>
+          <DialogFooter className="flex justify-between">
+            <div>
+              {selectedContact?.needs_reply && (
+                <Button
+                  variant="outline"
+                  onClick={handleNoReplyNeeded}
+                  className="border-gray-300 text-gray-600"
+                >
+                  <X className="w-4 h-4 mr-2" />
+                  返信の必要なし
+                </Button>
               )}
-            </Button>
+            </div>
+            <div className="flex gap-2">
+              <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
+                閉じる
+              </Button>
+              {selectedContact?.needs_reply && (
+                <Button
+                  onClick={handleSendReply}
+                  disabled={isSending || !replyText.trim()}
+                  className="bg-gray-900 hover:bg-gray-800"
+                >
+                  {isSending ? '送信中...' : (
+                    <>
+                      <Send className="w-4 h-4 mr-2" />
+                      返信を送信
+                    </>
+                  )}
+                </Button>
+              )}
+            </div>
           </DialogFooter>
         </DialogContent>
       </Dialog>
