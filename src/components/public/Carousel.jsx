@@ -5,11 +5,13 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 export default function Carousel() {
   const [images, setImages] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchImages = async () => {
       const data = await base44.entities.CarouselImage.filter({ is_active: true }, 'order');
       setImages(data.slice(0, 5));
+      setIsLoading(false);
     };
     fetchImages();
   }, []);
@@ -26,6 +28,12 @@ export default function Carousel() {
   const goTo = (index) => setCurrentIndex(index);
   const goPrev = () => setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
   const goNext = () => setCurrentIndex((prev) => (prev + 1) % images.length);
+
+  if (isLoading) {
+    return (
+      <div className="w-full h-[60vh] md:h-[80vh] bg-gray-100" />
+    );
+  }
 
   if (images.length === 0) {
     return (

@@ -32,7 +32,7 @@ export default function AdminLayout({ children, currentPage }) {
         isMobileMenuOpen={isMobileMenuOpen}
         setIsMobileMenuOpen={setIsMobileMenuOpen}
       />
-      <main className="md:ml-64 p-4 md:p-8 overflow-auto">
+      <main className="md:ml-64 p-4 md:p-8 overflow-auto pt-20 md:pt-8">
         {children}
       </main>
     </div>
