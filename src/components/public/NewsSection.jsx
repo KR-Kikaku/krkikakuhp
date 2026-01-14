@@ -29,18 +29,18 @@ export default function NewsSection() {
               <Link
                 key={item.id}
                 to={createPageUrl(`NewsDetail?slug=${item.slug}`)}
-                className="block bg-white rounded-lg p-6 hover:shadow-lg transition-shadow"
+                className="block bg-white rounded-lg p-4 md:p-6 hover:shadow-lg transition-shadow"
               >
                 <div className="flex flex-col md:flex-row gap-4">
                   {item.cover_image && (
                     <img
                       src={item.cover_image}
                       alt={item.title}
-                      className="w-full md:w-32 h-32 object-cover rounded-lg"
+                      className="w-full md:w-32 h-48 md:h-32 object-cover rounded-lg flex-shrink-0"
                     />
                   )}
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-2">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex flex-wrap items-center gap-2 md:gap-3 mb-2">
                       <span className="text-xs px-2 py-1 bg-gray-100 rounded text-gray-600">
                         {item.category}
                       </span>
@@ -48,7 +48,7 @@ export default function NewsSection() {
                         {item.publish_date && format(new Date(item.publish_date), 'yyyy.MM.dd', { locale: ja })}
                       </span>
                     </div>
-                    <h3 className="text-lg font-medium text-gray-800">{item.title}</h3>
+                    <h3 className="text-base md:text-lg font-medium text-gray-800 break-words">{item.title}</h3>
                   </div>
                 </div>
               </Link>

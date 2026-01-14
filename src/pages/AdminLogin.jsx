@@ -27,18 +27,22 @@ export default function AdminLogin() {
     e.preventDefault();
     setIsLoading(true);
 
-    const admins = await base44.entities.Admin.filter({ 
-      login_id: loginId, 
-      password: password,
-      is_active: true 
-    });
+    try {
+      const admins = await base44.entities.Admin.filter({ 
+        login_id: loginId, 
+        password: password,
+        is_active: true 
+      });
 
-    if (admins.length > 0) {
-      sessionStorage.setItem('adminSession', JSON.stringify(admins[0]));
-      toast.success('ログインしました');
-      navigate(createPageUrl('AdminDashboard'));
-    } else {
-      toast.error('ログインIDまたはパスワードが正しくありません');
+      if (admins.length > 0) {
+        sessionStorage.setItem('adminSession', JSON.stringify(admins[0]));
+        toast.success('ログインしました');
+        navigate(createPageUrl('AdminDashboard'));
+      } else {
+        toast.error('ログインIDまたはパスワードが正しくありません');
+      }
+    } catch (error) {
+      toast.error('ログインに失敗しました');
     }
 
     setIsLoading(false);
