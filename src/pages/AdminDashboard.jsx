@@ -16,12 +16,16 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     const fetchStats = async () => {
-      const [carousel, business, news, contacts] = await Promise.all([
+      const [carousel, business, news, contacts, visitors] = await Promise.all([
         base44.entities.CarouselImage.list(),
         base44.entities.Business.list(),
         base44.entities.News.list(),
-        base44.entities.Contact.list()
+        base44.entities.Contact.list(),
+        base44.entities.Visitor.list()
       ]);
+
+      const today = new Date().toISOString().split('T')[0];
+      const todayVisitors = visitors.filter(v => v.visit_date === today).length;
 
       setStats({
         carousel: carousel.length,
@@ -29,7 +33,7 @@ export default function AdminDashboard() {
         news: news.length,
         contacts: contacts.length,
         unreadContacts: contacts.filter(c => c.status === '未対応').length,
-        visitors: 0
+        visitors: todayVisitors
       });
     };
     fetchStats();
