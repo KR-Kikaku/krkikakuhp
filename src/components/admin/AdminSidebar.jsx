@@ -10,11 +10,13 @@ import {
   Settings, 
   Users,
   LogOut,
-  Home
+  Home,
+  Menu,
+  X
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-export default function AdminSidebar({ currentPage }) {
+export default function AdminSidebar({ currentPage, isMobileMenuOpen, setIsMobileMenuOpen }) {
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -33,49 +35,84 @@ export default function AdminSidebar({ currentPage }) {
   ];
 
   return (
-    <div className="w-64 bg-gray-900 min-h-screen flex flex-col">
-      <div className="p-6 border-b border-gray-800 flex justify-center">
+    <>
+      {/* Mobile Header */}
+      <div className="md:hidden fixed top-0 left-0 right-0 bg-gray-900 z-50 flex items-center justify-between p-4">
         <img 
           src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/696397724eafe2f0916bfdff/b2e3098a5_S__649773062.jpg" 
           alt="KR企画 管理" 
-          className="h-12 object-contain"
+          className="h-8 object-contain"
         />
+        <button
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          className="text-white p-2"
+        >
+          {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
       </div>
 
-      <nav className="flex-1 py-6">
-        {menuItems.map((item) => (
+      {/* Sidebar */}
+      <div className={`
+        fixed md:fixed top-0 left-0 h-full w-64 bg-gray-900 z-40
+        transform transition-transform duration-300 ease-in-out
+        ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}
+        md:translate-x-0
+        flex flex-col
+        pt-16 md:pt-0
+      `}>
+        <div className="hidden md:block p-6 border-b border-gray-800">
+          <img 
+            src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/696397724eafe2f0916bfdff/b2e3098a5_S__649773062.jpg" 
+            alt="KR企画 管理" 
+            className="h-12 object-contain mx-auto"
+          />
+        </div>
+
+        <nav className="flex-1 py-6 overflow-y-auto">
+          {menuItems.map((item) => (
+            <Link
+              key={item.id}
+              to={createPageUrl(item.page)}
+              onClick={() => setIsMobileMenuOpen(false)}
+              className={`flex items-center gap-3 px-6 py-3 text-sm transition-colors ${
+                currentPage === item.id
+                  ? 'bg-gray-800 text-white border-r-2 border-white'
+                  : 'text-gray-400 hover:text-white hover:bg-gray-800/50'
+              }`}
+            >
+              <item.icon size={18} />
+              {item.label}
+            </Link>
+          ))}
+        </nav>
+
+        <div className="p-4 border-t border-gray-800 space-y-2">
           <Link
-            key={item.id}
-            to={createPageUrl(item.page)}
-            className={`flex items-center gap-3 px-6 py-3 text-sm transition-colors ${
-              currentPage === item.id
-                ? 'bg-gray-800 text-white border-r-2 border-white'
-                : 'text-gray-400 hover:text-white hover:bg-gray-800/50'
-            }`}
+            to={createPageUrl('Home')}
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="flex items-center gap-3 px-4 py-2 text-sm text-gray-400 hover:text-white transition-colors"
           >
-            <item.icon size={18} />
-            {item.label}
+            <Home size={18} />
+            サイトを見る
           </Link>
-        ))}
-      </nav>
-
-      <div className="p-4 border-t border-gray-800 space-y-2">
-        <Link
-          to={createPageUrl('Home')}
-          className="flex items-center gap-3 px-4 py-2 text-sm text-gray-400 hover:text-white transition-colors"
-        >
-          <Home size={18} />
-          サイトを見る
-        </Link>
-        <Button
-          variant="ghost"
-          onClick={handleLogout}
-          className="w-full justify-start gap-3 text-gray-400 hover:text-white hover:bg-gray-800"
-        >
-          <LogOut size={18} />
-          ログアウト
-        </Button>
+          <Button
+            variant="ghost"
+            onClick={handleLogout}
+            className="w-full justify-start gap-3 text-gray-400 hover:text-white hover:bg-gray-800"
+          >
+            <LogOut size={18} />
+            ログアウト
+          </Button>
+        </div>
       </div>
-    </div>
+
+      {/* Mobile Overlay */}
+      {isMobileMenuOpen && (
+        <div
+          className="md:hidden fixed inset-0 bg-black bg-opacity-50 z-30"
+          onClick={() => setIsMobileMenuOpen(false)}
+        />
+      )}
+    </>
   );
 }

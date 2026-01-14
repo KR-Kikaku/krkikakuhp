@@ -6,6 +6,7 @@ import AdminSidebar from './AdminSidebar';
 export default function AdminLayout({ children, currentPage }) {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const adminSession = sessionStorage.getItem('adminSession');
@@ -25,9 +26,13 @@ export default function AdminLayout({ children, currentPage }) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 flex">
-      <AdminSidebar currentPage={currentPage} />
-      <main className="flex-1 p-8 overflow-auto">
+    <div className="min-h-screen bg-gray-100">
+      <AdminSidebar 
+        currentPage={currentPage} 
+        isMobileMenuOpen={isMobileMenuOpen}
+        setIsMobileMenuOpen={setIsMobileMenuOpen}
+      />
+      <main className="md:ml-64 p-4 md:p-8 overflow-auto">
         {children}
       </main>
     </div>
