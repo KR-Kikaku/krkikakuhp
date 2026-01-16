@@ -94,25 +94,38 @@ export default function AdminSettings() {
   const handleSave = async () => {
     setIsSaving(true);
     
-    if (settingsId) {
-      await base44.entities.SiteSettings.update(settingsId, settings);
-    } else {
-      const newSettings = await base44.entities.SiteSettings.create(settings);
-      setSettingsId(newSettings.id);
-    }
+    try {
+      if (settingsId) {
+        await base44.entities.SiteSettings.update(settingsId, settings);
+      } else {
+        const newSettings = await base44.entities.SiteSettings.create(settings);
+        setSettingsId(newSettings.id);
+      }
 
-    toast.success('設定を保存しました');
-    setIsSaving(false);
+      toast.success('設定を保存しました');
+    } catch (error) {
+      console.error('保存エラー:', error);
+      toast.error('保存に失敗しました');
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const handleImageUpload = async (e, field) => {
     const file = e.target.files[0];
     if (!file) return;
 
-    setIsUploading({ ...isUploading, [field]: true });
-    const { file_url } = await base44.integrations.Core.UploadFile({ file });
-    setSettings({ ...settings, [field]: file_url });
-    setIsUploading({ ...isUploading, [field]: false });
+    setIsUploading(prev => ({ ...prev, [field]: true }));
+    try {
+      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+      setSettings(prev => ({ ...prev, [field]: file_url }));
+      toast.success('画像をアップロードしました');
+    } catch (error) {
+      console.error('アップロードエラー:', error);
+      toast.error('アップロードに失敗しました');
+    } finally {
+      setIsUploading(prev => ({ ...prev, [field]: false }));
+    }
   };
 
   if (!settings) {
