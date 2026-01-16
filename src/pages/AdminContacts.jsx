@@ -56,29 +56,7 @@ export default function AdminContacts() {
 
     const updatedReplies = [...(selectedContact.replies || []), newReply];
 
-    // Send email
-    await base44.integrations.Core.SendEmail({
-      from_name: 'KR企画',
-      to: selectedContact.email,
-      subject: `【KR企画】お問い合わせへの返信`,
-      body: `
-${selectedContact.name} 様
-
-お問い合わせいただきありがとうございます。
-以下の通りご返信いたします。
-
----
-
-${replyText}
-
----
-
-引き続きご不明な点がございましたら、お気軽にお問い合わせください。
-
-合同会社KR企画
-support@kr-kikaku.co.jp
-      `
-    });
+    // Note: Email sending requires external email service configuration
 
     // Update contact record
     await base44.entities.Contact.update(selectedContact.id, {

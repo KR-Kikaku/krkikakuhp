@@ -46,33 +46,7 @@ export default function ContactSection() {
       }]
     });
 
-    // Send email notification to support
-    await base44.integrations.Core.SendEmail({
-      from_name: 'KR企画 お問い合わせフォーム',
-      to: 'support@kr-kikaku.co.jp',
-      subject: `【新規お問い合わせ】${formData.name}様より`,
-      body: `
-    新しいお問い合わせが届きました。
-
-    ■ 会社名
-    ${formData.company_name || '（未入力）'}
-
-    ■ お名前
-    ${formData.name}
-
-    ■ メールアドレス
-    ${formData.email}
-
-    ■ 電話番号
-    ${formData.phone || '（未入力）'}
-
-    ■ お問い合わせ内容
-    ${formData.message}
-
-    ---
-    受信日時: ${new Date().toLocaleString('ja-JP')}
-      `
-    });
+    // Email notification will be handled by admin dashboard
 
     setIsSubmitting(false);
     setIsSubmitted(true);
