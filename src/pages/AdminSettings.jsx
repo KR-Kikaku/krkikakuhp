@@ -102,10 +102,17 @@ export default function AdminSettings() {
         setSettingsId(newSettings.id);
       }
 
+      // データを再取得して反映を確認
+      const updatedData = await base44.entities.SiteSettings.list();
+      if (updatedData.length > 0) {
+        setSettings(updatedData[0]);
+        setSettingsId(updatedData[0].id);
+      }
+
       toast.success('設定を保存しました');
     } catch (error) {
       console.error('保存エラー:', error);
-      toast.error('保存に失敗しました');
+      toast.error('保存に失敗しました: ' + error.message);
     } finally {
       setIsSaving(false);
     }
