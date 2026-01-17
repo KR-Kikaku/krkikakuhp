@@ -94,48 +94,48 @@ export default function AdminSettings() {
   }, []);
 
   const handleSave = async () => {
-    setIsSaving(true);
-    
     try {
+      setIsSaving(true);
+      
+      console.log('保存開始:', { settingsId, settings });
+      
+      let result;
       if (settingsId) {
-        await base44.entities.SiteSettings.update(settingsId, settings);
+        result = await base44.entities.SiteSettings.update(settingsId, settings);
       } else {
-        const newSettings = await base44.entities.SiteSettings.create(settings);
-        setSettingsId(newSettings.id);
+        result = await base44.entities.SiteSettings.create(settings);
+        setSettingsId(result.id);
       }
 
+      console.log('保存成功:', result);
+
       // キャッシュを無効化して本番サイトに反映
-      queryClient.invalidateQueries({ queryKey: ['siteSettings'] });
+      await queryClient.invalidateQueries({ queryKey: ['siteSettings'] });
 
       toast.success('変更が完了しました', {
         duration: 3000,
-        style: {
-          background: '#10b981',
-          color: '#fff',
-          fontSize: '16px',
-          fontWeight: 'bold',
-        },
       });
     } catch (error) {
-      console.error('保存エラー:', error);
-      toast.error('保存に失敗しました: ' + error.message);
+      console.error('保存エラー詳細:', error);
+      toast.error('保存に失敗しました: ' + (error?.message || '不明なエラー'));
     } finally {
       setIsSaving(false);
     }
   };
 
   const handleImageUpload = async (e, field) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    setIsUploading(prev => ({ ...prev, [field]: true }));
     try {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      setIsUploading(prev => ({ ...prev, [field]: true }));
+      
       const { file_url } = await base44.integrations.Core.UploadFile({ file });
       setSettings(prev => ({ ...prev, [field]: file_url }));
       toast.success('画像をアップロードしました');
     } catch (error) {
       console.error('アップロードエラー:', error);
-      toast.error('アップロードに失敗しました');
+      toast.error('アップロードに失敗しました: ' + (error?.message || ''));
     } finally {
       setIsUploading(prev => ({ ...prev, [field]: false }));
     }
