@@ -102,13 +102,21 @@ export default function AdminSettings() {
         setSettingsId(newSettings.id);
       }
 
-      toast.success('設定を保存しました');
+      toast.success('変更が完了しました', {
+        duration: 3000,
+        style: {
+          background: '#10b981',
+          color: '#fff',
+          fontSize: '16px',
+          fontWeight: 'bold',
+        },
+      });
     } catch (error) {
       console.error('保存エラー:', error);
       toast.error('保存に失敗しました: ' + error.message);
-    } finally {
-      setIsSaving(false);
     }
+    
+    setIsSaving(false);
   };
 
   const handleImageUpload = async (e, field) => {
