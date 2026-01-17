@@ -5,6 +5,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
@@ -18,6 +19,8 @@ export default function AdminContacts() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [replyText, setReplyText] = useState('');
   const [isSending, setIsSending] = useState(false);
+  const [emailGreeting, setEmailGreeting] = useState('お問い合わせありがとうございます。');
+  const [emailSignature, setEmailSignature] = useState('---\n合同会社 KR企画');
 
   const fetchContacts = async () => {
     const data = await base44.entities.Contact.list('-created_date');
@@ -62,7 +65,7 @@ export default function AdminContacts() {
         from_name: '合同会社 KR企画',
         to: selectedContact.email,
         subject: `Re: お問い合わせへの返信`,
-        body: `${selectedContact.name}様\n\nお問い合わせありがとうございます。\n\n${replyText}\n\n---\n合同会社 KR企画`
+        body: `${selectedContact.name}様\n\n${emailGreeting}\n\n${replyText}\n\n${emailSignature}`
       });
 
       // Update contact record
@@ -248,10 +251,34 @@ export default function AdminContacts() {
                 </div>
               </div>
 
+              {/* Email Template Settings */}
+              {selectedContact.needs_reply && (
+                <div className="space-y-3 p-4 bg-gray-50 rounded-lg">
+                  <div>
+                    <Label className="text-xs text-gray-500">挨拶文</Label>
+                    <Input
+                      value={emailGreeting}
+                      onChange={(e) => setEmailGreeting(e.target.value)}
+                      className="mt-1 text-sm"
+                      placeholder="お問い合わせありがとうございます。"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-xs text-gray-500">署名</Label>
+                    <Textarea
+                      value={emailSignature}
+                      onChange={(e) => setEmailSignature(e.target.value)}
+                      className="mt-1 text-sm min-h-16"
+                      placeholder="---&#10;合同会社 KR企画"
+                    />
+                  </div>
+                </div>
+              )}
+
               {/* Reply Form */}
               {selectedContact.needs_reply && (
                 <div>
-                  <Label className="text-gray-400">返信を作成</Label>
+                  <Label className="text-gray-400">返信内容</Label>
                   <Textarea
                     value={replyText}
                     onChange={(e) => setReplyText(e.target.value)}
