@@ -61,6 +61,7 @@ export default function PrivacyPolicy() {
       return data.length > 0 ? data[0] : null;
     },
     staleTime: 0,
+    gcTime: 0,
     refetchOnWindowFocus: true,
     refetchOnMount: true,
   });
