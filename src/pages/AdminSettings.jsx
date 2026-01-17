@@ -91,7 +91,12 @@ export default function AdminSettings() {
     fetchSettings();
   }, []);
 
-  const handleSave = async () => {
+  const handleSave = async (e) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    
     setIsSaving(true);
     
     try {
@@ -114,9 +119,9 @@ export default function AdminSettings() {
     } catch (error) {
       console.error('保存エラー:', error);
       toast.error('保存に失敗しました: ' + error.message);
+    } finally {
+      setIsSaving(false);
     }
-    
-    setIsSaving(false);
   };
 
   const handleImageUpload = async (e, field) => {
