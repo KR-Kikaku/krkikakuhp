@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
+import { useQueryClient } from '@tanstack/react-query';
 import AdminLayout from '@/components/admin/AdminLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -12,6 +13,7 @@ import { Upload, Save, Loader2 } from 'lucide-react';
 import ReactQuill from 'react-quill';
 
 export default function AdminSettings() {
+  const queryClient = useQueryClient();
   const [settings, setSettings] = useState(null);
   const [settingsId, setSettingsId] = useState(null);
   const [isSaving, setIsSaving] = useState(false);
@@ -106,6 +108,9 @@ export default function AdminSettings() {
         const newSettings = await base44.entities.SiteSettings.create(settings);
         setSettingsId(newSettings.id);
       }
+
+      // キャッシュを無効化して本番サイトに反映
+      queryClient.invalidateQueries({ queryKey: ['siteSettings'] });
 
       toast.success('変更が完了しました', {
         duration: 3000,

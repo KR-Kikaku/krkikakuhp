@@ -1,16 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { base44 } from '@/api/base44Client';
+import { useQuery } from '@tanstack/react-query';
 
 export default function GreetingSection() {
-  const [settings, setSettings] = useState(null);
-
-  useEffect(() => {
-    const fetchSettings = async () => {
+  const { data: settings } = useQuery({
+    queryKey: ['siteSettings'],
+    queryFn: async () => {
       const data = await base44.entities.SiteSettings.list();
-      if (data.length > 0) setSettings(data[0]);
-    };
-    fetchSettings();
-  }, []);
+      return data.length > 0 ? data[0] : null;
+    },
+  });
 
   const defaultTitle = 'あなたの日常を明るく、楽しいものへ';
   const defaultText = `合同会社KR企画のホームページをご覧いただき、心よりありがとうございます。

@@ -1,18 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { base44 } from '@/api/base44Client';
+import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 
 export default function Footer({ onNavigate }) {
-  const [settings, setSettings] = useState(null);
-
-  useEffect(() => {
-    const fetchSettings = async () => {
+  const { data: settings } = useQuery({
+    queryKey: ['siteSettings'],
+    queryFn: async () => {
       const data = await base44.entities.SiteSettings.list();
-      if (data.length > 0) setSettings(data[0]);
-    };
-    fetchSettings();
-  }, []);
+      return data.length > 0 ? data[0] : null;
+    },
+  });
 
   const menuItems = [
     { label: 'ご挨拶', id: 'greeting' },
