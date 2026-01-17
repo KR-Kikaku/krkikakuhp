@@ -10,10 +10,6 @@ export default function Header({ onNavigate }) {
       const data = await base44.entities.SiteSettings.list();
       return data.length > 0 ? data[0] : null;
     },
-    staleTime: 0,
-    gcTime: 0,
-    refetchOnWindowFocus: true,
-    refetchOnMount: true,
   });
   
   const [isMenuOpen, setIsMenuOpen] = useState(false);

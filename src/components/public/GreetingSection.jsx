@@ -9,10 +9,6 @@ export default function GreetingSection() {
       const data = await base44.entities.SiteSettings.list();
       return data.length > 0 ? data[0] : null;
     },
-    staleTime: 0,
-    gcTime: 0,
-    refetchOnWindowFocus: true,
-    refetchOnMount: true,
   });
 
   const defaultTitle = 'あなたの日常を明るく、楽しいものへ';
