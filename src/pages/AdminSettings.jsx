@@ -96,36 +96,28 @@ export default function AdminSettings() {
   const handleSave = async () => {
     if (isSaving) return;
     
+    setIsSaving(true);
+    
     try {
-      setIsSaving(true);
-      
       console.log('保存開始:', { settingsId, settings });
-      
-      // settingsオブジェクトのコピーを作成
-      const settingsToSave = { ...settings };
       
       let result;
       if (settingsId) {
-        result = await base44.entities.SiteSettings.update(settingsId, settingsToSave);
+        result = await base44.entities.SiteSettings.update(settingsId, settings);
       } else {
-        result = await base44.entities.SiteSettings.create(settingsToSave);
+        result = await base44.entities.SiteSettings.create(settings);
         setSettingsId(result.id);
       }
 
       console.log('保存成功:', result);
 
-      // キャッシュを無効化して本番サイトに反映
+      // キャッシュを無効化（awaitなし）
       queryClient.invalidateQueries({ queryKey: ['siteSettings'] });
 
-      toast.success('変更が完了しました', {
-        duration: 3000,
-      });
-      
-      return true;
+      toast.success('変更が完了しました');
     } catch (error) {
       console.error('保存エラー詳細:', error);
-      toast.error('保存に失敗しました: ' + (error?.message || '不明なエラー'));
-      return false;
+      toast.error('保存に失敗しました');
     } finally {
       setIsSaving(false);
     }
