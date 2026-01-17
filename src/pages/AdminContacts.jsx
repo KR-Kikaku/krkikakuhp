@@ -48,29 +48,41 @@ export default function AdminContacts() {
 
     setIsSending(true);
 
-    const newReply = {
-      from: 'support@kr-kikaku.co.jp',
-      message: replyText,
-      timestamp: new Date().toISOString()
-    };
+    try {
+      const newReply = {
+        from: 'support@kr-kikaku.co.jp',
+        message: replyText,
+        timestamp: new Date().toISOString()
+      };
 
-    const updatedReplies = [...(selectedContact.replies || []), newReply];
+      const updatedReplies = [...(selectedContact.replies || []), newReply];
 
-    // Note: Email sending requires external email service configuration
+      // Send email to customer
+      await base44.integrations.Core.SendEmail({
+        from_name: '合同会社 KR企画',
+        to: selectedContact.email,
+        subject: `Re: お問い合わせへの返信`,
+        body: `${selectedContact.name}様\n\nお問い合わせありがとうございます。\n\n${replyText}\n\n---\n合同会社 KR企画`
+      });
 
-    // Update contact record
-    await base44.entities.Contact.update(selectedContact.id, {
-      replies: updatedReplies,
-      needs_reply: false
-    });
+      // Update contact record
+      await base44.entities.Contact.update(selectedContact.id, {
+        replies: updatedReplies,
+        needs_reply: false
+      });
 
-    toast.success('返信を送信しました');
-    setReplyText('');
-    setIsSending(false);
-    
-    const updated = { ...selectedContact, replies: updatedReplies, needs_reply: false };
-    setSelectedContact(updated);
-    fetchContacts();
+      toast.success('返信メールを送信しました');
+      setReplyText('');
+      
+      const updated = { ...selectedContact, replies: updatedReplies, needs_reply: false };
+      setSelectedContact(updated);
+      fetchContacts();
+    } catch (error) {
+      console.error('送信エラー:', error);
+      toast.error('メール送信に失敗しました');
+    } finally {
+      setIsSending(false);
+    }
   };
 
   const handleNoReplyNeeded = async () => {
