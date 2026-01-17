@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import AdminSidebar from './AdminSidebar';
+import { Toaster } from '@/components/ui/sonner';
 
 export default function AdminLayout({ children, currentPage }) {
   const navigate = useNavigate();
@@ -27,6 +28,7 @@ export default function AdminLayout({ children, currentPage }) {
 
   return (
     <div className="min-h-screen bg-gray-100">
+      <Toaster position="top-center" richColors />
       <AdminSidebar 
         currentPage={currentPage} 
         isMobileMenuOpen={isMobileMenuOpen}
