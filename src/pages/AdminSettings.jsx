@@ -158,7 +158,7 @@ export default function AdminSettings() {
           <h1 className="text-2xl font-bold text-gray-800">サイト設定</h1>
           <p className="text-gray-500 mt-1">サイト全体の設定</p>
         </div>
-        <Button onClick={handleSave} disabled={isSaving} className="bg-gray-900 hover:bg-gray-800">
+        <Button type="button" onClick={handleSave} disabled={isSaving} className="bg-gray-900 hover:bg-gray-800">
           {isSaving ? (
             <>
               <Loader2 className="w-4 h-4 mr-2 animate-spin" />
