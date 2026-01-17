@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { base44 } from '@/api/base44Client';
+import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import Header from '@/components/public/Header';
@@ -53,16 +54,15 @@ const defaultPrivacyPolicy = `
 `;
 
 export default function PrivacyPolicy() {
-  const [settings, setSettings] = useState(null);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const fetchSettings = async () => {
+  const { data: settings } = useQuery({
+    queryKey: ['siteSettings'],
+    queryFn: async () => {
       const data = await base44.entities.SiteSettings.list();
-      if (data.length > 0) setSettings(data[0]);
-    };
-    fetchSettings();
-  }, []);
+      return data.length > 0 ? data[0] : null;
+    },
+  });
+  
+  const navigate = useNavigate();
 
   const handleNavigate = (id) => {
     navigate(createPageUrl('Home') + `#${id}`);
