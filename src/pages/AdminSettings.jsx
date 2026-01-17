@@ -93,12 +93,7 @@ export default function AdminSettings() {
     fetchSettings();
   }, []);
 
-  const handleSave = async (e) => {
-    if (e) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
-    
+  const handleSave = async () => {
     setIsSaving(true);
     
     try {
