@@ -190,6 +190,7 @@ export default function AdminSettings() {
             <CardContent className="space-y-6">
               <div>
                 <Label>会社ロゴ（ヘッダー用）</Label>
+                <p className="text-xs text-gray-500 mt-1">推奨サイズ: 横 200-400px、縦 50-100px</p>
                 <div className="mt-2 flex items-center gap-4">
                   {settings.logo_url && (
                     <img src={settings.logo_url} alt="Logo" className="h-12 object-contain" />
@@ -220,6 +221,7 @@ export default function AdminSettings() {
               </div>
               <div>
                 <Label>会社ロゴ（フッター用）</Label>
+                <p className="text-xs text-gray-500 mt-1">推奨サイズ: 横 200-400px、縦 50-100px</p>
                 <div className="mt-2 flex items-center gap-4">
                   {settings.footer_logo_url && (
                     <img src={settings.footer_logo_url} alt="Footer Logo" className="h-12 object-contain" />
@@ -276,6 +278,7 @@ export default function AdminSettings() {
               </div>
               <div>
                 <Label>ご挨拶画像</Label>
+                <p className="text-xs text-gray-500 mt-1">推奨サイズ: 横 800-1200px、縦 600-800px</p>
                 <div className="mt-2 flex items-center gap-4">
                   {settings.greeting_image_url && (
                     <img src={settings.greeting_image_url} alt="" className="w-32 h-20 object-cover rounded" />
@@ -311,6 +314,7 @@ export default function AdminSettings() {
             <CardContent className="space-y-6">
               <div>
                 <Label>「私たちの仕事」バナー</Label>
+                <p className="text-xs text-gray-500 mt-1">推奨サイズ: 横 1200-1600px、縦 300-400px</p>
                 <div className="mt-2 flex items-center gap-4">
                   {settings?.work_banner_url && (
                     <img src={settings.work_banner_url} alt="" className="w-48 h-16 object-cover rounded" />
@@ -337,6 +341,7 @@ export default function AdminSettings() {
 
               <div>
                 <Label>「会社情報」バナー</Label>
+                <p className="text-xs text-gray-500 mt-1">推奨サイズ: 横 1200-1600px、縦 300-400px</p>
                 <div className="mt-2 flex items-center gap-4">
                   {settings?.company_banner_url && (
                     <img src={settings.company_banner_url} alt="" className="w-48 h-16 object-cover rounded" />

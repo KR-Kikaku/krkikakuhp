@@ -286,6 +286,7 @@ export default function AdminNews() {
 
             <div>
               <Label>カバー画像</Label>
+              <p className="text-xs text-gray-500 mt-1">推奨サイズ: 横 1200-1600px、縦 600-800px</p>
               <div className="mt-2 flex items-center gap-4">
                 {formData.cover_image && (
                   <img src={formData.cover_image} alt="" className="w-32 h-20 object-cover rounded" />

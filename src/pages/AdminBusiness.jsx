@@ -222,6 +222,7 @@ export default function AdminBusiness() {
 
             <div>
               <Label>画像（最大3枚）</Label>
+              <p className="text-xs text-gray-500 mt-1">推奨サイズ: 横 800-1200px、縦 600-800px</p>
               <div className="space-y-3 mt-2">
                 {formData.images.map((img, index) => (
                   <div key={index} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
