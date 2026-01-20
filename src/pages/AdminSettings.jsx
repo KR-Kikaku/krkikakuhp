@@ -18,13 +18,15 @@ export default function AdminSettings() {
   const [settingsId, setSettingsId] = useState(null);
   const [isSaving, setIsSaving] = useState(false);
   const [isUploading, setIsUploading] = useState({});
-  const [activeTab, setActiveTab] = useState('company');
+  const [activeTab, setActiveTab] = useState('logo');
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const tab = urlParams.get('tab');
     if (tab) {
       setActiveTab(tab);
+    } else {
+      setActiveTab('logo');
     }
   }, []);
 
