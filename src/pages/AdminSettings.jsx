@@ -205,12 +205,12 @@ export default function AdminSettings() {
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList>
-          <TabsTrigger value="logo">ロゴ</TabsTrigger>
-          <TabsTrigger value="greeting">ご挨拶</TabsTrigger>
-          <TabsTrigger value="company">会社情報</TabsTrigger>
-          <TabsTrigger value="privacy">プライバシーポリシー</TabsTrigger>
-        </TabsList>
+        {(activeTab === 'logo' || activeTab === 'company') && (
+          <TabsList>
+            <TabsTrigger value="logo">ロゴ</TabsTrigger>
+            <TabsTrigger value="company">会社情報</TabsTrigger>
+          </TabsList>
+        )}
 
         <TabsContent value="logo">
           <Card>
