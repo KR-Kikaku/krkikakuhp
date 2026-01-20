@@ -155,7 +155,7 @@ export default function AdminSettings() {
     <AdminLayout currentPage="settings">
       <div className="mb-8 flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold text-gray-800">サイト設定</h1>
+          <h1 className="text-2xl font-bold text-gray-800">会社情報</h1>
           <p className="text-gray-500 mt-1">サイト全体の設定</p>
         </div>
         <Button type="button" onClick={handleSave} disabled={isSaving} className="bg-gray-900 hover:bg-gray-800">
@@ -173,19 +173,20 @@ export default function AdminSettings() {
         </Button>
       </div>
 
-      <Tabs defaultValue="basic" className="space-y-6">
+      <Tabs defaultValue="logo" className="space-y-6">
         <TabsList>
-          <TabsTrigger value="basic">基本設定</TabsTrigger>
+          <TabsTrigger value="logo">会社ロゴ設定</TabsTrigger>
+          <TabsTrigger value="carousel">TOP画像</TabsTrigger>
           <TabsTrigger value="greeting">ご挨拶</TabsTrigger>
-          <TabsTrigger value="banners">バナー画像</TabsTrigger>
+          <TabsTrigger value="business">私たちの仕事</TabsTrigger>
           <TabsTrigger value="company">会社情報</TabsTrigger>
           <TabsTrigger value="privacy">プライバシーポリシー</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="basic">
+        <TabsContent value="logo">
           <Card>
             <CardHeader>
-              <CardTitle>基本設定</CardTitle>
+              <CardTitle>会社ロゴ設定</CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
               <div>
@@ -254,6 +255,17 @@ export default function AdminSettings() {
           </Card>
         </TabsContent>
 
+        <TabsContent value="carousel">
+          <Card>
+            <CardHeader>
+              <CardTitle>TOP画像</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-gray-500">TOP画像の設定は「TOP画像管理」ページで行えます。</p>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
         <TabsContent value="greeting">
           <Card>
             <CardHeader>
@@ -306,10 +318,10 @@ export default function AdminSettings() {
           </Card>
         </TabsContent>
 
-        <TabsContent value="banners">
+        <TabsContent value="business">
           <Card>
             <CardHeader>
-              <CardTitle>バナー画像</CardTitle>
+              <CardTitle>私たちの仕事</CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
               <div>
@@ -338,7 +350,16 @@ export default function AdminSettings() {
                   </div>
                 </div>
               </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
 
+        <TabsContent value="company">
+          <Card>
+            <CardHeader>
+              <CardTitle>会社情報</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
               <div>
                 <Label>「会社情報」バナー</Label>
                 <p className="text-xs text-gray-500 mt-1">推奨サイズ: 横 1200-1600px、縦 300-400px</p>
@@ -365,16 +386,8 @@ export default function AdminSettings() {
                   </div>
                 </div>
               </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="company">
-          <Card>
-            <CardHeader>
-              <CardTitle>会社情報</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
+              
+              <div className="border-t pt-6">
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <Label>社長の言葉タイトル</Label>

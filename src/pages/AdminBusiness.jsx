@@ -120,7 +120,7 @@ export default function AdminBusiness() {
     <AdminLayout currentPage="business">
       <div className="mb-8 flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold text-gray-800">事業内容管理</h1>
+          <h1 className="text-2xl font-bold text-gray-800">私たちの仕事管理</h1>
           <p className="text-gray-500 mt-1">事業・サービスの紹介</p>
         </div>
         <Button onClick={() => openDialog()} className="bg-gray-900 hover:bg-gray-800">

@@ -58,7 +58,7 @@ export default function BusinessSection() {
                         {business.title}
                       </h3>
                     )}
-                    <p className="mt-4 text-gray-600 leading-relaxed">
+                    <p className="mt-4 text-gray-600 leading-relaxed whitespace-pre-wrap">
                       {business.description}
                     </p>
                   </div>
