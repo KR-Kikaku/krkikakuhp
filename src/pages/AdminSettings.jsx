@@ -176,7 +176,6 @@ export default function AdminSettings() {
       <Tabs defaultValue="logo" className="space-y-6">
         <TabsList>
           <TabsTrigger value="logo">会社ロゴ設定</TabsTrigger>
-          <TabsTrigger value="carousel">TOP画像</TabsTrigger>
           <TabsTrigger value="greeting">ご挨拶</TabsTrigger>
           <TabsTrigger value="business">私たちの仕事</TabsTrigger>
           <TabsTrigger value="company">会社情報</TabsTrigger>
@@ -251,17 +250,6 @@ export default function AdminSettings() {
                   </div>
                 </div>
               </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="carousel">
-          <Card>
-            <CardHeader>
-              <CardTitle>TOP画像</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-gray-500">TOP画像の設定は「TOP画像管理」ページで行えます。</p>
             </CardContent>
           </Card>
         </TabsContent>
