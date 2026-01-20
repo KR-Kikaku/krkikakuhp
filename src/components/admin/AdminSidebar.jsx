@@ -28,6 +28,7 @@ export default function AdminSidebar({ currentPage, isMobileMenuOpen, setIsMobil
 
   const menuItems = [
     { id: 'dashboard', label: 'ダッシュボード', icon: LayoutDashboard, page: 'AdminDashboard' },
+    { id: 'logo', label: '会社ロゴ', icon: Images, page: 'AdminSettings', tab: 'logo' },
     { id: 'carousel', label: 'TOP画像', icon: Images, page: 'AdminCarousel' },
     { id: 'greeting', label: 'ご挨拶', icon: HandHeart, page: 'AdminSettings', tab: 'greeting' },
     { id: 'business', label: '私たちの仕事', icon: Briefcase, page: 'AdminBusiness' },

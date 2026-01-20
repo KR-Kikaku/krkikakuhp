@@ -205,9 +205,8 @@ export default function AdminSettings() {
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        {(activeTab === 'logo' || activeTab === 'company') && (
+        {activeTab === 'company' && (
           <TabsList>
-            <TabsTrigger value="logo">ロゴ</TabsTrigger>
             <TabsTrigger value="company">会社情報</TabsTrigger>
           </TabsList>
         )}
