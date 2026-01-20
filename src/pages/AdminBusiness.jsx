@@ -24,14 +24,26 @@ export default function AdminBusiness() {
     is_active: true
   });
   const [isUploading, setIsUploading] = useState(false);
+  const [bannerUrl, setBannerUrl] = useState('');
+  const [settingsId, setSettingsId] = useState(null);
+  const [isSavingBanner, setIsSavingBanner] = useState(false);
 
   const fetchBusinesses = async () => {
     const data = await base44.entities.Business.list('order');
     setBusinesses(data);
   };
 
+  const fetchSettings = async () => {
+    const settings = await base44.entities.SiteSettings.list();
+    if (settings.length > 0) {
+      setBannerUrl(settings[0].work_banner_url || '');
+      setSettingsId(settings[0].id);
+    }
+  };
+
   useEffect(() => {
     fetchBusinesses();
+    fetchSettings();
   }, []);
 
   const openDialog = (business = null) => {
@@ -116,6 +128,29 @@ export default function AdminBusiness() {
     }));
   };
 
+  const handleBannerUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setIsSavingBanner(true);
+    try {
+      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+      setBannerUrl(file_url);
+      
+      if (settingsId) {
+        await base44.entities.SiteSettings.update(settingsId, { work_banner_url: file_url });
+      } else {
+        const newSettings = await base44.entities.SiteSettings.create({ work_banner_url: file_url });
+        setSettingsId(newSettings.id);
+      }
+      
+      toast.success('バナー画像を更新しました');
+    } catch (error) {
+      toast.error('アップロードに失敗しました');
+    }
+    setIsSavingBanner(false);
+  };
+
   return (
     <AdminLayout currentPage="business">
       <div className="mb-8 flex justify-between items-center">
@@ -128,6 +163,39 @@ export default function AdminBusiness() {
           事業を追加
         </Button>
       </div>
+
+      <Card className="mb-6">
+        <CardContent className="p-6">
+          <h3 className="text-lg font-medium mb-4">バナー画像</h3>
+          <p className="text-sm text-gray-500 mb-4">推奨サイズ: 横 1920px、縦 400-600px</p>
+          
+          {bannerUrl && (
+            <div className="mb-4">
+              <img src={bannerUrl} alt="バナー" className="w-full h-40 object-cover rounded-lg" />
+            </div>
+          )}
+          
+          <input
+            type="file"
+            id="bannerUpload"
+            accept="image/*"
+            onChange={handleBannerUpload}
+            className="hidden"
+          />
+          <Button
+            variant="outline"
+            onClick={() => document.getElementById('bannerUpload').click()}
+            disabled={isSavingBanner}
+          >
+            {isSavingBanner ? 'アップロード中...' : (
+              <>
+                <Upload className="w-4 h-4 mr-2" />
+                バナー画像を{bannerUrl ? '変更' : 'アップロード'}
+              </>
+            )}
+          </Button>
+        </CardContent>
+      </Card>
 
       <div className="space-y-4">
         {businesses.map((business, index) => (
