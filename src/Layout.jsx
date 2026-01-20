@@ -1,5 +1,28 @@
 import React, { useEffect } from 'react';
 
+// ページロード時に即座にメタタグを設定
+if (typeof document !== 'undefined') {
+  document.documentElement.lang = 'ja';
+  document.documentElement.setAttribute('translate', 'no');
+  document.documentElement.classList.add('notranslate');
+  
+  // メタタグを最優先で追加
+  const metaGoogle = document.createElement('meta');
+  metaGoogle.name = 'google';
+  metaGoogle.content = 'notranslate';
+  document.head.insertBefore(metaGoogle, document.head.firstChild);
+  
+  const metaGoogleBot = document.createElement('meta');
+  metaGoogleBot.name = 'googlebot';
+  metaGoogleBot.content = 'notranslate';
+  document.head.insertBefore(metaGoogleBot, document.head.firstChild);
+  
+  const metaContentLang = document.createElement('meta');
+  metaContentLang.httpEquiv = 'Content-Language';
+  metaContentLang.content = 'ja';
+  document.head.insertBefore(metaContentLang, document.head.firstChild);
+}
+
 export default function Layout({ children }) {
   useEffect(() => {
     // 即座に実行
