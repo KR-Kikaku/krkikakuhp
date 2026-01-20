@@ -27,10 +27,10 @@ export default function AdminSidebar({ currentPage, isMobileMenuOpen, setIsMobil
   const menuItems = [
     { id: 'dashboard', label: 'ダッシュボード', icon: LayoutDashboard, page: 'AdminDashboard' },
     { id: 'carousel', label: 'TOP画像', icon: Images, page: 'AdminCarousel' },
-    { id: 'business', label: '事業内容', icon: Briefcase, page: 'AdminBusiness' },
+    { id: 'business', label: '私たちの仕事', icon: Briefcase, page: 'AdminBusiness' },
     { id: 'news', label: 'お知らせ', icon: Newspaper, page: 'AdminNews' },
     { id: 'contacts', label: 'お問い合わせ', icon: MessageSquare, page: 'AdminContacts' },
-    { id: 'settings', label: 'サイト設定', icon: Settings, page: 'AdminSettings' },
+    { id: 'settings', label: '会社情報', icon: Settings, page: 'AdminSettings' },
     { id: 'admins', label: '管理者', icon: Users, page: 'AdminUsers' },
   ];
 
