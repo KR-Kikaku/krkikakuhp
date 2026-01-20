@@ -29,7 +29,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white notranslate" translate="no" lang="ja">
       <Header onNavigate={handleNavigate} />
       <div className="mt-8 md:mt-12"></div>
       <main>

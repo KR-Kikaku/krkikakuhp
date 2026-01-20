@@ -69,7 +69,7 @@ export default function PrivacyPolicy() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white notranslate" translate="no" lang="ja">
       <Header onNavigate={handleNavigate} />
       <main className="pt-24 pb-20">
         <div className="max-w-3xl mx-auto px-4">
