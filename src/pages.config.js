@@ -10,6 +10,7 @@ import Home from './pages/Home';
 import NewsDetail from './pages/NewsDetail';
 import NewsList from './pages/NewsList';
 import PrivacyPolicy from './pages/PrivacyPolicy';
+import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
@@ -30,4 +31,5 @@ export const PAGES = {
 export const pagesConfig = {
     mainPage: "Home",
     Pages: PAGES,
+    Layout: __Layout,
 };
