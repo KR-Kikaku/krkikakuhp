@@ -12,7 +12,9 @@ import {
   LogOut,
   Home,
   Menu,
-  X
+  X,
+  HandHeart,
+  FileText
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -27,10 +29,12 @@ export default function AdminSidebar({ currentPage, isMobileMenuOpen, setIsMobil
   const menuItems = [
     { id: 'dashboard', label: 'ダッシュボード', icon: LayoutDashboard, page: 'AdminDashboard' },
     { id: 'carousel', label: 'TOP画像', icon: Images, page: 'AdminCarousel' },
+    { id: 'greeting', label: 'ご挨拶', icon: HandHeart, page: 'AdminSettings', tab: 'greeting' },
     { id: 'business', label: '私たちの仕事', icon: Briefcase, page: 'AdminBusiness' },
     { id: 'news', label: 'お知らせ', icon: Newspaper, page: 'AdminNews' },
     { id: 'contacts', label: 'お問い合わせ', icon: MessageSquare, page: 'AdminContacts' },
-    { id: 'settings', label: '会社情報', icon: Settings, page: 'AdminSettings' },
+    { id: 'settings', label: '会社情報', icon: Settings, page: 'AdminSettings', tab: 'company' },
+    { id: 'privacy', label: 'プライバシーポリシー', icon: FileText, page: 'AdminSettings', tab: 'privacy' },
     { id: 'admins', label: '管理者', icon: Users, page: 'AdminUsers' },
   ];
 
@@ -72,7 +76,7 @@ export default function AdminSidebar({ currentPage, isMobileMenuOpen, setIsMobil
           {menuItems.map((item) => (
             <Link
               key={item.id}
-              to={createPageUrl(item.page)}
+              to={item.tab ? `${createPageUrl(item.page)}?tab=${item.tab}` : createPageUrl(item.page)}
               onClick={() => setIsMobileMenuOpen(false)}
               className={`flex items-center gap-3 px-6 py-3 text-sm transition-colors ${
                 currentPage === item.id

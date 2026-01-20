@@ -18,6 +18,15 @@ export default function AdminSettings() {
   const [settingsId, setSettingsId] = useState(null);
   const [isSaving, setIsSaving] = useState(false);
   const [isUploading, setIsUploading] = useState({});
+  const [activeTab, setActiveTab] = useState('logo');
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const tab = urlParams.get('tab');
+    if (tab) {
+      setActiveTab(tab);
+    }
+  }, []);
 
   useEffect(() => {
     const fetchSettings = async () => {
@@ -173,7 +182,7 @@ export default function AdminSettings() {
         </Button>
       </div>
 
-      <Tabs defaultValue="logo" className="space-y-6">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
         <TabsList>
           <TabsTrigger value="logo">会社ロゴ設定</TabsTrigger>
           <TabsTrigger value="greeting">ご挨拶</TabsTrigger>
