@@ -162,12 +162,32 @@ export default function AdminSettings() {
     );
   }
 
+  const getPageTitle = () => {
+    switch (activeTab) {
+      case 'logo': return 'ロゴ設定';
+      case 'greeting': return 'ご挨拶';
+      case 'company': return '会社情報';
+      case 'privacy': return 'プライバシーポリシー';
+      default: return 'サイト設定';
+    }
+  };
+
+  const getPageDescription = () => {
+    switch (activeTab) {
+      case 'logo': return 'ヘッダーとフッターのロゴを管理';
+      case 'greeting': return 'トップページのご挨拶セクションを管理';
+      case 'company': return '会社の基本情報を管理';
+      case 'privacy': return 'プライバシーポリシーの内容を管理';
+      default: return 'サイト全体の設定';
+    }
+  };
+
   return (
     <AdminLayout currentPage="settings">
       <div className="mb-8 flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold text-gray-800">会社情報</h1>
-          <p className="text-gray-500 mt-1">サイト全体の設定</p>
+          <h1 className="text-2xl font-bold text-gray-800">{getPageTitle()}</h1>
+          <p className="text-gray-500 mt-1">{getPageDescription()}</p>
         </div>
         <Button type="button" onClick={handleSave} disabled={isSaving} className="bg-gray-900 hover:bg-gray-800">
           {isSaving ? (
