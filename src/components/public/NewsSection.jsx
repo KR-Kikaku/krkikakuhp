@@ -17,7 +17,7 @@ export default function NewsSection() {
   }, []);
 
   return (
-    <section id="news" className="py-20 md:py-32 bg-gray-50">
+    <section id="news" className="py-20 md:py-32 bg-gray-50 notranslate" translate="no" lang="ja">
       <div className="max-w-5xl mx-auto px-4">
         <h2 className="text-2xl md:text-3xl font-semibold text-center mb-12 tracking-wide text-gray-800">
           お知らせ

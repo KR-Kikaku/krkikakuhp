@@ -55,7 +55,7 @@ export default function ContactSection() {
 
   if (isSubmitted) {
     return (
-      <section id="contact" className="py-20 md:py-32 bg-gray-50">
+      <section id="contact" className="py-20 md:py-32 bg-gray-50 notranslate" translate="no" lang="ja">
         <div className="max-w-2xl mx-auto px-4 text-center">
           <CheckCircle className="w-16 h-16 mx-auto text-green-500 mb-6" />
           <h2 className="text-2xl font-light mb-4">送信完了</h2>

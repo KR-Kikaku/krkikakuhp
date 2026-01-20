@@ -35,7 +35,7 @@ export default function Header({ onNavigate }) {
   };
 
   return (
-    <header className="bg-white">
+    <header className="bg-white notranslate" translate="no" lang="ja">
       <div className="max-w-6xl mx-auto px-4">
         {/* Logo and Mobile Menu - Desktop */}
         <div className="hidden md:block">

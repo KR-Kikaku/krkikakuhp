@@ -18,7 +18,7 @@ export default function BusinessSection() {
   }, []);
 
   return (
-    <section id="work">
+    <section id="work" className="notranslate" translate="no" lang="ja">
       {/* Banner */}
       <div className="relative h-64 md:h-80 overflow-hidden">
         <img

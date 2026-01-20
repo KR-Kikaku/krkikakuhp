@@ -19,7 +19,7 @@ export default function GreetingSection() {
 そして、この事業を通じて、皆さまの日常が少し明るくなる瞬間を増やせたら、これほど嬉しいことはありません。`;
 
   return (
-    <section className="py-20 md:py-32 bg-white">
+    <section className="py-20 md:py-32 bg-white notranslate" translate="no" lang="ja">
       <div className="max-w-4xl mx-auto px-4">
         <p id="greeting" className="text-2xl md:text-3xl font-semibold text-center mb-6 tracking-wide text-gray-800">
           ご挨拶
