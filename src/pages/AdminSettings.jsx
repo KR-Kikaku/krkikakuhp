@@ -184,15 +184,88 @@ export default function AdminSettings() {
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
         <TabsList>
+          <TabsTrigger value="logo">ロゴ</TabsTrigger>
           <TabsTrigger value="greeting">ご挨拶</TabsTrigger>
           <TabsTrigger value="company">会社情報</TabsTrigger>
           <TabsTrigger value="privacy">プライバシーポリシー</TabsTrigger>
         </TabsList>
 
+        <TabsContent value="logo">
+          <Card>
+            <CardHeader>
+              <CardTitle>ロゴ設定</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div>
+                <Label>ヘッダーロゴ</Label>
+                <p className="text-xs text-gray-500 mt-1">推奨サイズ: 横 200-400px、縦 50-100px</p>
+                <div className="mt-2 flex items-center gap-4">
+                  {settings.logo_url && (
+                    <img src={settings.logo_url} alt="Logo" className="h-12 object-contain" />
+                  )}
+                  <div>
+                    <input
+                      type="file"
+                      id="logoUpload"
+                      accept="image/*"
+                      onChange={(e) => handleImageUpload(e, 'logo_url')}
+                      className="hidden"
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => document.getElementById('logoUpload').click()}
+                      disabled={isUploading.logo_url}
+                    >
+                      {isUploading.logo_url ? 'アップロード中...' : (
+                        <>
+                          <Upload className="w-4 h-4 mr-2" />
+                          ロゴを変更
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <Label>フッターロゴ</Label>
+                <p className="text-xs text-gray-500 mt-1">推奨サイズ: 横 200-400px、縦 50-100px</p>
+                <div className="mt-2 flex items-center gap-4">
+                  {settings.footer_logo_url && (
+                    <img src={settings.footer_logo_url} alt="Footer Logo" className="h-12 object-contain" />
+                  )}
+                  <div>
+                    <input
+                      type="file"
+                      id="footerLogoUpload"
+                      accept="image/*"
+                      onChange={(e) => handleImageUpload(e, 'footer_logo_url')}
+                      className="hidden"
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => document.getElementById('footerLogoUpload').click()}
+                      disabled={isUploading.footer_logo_url}
+                    >
+                      {isUploading.footer_logo_url ? 'アップロード中...' : (
+                        <>
+                          <Upload className="w-4 h-4 mr-2" />
+                          ロゴを変更
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
         <TabsContent value="greeting">
           <Card>
             <CardHeader>
-              <CardTitle>ご挨拶セクション</CardTitle>
+              <CardTitle>ご挨拶</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
@@ -248,30 +321,33 @@ export default function AdminSettings() {
             </CardHeader>
             <CardContent className="space-y-6">
               <div>
-                <Label>「会社情報」バナー</Label>
-                <p className="text-xs text-gray-500 mt-1">推奨サイズ: 横 1200-1600px、縦 300-400px</p>
-                <div className="mt-2 flex items-center gap-4">
-                  {settings?.company_banner_url && (
-                    <img src={settings.company_banner_url} alt="" className="w-48 h-16 object-cover rounded" />
-                  )}
-                  <div>
-                    <input
-                      type="file"
-                      id="companyBannerUpload"
-                      accept="image/*"
-                      onChange={(e) => handleImageUpload(e, 'company_banner_url')}
-                      className="hidden"
-                    />
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => document.getElementById('companyBannerUpload').click()}
-                      disabled={isUploading.company_banner_url}
-                    >
-                      {isUploading.company_banner_url ? 'アップロード中...' : '画像を変更'}
-                    </Button>
+                <Label>バナー画像</Label>
+                <p className="text-xs text-gray-500 mt-1">推奨サイズ: 横 1920px、縦 400-600px</p>
+                {settings?.company_banner_url && (
+                  <div className="mt-2 mb-4">
+                    <img src={settings.company_banner_url} alt="バナー" className="w-full h-40 object-cover rounded-lg" />
                   </div>
-                </div>
+                )}
+                <input
+                  type="file"
+                  id="companyBannerUpload"
+                  accept="image/*"
+                  onChange={(e) => handleImageUpload(e, 'company_banner_url')}
+                  className="hidden"
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => document.getElementById('companyBannerUpload').click()}
+                  disabled={isUploading.company_banner_url}
+                >
+                  {isUploading.company_banner_url ? 'アップロード中...' : (
+                    <>
+                      <Upload className="w-4 h-4 mr-2" />
+                      バナー画像を{settings?.company_banner_url ? '変更' : 'アップロード'}
+                    </>
+                  )}
+                </Button>
               </div>
               
               <div className="border-t pt-6 space-y-4">
