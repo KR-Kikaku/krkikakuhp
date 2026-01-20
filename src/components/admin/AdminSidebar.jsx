@@ -33,7 +33,7 @@ export default function AdminSidebar({ currentPage, isMobileMenuOpen, setIsMobil
     { id: 'business', label: '私たちの仕事', icon: Briefcase, page: 'AdminBusiness' },
     { id: 'news', label: 'お知らせ', icon: Newspaper, page: 'AdminNews' },
     { id: 'contacts', label: 'お問い合わせ', icon: MessageSquare, page: 'AdminContacts' },
-    { id: 'settings', label: '会社情報', icon: Settings, page: 'AdminSettings', tab: 'company' },
+    { id: 'settings', label: '会社情報', icon: Settings, page: 'AdminSettings' },
     { id: 'privacy', label: 'プライバシーポリシー', icon: FileText, page: 'AdminSettings', tab: 'privacy' },
     { id: 'admins', label: '管理者', icon: Users, page: 'AdminUsers' },
   ];

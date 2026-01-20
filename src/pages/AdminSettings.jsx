@@ -18,7 +18,7 @@ export default function AdminSettings() {
   const [settingsId, setSettingsId] = useState(null);
   const [isSaving, setIsSaving] = useState(false);
   const [isUploading, setIsUploading] = useState({});
-  const [activeTab, setActiveTab] = useState('logo');
+  const [activeTab, setActiveTab] = useState('company');
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
