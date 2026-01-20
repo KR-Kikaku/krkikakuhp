@@ -387,7 +387,7 @@ export default function AdminSettings() {
                 </div>
               </div>
               
-              <div className="border-t pt-6">
+              <div className="border-t pt-6 space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <Label>社長の言葉タイトル</Label>
@@ -457,6 +457,7 @@ export default function AdminSettings() {
                   onChange={(e) => setSettings({ ...settings, address: e.target.value })}
                   className="mt-1"
                 />
+              </div>
               </div>
             </CardContent>
           </Card>
