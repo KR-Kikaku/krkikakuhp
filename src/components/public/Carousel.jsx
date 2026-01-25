@@ -8,6 +8,8 @@ export default function Carousel() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    setIsLoading(true);
+    setImages([]);
     const fetchImages = async () => {
       const data = await base44.entities.CarouselImage.filter({ is_active: true }, 'order');
       setImages(data.slice(0, 5));

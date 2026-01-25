@@ -4,8 +4,12 @@ import { base44 } from '@/api/base44Client';
 export default function BusinessSection() {
   const [settings, setSettings] = useState(null);
   const [businesses, setBusinesses] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    setIsLoading(true);
+    setSettings(null);
+    setBusinesses([]);
     const fetchData = async () => {
       const [settingsData, businessData] = await Promise.all([
         base44.entities.SiteSettings.list(),
@@ -13,9 +17,23 @@ export default function BusinessSection() {
       ]);
       if (settingsData.length > 0) setSettings(settingsData[0]);
       setBusinesses(businessData);
+      setIsLoading(false);
     };
     fetchData();
   }, []);
+
+  if (isLoading) {
+    return (
+      <section id="work" className="notranslate" translate="no" lang="ja">
+        <div className="relative w-full aspect-[16/6] sm:aspect-[16/5] bg-gray-100" />
+        <div className="py-20 md:py-32 bg-white">
+          <div className="max-w-5xl mx-auto px-4">
+            <div className="h-32 bg-gray-100 rounded animate-pulse" />
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section id="work" className="notranslate" translate="no" lang="ja">

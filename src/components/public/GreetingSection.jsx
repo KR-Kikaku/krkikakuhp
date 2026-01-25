@@ -3,12 +3,14 @@ import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
 
 export default function GreetingSection() {
-  const { data: settings } = useQuery({
+  const { data: settings, isLoading } = useQuery({
     queryKey: ['siteSettings'],
     queryFn: async () => {
       const data = await base44.entities.SiteSettings.list();
       return data.length > 0 ? data[0] : null;
     },
+    staleTime: 0,
+    cacheTime: 0,
   });
 
   const defaultTitle = 'あなたの日常を明るく、楽しいものへ';
@@ -17,6 +19,17 @@ export default function GreetingSection() {
 「挑戦するなら、とことん自分たち、みんなが楽しめるものをつくりたい」そんなシンプルな思いが、KR企画のスタートでした。
 楽しさを掘り起こし、技術と発想を組み合わせて、もっと身近に届けていきたい。
 そして、この事業を通じて、皆さまの日常が少し明るくなる瞬間を増やせたら、これほど嬉しいことはありません。`;
+
+  if (isLoading) {
+    return (
+      <section className="py-20 md:py-32 bg-white notranslate" translate="no" lang="ja">
+        <div className="max-w-4xl mx-auto px-4">
+          <div className="h-8 bg-gray-100 rounded animate-pulse mb-12" />
+          <div className="h-32 bg-gray-100 rounded animate-pulse" />
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="py-20 md:py-32 bg-white notranslate" translate="no" lang="ja">
