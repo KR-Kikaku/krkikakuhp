@@ -33,3 +33,28 @@ p, div, span, h1, h2, h3, h4, h5, h6, li {
 .break-words {
   word-break: break-word;
 }
+
+/* プライバシーポリシーのスタイル統一 */
+.prose h2 {
+  font-size: 1.5rem !important;
+  font-weight: 600 !important;
+  margin-top: 3rem !important;
+  margin-bottom: 1rem !important;
+  color: #1f2937 !important;
+}
+
+.prose p {
+  margin-bottom: 1.5rem !important;
+  color: #4b5563 !important;
+}
+
+.prose ul {
+  margin-left: 1.5rem !important;
+  margin-bottom: 1.5rem !important;
+  list-style: disc !important;
+  color: #4b5563 !important;
+}
+
+.prose li {
+  margin-bottom: 0.5rem !important;
+}

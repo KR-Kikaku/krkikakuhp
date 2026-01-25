@@ -182,8 +182,10 @@ export default function AdminSettings() {
     }
   };
 
+  const currentPageId = activeTab === 'privacy' ? 'privacy' : activeTab === 'logo' ? 'logo' : activeTab === 'greeting' ? 'greeting' : 'settings';
+
   return (
-    <AdminLayout currentPage="settings">
+    <AdminLayout currentPage={currentPageId}>
       <div className="mb-8 flex justify-between items-center">
         <div>
           <h1 className="text-2xl font-bold text-gray-800">{getPageTitle()}</h1>
