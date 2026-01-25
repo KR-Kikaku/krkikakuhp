@@ -44,7 +44,7 @@ export default function CompanySection() {
       </div>
 
       <div className="py-20 md:py-32 bg-white">
-        <div className="max-w-4xl mx-auto px-4">
+        <div className="max-w-[1920px] mx-auto px-4">
           {/* CEO Message */}
           <div className="mb-20">
             <h3 className="text-xl md:text-2xl font-semibold text-left mb-8 text-gray-800 tracking-wide">

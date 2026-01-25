@@ -35,7 +35,7 @@ export default function BusinessSection() {
 
       {/* Business Items */}
       <div className="py-20 md:py-32 bg-white">
-        <div className="max-w-5xl mx-auto px-4">
+        <div className="max-w-[1920px] mx-auto px-4">
           {businesses.length > 0 ? (
             businesses.map((business, index) => (
               <div key={business.id} className="mb-20 last:mb-0">
