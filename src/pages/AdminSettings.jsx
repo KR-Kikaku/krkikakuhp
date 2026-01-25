@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQueryClient } from '@tanstack/react-query';
+import { useLocation } from 'react-router-dom';
 import AdminLayout from '@/components/admin/AdminLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -14,6 +15,7 @@ import ReactQuill from 'react-quill';
 
 export default function AdminSettings() {
   const queryClient = useQueryClient();
+  const location = useLocation();
   const [settings, setSettings] = useState(null);
   const [settingsId, setSettingsId] = useState(null);
   const [isSaving, setIsSaving] = useState(false);
@@ -21,14 +23,14 @@ export default function AdminSettings() {
   const [activeTab, setActiveTab] = useState('logo');
 
   useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
+    const urlParams = new URLSearchParams(location.search);
     const tab = urlParams.get('tab');
     if (tab) {
       setActiveTab(tab);
     } else {
       setActiveTab('logo');
     }
-  }, [window.location.search]);
+  }, [location.search]);
 
   useEffect(() => {
     const fetchSettings = async () => {
