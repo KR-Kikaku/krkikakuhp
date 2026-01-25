@@ -176,7 +176,7 @@ export default function AdminPrivacyPolicy() {
             </p>
             <div className="border rounded-lg p-6 bg-gray-50">
               <div 
-                className="prose prose-gray max-w-none"
+                className="privacy-policy-content"
                 dangerouslySetInnerHTML={{ __html: settings?.privacy_policy || '' }}
               />
             </div>
