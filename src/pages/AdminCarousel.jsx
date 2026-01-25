@@ -64,7 +64,7 @@ export default function AdminCarousel() {
         <div>
           <h1 className="text-2xl font-bold text-gray-800">TOP画像管理</h1>
           <p className="text-gray-500 mt-1">カルーセル画像（最大5枚）</p>
-          <p className="text-xs text-gray-400 mt-1">推奨サイズ: 横 1600-2000px、縦 600-800px</p>
+          <p className="text-xs text-gray-400 mt-1">推奨サイズ: 横 1280px、縦 500px</p>
         </div>
         <div>
           <input

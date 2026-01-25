@@ -30,7 +30,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-white notranslate" translate="no" lang="ja">
-      <div className="max-w-[1920px] mx-auto">
+      <div className="max-w-[1280px] mx-auto">
         <Header onNavigate={handleNavigate} />
         <div className="mt-8 md:mt-12"></div>
         <main>

@@ -167,7 +167,7 @@ export default function AdminBusiness() {
       <Card className="mb-6">
         <CardContent className="p-6">
           <h3 className="text-lg font-medium mb-4">バナー画像</h3>
-          <p className="text-sm text-gray-500 mb-4">推奨サイズ: 横 1920px、縦 400-600px</p>
+          <p className="text-sm text-gray-500 mb-4">推奨サイズ: 横 1280px、縦 320px</p>
           
           {bannerUrl && (
             <div className="mb-4">

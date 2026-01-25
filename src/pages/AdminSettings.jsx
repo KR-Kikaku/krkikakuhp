@@ -343,7 +343,7 @@ export default function AdminSettings() {
             <CardContent className="space-y-6">
               <div>
                 <Label>バナー画像</Label>
-                <p className="text-xs text-gray-500 mt-1">推奨サイズ: 横 1920px、縦 400-600px</p>
+                <p className="text-xs text-gray-500 mt-1">推奨サイズ: 横 1280px、縦 320px</p>
                 {settings?.company_banner_url && (
                   <div className="mt-2 mb-4">
                     <img src={settings.company_banner_url} alt="バナー" className="w-full h-auto object-cover rounded-lg" />
