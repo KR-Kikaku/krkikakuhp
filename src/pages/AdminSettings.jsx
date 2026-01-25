@@ -28,7 +28,7 @@ export default function AdminSettings() {
     } else {
       setActiveTab('logo');
     }
-  }, []);
+  }, [window.location.search]);
 
   useEffect(() => {
     const fetchSettings = async () => {

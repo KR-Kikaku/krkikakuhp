@@ -85,7 +85,7 @@ export default function PrivacyPolicy() {
             </h1>
 
             <div 
-              className="prose prose-gray max-w-none text-sm md:text-base"
+              className="privacy-policy-content"
               dangerouslySetInnerHTML={{ __html: settings?.privacy_policy || defaultPrivacyPolicy }}
             />
           </div>
