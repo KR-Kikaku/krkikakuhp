@@ -35,11 +35,14 @@ p, div, span, h1, h2, h3, h4, h5, h6, li {
 }
 
 /* プライバシーポリシーのスタイル統一 */
-.privacy-policy-content {
+.privacy-policy-content,
+.privacy-policy-content div[style],
+.privacy-policy-content div {
   line-height: 1.75 !important;
 }
 
-.privacy-policy-content h2 {
+.privacy-policy-content h2,
+.privacy-policy-content h2[style] {
   font-size: 1.5rem !important;
   font-weight: 600 !important;
   margin-top: 3rem !important;
@@ -47,21 +50,26 @@ p, div, span, h1, h2, h3, h4, h5, h6, li {
   color: #1f2937 !important;
 }
 
-.privacy-policy-content p {
+.privacy-policy-content p,
+.privacy-policy-content p[style] {
   margin-bottom: 1.5rem !important;
   color: #4b5563 !important;
   line-height: 1.75 !important;
+  font-size: 1rem !important;
 }
 
-.privacy-policy-content ul {
+.privacy-policy-content ul,
+.privacy-policy-content ul[style] {
   margin-left: 1.5rem !important;
   margin-bottom: 1.5rem !important;
   list-style: disc !important;
   color: #4b5563 !important;
 }
 
-.privacy-policy-content li {
+.privacy-policy-content li,
+.privacy-policy-content li[style] {
   margin-bottom: 0.5rem !important;
+  font-size: 1rem !important;
 }
 
 .privacy-policy-content br {
