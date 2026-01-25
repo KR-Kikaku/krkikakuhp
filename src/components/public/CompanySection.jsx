@@ -30,7 +30,7 @@ export default function CompanySection() {
   return (
     <section id="company" className="notranslate" translate="no" lang="ja">
       {/* Banner */}
-      <div className="relative h-64 md:h-80 overflow-hidden">
+      <div className="relative w-full aspect-[16/6] sm:aspect-[16/5] overflow-hidden">
         <img
           src={settings?.company_banner_url || "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1600&h=400&fit=crop"}
           alt="会社情報"

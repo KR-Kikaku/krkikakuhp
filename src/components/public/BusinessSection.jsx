@@ -20,7 +20,7 @@ export default function BusinessSection() {
   return (
     <section id="work" className="notranslate" translate="no" lang="ja">
       {/* Banner */}
-      <div className="relative h-64 md:h-80 overflow-hidden">
+      <div className="relative w-full aspect-[16/6] sm:aspect-[16/5] overflow-hidden">
         <img
           src={settings?.work_banner_url || "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1600&h=400&fit=crop"}
           alt="私たちの仕事"
@@ -78,7 +78,7 @@ export default function BusinessSection() {
                           <img
                             src={img.url}
                             alt={`${business.title} ${imgIndex + 1}`}
-                            className="w-full h-auto object-cover rounded-lg hover:opacity-90 transition-opacity"
+                            className="w-full aspect-[4/3] object-cover rounded-lg hover:opacity-90 transition-opacity"
                           />
                         </a>
                       ) : (
@@ -86,7 +86,7 @@ export default function BusinessSection() {
                           key={imgIndex}
                           src={img.url}
                           alt={`${business.title} ${imgIndex + 1}`}
-                          className="w-full h-auto object-cover rounded-lg"
+                          className="w-full aspect-[4/3] object-cover rounded-lg"
                         />
                       )
                     ))}
@@ -111,17 +111,17 @@ export default function BusinessSection() {
                 <img
                   src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400&h=300&fit=crop"
                   alt="Service 1"
-                  className="w-full h-auto object-cover rounded-lg"
+                  className="w-full aspect-[4/3] object-cover rounded-lg"
                 />
                 <img
                   src="https://images.unsplash.com/photo-1551434678-e076c223a692?w=400&h=300&fit=crop"
                   alt="Service 2"
-                  className="w-full h-auto object-cover rounded-lg"
+                  className="w-full aspect-[4/3] object-cover rounded-lg"
                 />
                 <img
                   src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=400&h=300&fit=crop"
                   alt="Service 3"
-                  className="w-full h-auto object-cover rounded-lg"
+                  className="w-full aspect-[4/3] object-cover rounded-lg"
                 />
               </div>
             </div>

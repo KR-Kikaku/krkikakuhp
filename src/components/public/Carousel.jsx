@@ -31,13 +31,13 @@ export default function Carousel() {
 
   if (isLoading) {
     return (
-      <div className="w-full h-[60vh] md:h-[80vh] bg-gray-100" />
+      <div className="w-full aspect-[16/9] sm:aspect-[16/8] md:aspect-[16/7] bg-gray-100" />
     );
   }
 
   if (images.length === 0) {
     return (
-      <div className="w-full h-[60vh] md:h-[80vh] bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+      <div className="w-full aspect-[16/9] sm:aspect-[16/8] md:aspect-[16/7] bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center overflow-hidden">
         <img 
           src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=1600&h=900&fit=crop" 
           alt="TOP"
@@ -54,7 +54,7 @@ export default function Carousel() {
   };
 
   return (
-    <div className="relative w-full h-[60vh] md:h-[80vh] overflow-hidden notranslate" translate="no" lang="ja">
+    <div className="relative w-full aspect-[16/9] sm:aspect-[16/8] md:aspect-[16/7] overflow-hidden notranslate" translate="no" lang="ja">
       {images.map((image, index) => (
         <div
           key={image.id}
