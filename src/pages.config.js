@@ -10,6 +10,7 @@ import Home from './pages/Home';
 import NewsDetail from './pages/NewsDetail';
 import NewsList from './pages/NewsList';
 import PrivacyPolicy from './pages/PrivacyPolicy';
+import AdminPrivacyPolicy from './pages/AdminPrivacyPolicy';
 import __Layout from './Layout.jsx';
 
 
@@ -26,6 +27,7 @@ export const PAGES = {
     "NewsDetail": NewsDetail,
     "NewsList": NewsList,
     "PrivacyPolicy": PrivacyPolicy,
+    "AdminPrivacyPolicy": AdminPrivacyPolicy,
 }
 
 export const pagesConfig = {

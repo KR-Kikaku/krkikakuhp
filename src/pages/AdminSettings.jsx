@@ -167,7 +167,6 @@ export default function AdminSettings() {
       case 'logo': return 'ロゴ設定';
       case 'greeting': return 'ご挨拶';
       case 'company': return '会社情報';
-      case 'privacy': return 'プライバシーポリシー';
       default: return 'サイト設定';
     }
   };
@@ -177,12 +176,11 @@ export default function AdminSettings() {
       case 'logo': return 'ヘッダーとフッターのロゴを管理';
       case 'greeting': return 'トップページのご挨拶セクションを管理';
       case 'company': return '会社の基本情報を管理';
-      case 'privacy': return 'プライバシーポリシーの内容を管理';
       default: return 'サイト全体の設定';
     }
   };
 
-  const currentPageId = activeTab === 'privacy' ? 'privacy' : activeTab === 'logo' ? 'logo' : activeTab === 'greeting' ? 'greeting' : 'settings';
+  const currentPageId = activeTab === 'logo' ? 'logo' : activeTab === 'greeting' ? 'greeting' : 'settings';
 
   return (
     <AdminLayout currentPage={currentPageId}>
@@ -449,25 +447,7 @@ export default function AdminSettings() {
           </Card>
         </TabsContent>
 
-        <TabsContent value="privacy">
-          <Card>
-            <CardHeader>
-              <CardTitle>プライバシーポリシー</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="mb-2 text-sm text-gray-500">
-                プライバシーポリシーページに表示される内容
-              </div>
-              <ReactQuill
-                theme="snow"
-                value={settings?.privacy_policy || ''}
-                onChange={(value) => setSettings({ ...settings, privacy_policy: value })}
-                className="bg-white"
-                style={{ height: '400px', marginBottom: '50px' }}
-              />
-            </CardContent>
-          </Card>
-        </TabsContent>
+
       </Tabs>
     </AdminLayout>
   );

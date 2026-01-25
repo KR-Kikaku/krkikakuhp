@@ -35,7 +35,7 @@ export default function AdminSidebar({ currentPage, isMobileMenuOpen, setIsMobil
     { id: 'news', label: 'お知らせ', icon: Newspaper, page: 'AdminNews' },
     { id: 'contacts', label: 'お問い合わせ', icon: MessageSquare, page: 'AdminContacts' },
     { id: 'settings', label: '会社情報', icon: Settings, page: 'AdminSettings', tab: 'company' },
-    { id: 'privacy', label: 'プライバシーポリシー', icon: FileText, page: 'AdminSettings', tab: 'privacy' },
+    { id: 'privacy', label: 'プライバシーポリシー', icon: FileText, page: 'AdminPrivacyPolicy' },
     { id: 'admins', label: '管理者', icon: Users, page: 'AdminUsers' },
   ];
 
