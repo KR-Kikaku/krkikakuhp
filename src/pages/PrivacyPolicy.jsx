@@ -65,25 +65,33 @@ export default function PrivacyPolicy() {
   const navigate = useNavigate();
 
   const handleNavigate = (id) => {
-    navigate(createPageUrl('Home') + `#${id}`);
+    navigate(createPageUrl('Home'));
+    setTimeout(() => {
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 100);
   };
 
   return (
     <div className="min-h-screen bg-white notranslate" translate="no" lang="ja">
-      <Header onNavigate={handleNavigate} />
-      <main className="pt-24 pb-20">
-        <div className="max-w-3xl mx-auto px-4">
-          <h1 className="text-3xl font-bold text-center mb-12 tracking-wide text-gray-800">
-            プライバシーポリシー
-          </h1>
+      <div className="max-w-[1280px] mx-auto">
+        <Header onNavigate={handleNavigate} />
+        <main className="pt-12 md:pt-24 pb-12 md:pb-20">
+          <div className="max-w-3xl mx-auto px-4">
+            <h1 className="text-2xl md:text-3xl font-bold text-center mb-8 md:mb-12 tracking-wide text-gray-800">
+              プライバシーポリシー
+            </h1>
 
-          <div 
-            className="prose prose-gray max-w-none"
-            dangerouslySetInnerHTML={{ __html: settings?.privacy_policy || defaultPrivacyPolicy }}
-          />
-        </div>
-      </main>
-      <Footer onNavigate={handleNavigate} />
+            <div 
+              className="prose prose-gray max-w-none text-sm md:text-base"
+              dangerouslySetInnerHTML={{ __html: settings?.privacy_policy || defaultPrivacyPolicy }}
+            />
+          </div>
+        </main>
+        <Footer onNavigate={handleNavigate} />
+      </div>
     </div>
   );
 }
