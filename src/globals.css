@@ -1,3 +1,4 @@
+css
 * {
   box-sizing: border-box;
 }
@@ -12,6 +13,12 @@ body {
   word-wrap: break-word;
   word-break: normal;
   overflow-wrap: break-word;
+  overflow-x: hidden;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
 }
 
 /* 日本語テキストの改行統一 */
