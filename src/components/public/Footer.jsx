@@ -34,7 +34,7 @@ export default function Footer({ onNavigate }) {
 
   return (
     <footer className="bg-gray-800 text-white py-12 notranslate" translate="no" lang="ja">
-      <div className="max-w-[1920px] mx-auto px-4">
+      <div className="max-w-6xl mx-auto px-4">
         {/* Menu */}
         <nav className="flex flex-wrap justify-center items-center gap-8 pb-8">
           {menuItems.map((item) => (
