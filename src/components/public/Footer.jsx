@@ -51,9 +51,9 @@ export default function Footer({ onNavigate }) {
         {/* Logo */}
         <div className="flex justify-center py-6">
           {settings?.footer_logo_url ? (
-            <img src={settings.footer_logo_url} alt="KR企画" className="h-16 object-contain" />
+            <img src={settings.footer_logo_url} alt="KR企画" className="h-16 max-w-full object-contain" />
           ) : settings?.logo_url ? (
-            <img src={settings.logo_url} alt="KR企画" className="h-16 object-contain" />
+            <img src={settings.logo_url} alt="KR企画" className="h-16 max-w-full object-contain" />
           ) : (
             <div className="text-2xl font-semibold tracking-wider">
               <span className="font-bold">KR</span>企画

@@ -222,7 +222,7 @@ export default function AdminSettings() {
                 <p className="text-xs text-gray-500 mt-1">推奨サイズ: 横 200-400px、縦 50-100px</p>
                 <div className="mt-2 flex items-center gap-4">
                   {settings.logo_url && (
-                    <img src={settings.logo_url} alt="Logo" className="h-12 object-contain" />
+                    <img src={settings.logo_url} alt="Logo" className="max-w-full h-auto max-h-12 object-contain" />
                   )}
                   <div>
                     <input
@@ -253,7 +253,7 @@ export default function AdminSettings() {
                 <p className="text-xs text-gray-500 mt-1">推奨サイズ: 横 200-400px、縦 50-100px</p>
                 <div className="mt-2 flex items-center gap-4">
                   {settings.footer_logo_url && (
-                    <img src={settings.footer_logo_url} alt="Footer Logo" className="h-12 object-contain" />
+                    <img src={settings.footer_logo_url} alt="Footer Logo" className="max-w-full h-auto max-h-12 object-contain" />
                   )}
                   <div>
                     <input
@@ -310,7 +310,7 @@ export default function AdminSettings() {
                 <p className="text-xs text-gray-500 mt-1">推奨サイズ: 横 800-1200px、縦 600-800px</p>
                 <div className="mt-2 flex items-center gap-4">
                   {settings.greeting_image_url && (
-                    <img src={settings.greeting_image_url} alt="" className="w-32 h-20 object-cover rounded" />
+                    <img src={settings.greeting_image_url} alt="" className="w-full sm:w-32 h-auto object-cover rounded" />
                   )}
                   <div>
                     <input
@@ -346,7 +346,7 @@ export default function AdminSettings() {
                 <p className="text-xs text-gray-500 mt-1">推奨サイズ: 横 1920px、縦 400-600px</p>
                 {settings?.company_banner_url && (
                   <div className="mt-2 mb-4">
-                    <img src={settings.company_banner_url} alt="バナー" className="w-full h-40 object-cover rounded-lg" />
+                    <img src={settings.company_banner_url} alt="バナー" className="w-full h-auto object-cover rounded-lg" />
                   </div>
                 )}
                 <input

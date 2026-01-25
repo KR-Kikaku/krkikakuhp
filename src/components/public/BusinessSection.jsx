@@ -78,7 +78,7 @@ export default function BusinessSection() {
                           <img
                             src={img.url}
                             alt={`${business.title} ${imgIndex + 1}`}
-                            className="w-full h-48 object-cover rounded-lg hover:opacity-90 transition-opacity"
+                            className="w-full h-auto object-cover rounded-lg hover:opacity-90 transition-opacity"
                           />
                         </a>
                       ) : (
@@ -86,7 +86,7 @@ export default function BusinessSection() {
                           key={imgIndex}
                           src={img.url}
                           alt={`${business.title} ${imgIndex + 1}`}
-                          className="w-full h-48 object-cover rounded-lg"
+                          className="w-full h-auto object-cover rounded-lg"
                         />
                       )
                     ))}
@@ -111,17 +111,17 @@ export default function BusinessSection() {
                 <img
                   src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400&h=300&fit=crop"
                   alt="Service 1"
-                  className="w-full h-48 object-cover rounded-lg"
+                  className="w-full h-auto object-cover rounded-lg"
                 />
                 <img
                   src="https://images.unsplash.com/photo-1551434678-e076c223a692?w=400&h=300&fit=crop"
                   alt="Service 2"
-                  className="w-full h-48 object-cover rounded-lg"
+                  className="w-full h-auto object-cover rounded-lg"
                 />
                 <img
                   src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=400&h=300&fit=crop"
                   alt="Service 3"
-                  className="w-full h-48 object-cover rounded-lg"
+                  className="w-full h-auto object-cover rounded-lg"
                 />
               </div>
             </div>

@@ -171,7 +171,7 @@ export default function AdminBusiness() {
           
           {bannerUrl && (
             <div className="mb-4">
-              <img src={bannerUrl} alt="バナー" className="w-full h-40 object-cover rounded-lg" />
+              <img src={bannerUrl} alt="バナー" className="w-full h-auto object-cover rounded-lg" />
             </div>
           )}
           
@@ -218,7 +218,7 @@ export default function AdminBusiness() {
                             key={i}
                             src={img.url}
                             alt=""
-                            className="w-16 h-12 object-cover rounded"
+                            className="w-16 h-auto object-cover rounded"
                           />
                         ))}
                       </div>
@@ -294,7 +294,7 @@ export default function AdminBusiness() {
               <div className="space-y-3 mt-2">
                 {formData.images.map((img, index) => (
                   <div key={index} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-                    <img src={img.url} alt="" className="w-20 h-14 object-cover rounded" />
+                    <img src={img.url} alt="" className="w-20 h-auto object-cover rounded" />
                     <div className="flex-1">
                       <Input
                         value={img.link || ''}

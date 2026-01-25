@@ -39,17 +39,17 @@ export default function GreetingSection() {
             <img
               src={settings?.greeting_image_url || "https://images.unsplash.com/photo-1497366216548-37526070297c?w=400&h=300&fit=crop"}
               alt="Greeting"
-              className="w-full h-48 object-cover rounded-lg"
+              className="w-full h-auto object-cover rounded-lg"
             />
             <img
               src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop"
               alt="Office"
-              className="w-full h-48 object-cover rounded-lg"
+              className="w-full h-auto object-cover rounded-lg"
             />
             <img
               src="https://images.unsplash.com/photo-1556761175-b413da4baf72?w=400&h=300&fit=crop"
               alt="Team"
-              className="w-full h-48 object-cover rounded-lg"
+              className="w-full h-auto object-cover rounded-lg"
             />
           </div>
         )}
