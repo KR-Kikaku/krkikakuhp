@@ -31,7 +31,7 @@ export default function ImageUploadField({
     <div>
       <Label>{label}</Label>
       {recommendedSize && (
-        <p className="text-xs text-gray-500 mt-1">{recommendedSize}</p>
+        <p className="text-xs text-gray-500 mt-1 whitespace-nowrap">{recommendedSize}</p>
       )}
       <div className="mt-2 flex items-center gap-4">
         {value && (
