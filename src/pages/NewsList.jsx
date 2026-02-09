@@ -40,10 +40,10 @@ export default function NewsList() {
                 className="block bg-white rounded-lg overflow-hidden border border-gray-100 hover:shadow-lg transition-shadow"
               >
                 <div className="flex flex-col sm:flex-row">
-                  {item.cover_image && (
+                  {(item.thumbnail_image || item.cover_image) && (
                     <div className="flex-shrink-0 w-full sm:w-32 md:w-40 h-32 md:h-32 overflow-hidden">
                       <img
-                        src={item.cover_image}
+                        src={item.thumbnail_image || item.cover_image}
                         alt={item.title}
                         className="w-full h-full object-cover"
                       />
