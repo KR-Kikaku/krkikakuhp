@@ -3,7 +3,6 @@ import { base44 } from '@/api/base44Client';
 import Header from '@/components/public/Header';
 import Footer from '@/components/public/Footer';
 import Carousel from '@/components/public/Carousel';
-import GreetingSection from '@/components/public/GreetingSection';
 import BusinessSection from '@/components/public/BusinessSection';
 import NewsSection from '@/components/public/NewsSection';
 import CompanySection from '@/components/public/CompanySection';
