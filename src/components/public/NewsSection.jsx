@@ -10,13 +10,16 @@ export default function NewsSection() {
 
   useEffect(() => {
     const fetchNews = async () => {
-      const data = await base44.entities.News.filter({ status: 'published' }, '-publish_date', 3);
+      const data = await base44.entities.News.filter({ status: 'published' }, '-publish_date', 4);
       setNews(data);
     };
     fetchNews();
   }, []);
 
   if (news.length === 0) return null;
+
+  const displayedNews = news.slice(0, 3);
+  const hasMore = news.length > 3;
 
   return (
     <section id="news" className="py-16 md:py-24 px-4">
@@ -26,7 +29,7 @@ export default function NewsSection() {
         </h2>
 
         <div className="space-y-4">
-          {news.map((item) => (
+          {displayedNews.map((item) => (
             <Link
               key={item.id}
               to={createPageUrl(`NewsDetail?slug=${item.slug}`)}
@@ -56,14 +59,16 @@ export default function NewsSection() {
           ))}
         </div>
 
-        <div className="text-center mt-8">
-          <Link
-            to={createPageUrl('NewsList')}
-            className="inline-block text-blue-600 hover:text-blue-800 font-medium"
-          >
-            一覧を見る →
-          </Link>
-        </div>
+        {hasMore && (
+          <div className="text-center mt-8">
+            <Link
+              to={createPageUrl('NewsList')}
+              className="inline-block text-blue-600 hover:text-blue-800 font-medium"
+            >
+              一覧を見る →
+            </Link>
+          </div>
+        )}
       </div>
     </section>
   );
