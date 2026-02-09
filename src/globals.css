@@ -34,13 +34,20 @@ p, div, span, h1, h2, h3, h4, h5, h6, li {
   word-break: break-word;
 }
 
-/* スマートフォン表示でのh2, h3フォントサイズ調整 */
+/* スマートフォン表示でのフォントサイズ調整 */
 @media (max-width: 768px) {
-  h2 {
-    font-size: 75% !important;
+  /* ご挨拶、お知らせ、お問い合わせのタイトル */
+  #greeting h2,
+  #news h2,
+  #contact h2 {
+    font-size: 1.2rem !important;
   }
-  h3 {
-    font-size: 75% !important;
+  
+  /* あなたの日常を明るく、楽しいものへ */
+  #greeting h3,
+  #business h3,
+  .business-title {
+    font-size: 0.8rem !important;
   }
 }
 
