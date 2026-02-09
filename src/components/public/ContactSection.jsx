@@ -31,6 +31,7 @@ export default function ContactSection() {
     try {
       if (!formData.name || !formData.email || !formData.message) {
         toast.error('必須項目をすべて入力してください');
+        setIsLoading(false);
         return;
       }
 
@@ -54,31 +55,37 @@ export default function ContactSection() {
   return (
     <section
       id="contact"
-      className="py-12 md:py-20 bg-gray-50 -mx-4 md:mx-0 px-4 md:px-0 notranslate"
+      className="py-16 md:py-24 bg-gray-50 notranslate"
       translate="no"
       lang="ja"
     >
-      <div className="max-w-2xl mx-auto md:px-8">
-        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 text-center mb-12">
+      <div className="max-w-2xl mx-auto px-4 md:px-8">
+        <h2 className="text-2xl md:text-3xl font-bold text-center mb-3">
           お問い合わせ
         </h2>
 
-        <form onSubmit={handleSubmit} className="space-y-6 bg-white p-6 md:p-8 rounded-lg">
+        <p className="text-center text-sm md:text-base text-gray-600 mb-12">
+          弊社へのお問い合わせはこちらよりお願い致します。<br />
+          ２営業日以内にご返信させて頂きます。
+        </p>
+
+        <form onSubmit={handleSubmit} className="space-y-6 bg-white p-8 md:p-10 rounded-lg border border-gray-200">
           <div>
-            <Label htmlFor="company_name">会社名</Label>
+            <Label htmlFor="company_name" className="text-sm font-medium">
+              会社名
+            </Label>
             <Input
               id="company_name"
               name="company_name"
               type="text"
               value={formData.company_name}
               onChange={handleChange}
-              placeholder="例：株式会社XXX"
-              className="mt-2"
+              className="mt-2 text-sm"
             />
           </div>
 
           <div>
-            <Label htmlFor="name">
+            <Label htmlFor="name" className="text-sm font-medium">
               お名前 <span className="text-red-500">*</span>
             </Label>
             <Input
@@ -87,14 +94,13 @@ export default function ContactSection() {
               type="text"
               value={formData.name}
               onChange={handleChange}
-              placeholder="山田 太郎"
-              className="mt-2"
+              className="mt-2 text-sm"
               required
             />
           </div>
 
           <div>
-            <Label htmlFor="email">
+            <Label htmlFor="email" className="text-sm font-medium">
               メールアドレス <span className="text-red-500">*</span>
             </Label>
             <Input
@@ -103,27 +109,27 @@ export default function ContactSection() {
               type="email"
               value={formData.email}
               onChange={handleChange}
-              placeholder="example@example.com"
-              className="mt-2"
+              className="mt-2 text-sm"
               required
             />
           </div>
 
           <div>
-            <Label htmlFor="phone">電話番号</Label>
+            <Label htmlFor="phone" className="text-sm font-medium">
+              電話番号
+            </Label>
             <Input
               id="phone"
               name="phone"
               type="tel"
               value={formData.phone}
               onChange={handleChange}
-              placeholder="090-XXXX-XXXX"
-              className="mt-2"
+              className="mt-2 text-sm"
             />
           </div>
 
           <div>
-            <Label htmlFor="message">
+            <Label htmlFor="message" className="text-sm font-medium">
               お問い合わせ内容 <span className="text-red-500">*</span>
             </Label>
             <textarea
@@ -131,17 +137,21 @@ export default function ContactSection() {
               name="message"
               value={formData.message}
               onChange={handleChange}
-              placeholder="お問い合わせ内容をご入力ください"
               rows={6}
-              className="mt-2 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-900"
+              className="mt-2 w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-900"
               required
             />
+          </div>
+
+          <div className="text-xs text-gray-500">
+            入力確認画面や自動返信メールはございません。<br />
+            ご入力内容を確認の上、送信ボタンを押して下さい。
           </div>
 
           <Button
             type="submit"
             disabled={isLoading}
-            className="w-full bg-gray-900 hover:bg-gray-800"
+            className="w-full bg-gray-900 hover:bg-gray-800 text-white font-bold"
           >
             {isLoading ? (
               <>
@@ -149,7 +159,7 @@ export default function ContactSection() {
                 送信中...
               </>
             ) : (
-              '送信'
+              '送信する'
             )}
           </Button>
         </form>
