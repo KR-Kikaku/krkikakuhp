@@ -294,7 +294,7 @@ export default function AdminNews() {
               value={formData.cover_image}
               onChange={handleCoverUpload}
               isUploading={isUploading}
-              recommendedSize="推奨サイズ: 横 1200-1600px、縦 600-800px"
+              recommendedSize="推奨サイズ: 1200px×600px（比率2:1）"
               inputId="coverImage"
             />
 
