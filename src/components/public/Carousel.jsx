@@ -2,7 +2,6 @@ import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
-import Autoplay from 'embla-carousel-autoplay';
 
 export default function HomeCarousel() {
   const { data: images } = useQuery({
@@ -11,20 +10,11 @@ export default function HomeCarousel() {
     initialData: []
   });
 
-  const plugin = React.useRef(
-    Autoplay({ delay: 4000, stopOnInteraction: true })
-  );
-
   if (images.length === 0) return null;
 
   return (
     <div className="px-4 md:px-8">
-      <Carousel
-        plugins={[plugin.current]}
-        className="w-full max-w-6xl mx-auto"
-        onMouseEnter={plugin.current.stop}
-        onMouseLeave={plugin.current.reset}
-      >
+      <Carousel className="w-full max-w-6xl mx-auto">
         <CarouselContent>
           {images.map((image) => (
             <CarouselItem key={image.id}>
