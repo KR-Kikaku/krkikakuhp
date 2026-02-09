@@ -32,7 +32,6 @@ export default function Home() {
     <div className="min-h-screen bg-white notranslate" translate="no" lang="ja">
       <div className="max-w-[1280px] mx-auto">
         <Header onNavigate={handleNavigate} />
-        <div className="mt-8 md:mt-12"></div>
         <main>
           <Carousel />
           <div className="-mt-12 md:-mt-16"></div>
