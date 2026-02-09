@@ -6,47 +6,52 @@ export default function CompanySection() {
   const { data: settings } = useQuery({
     queryKey: ['siteSettings'],
     queryFn: () => base44.entities.SiteSettings.list(),
-    initialData: []
+    select: (data) => data[0]
   });
 
-  const setting = settings[0] || {};
+  if (!settings?.company_name) return null;
 
   const companyInfo = [
-    { label: '会社名', value: setting.company_name },
-    { label: '代表', value: setting.representative },
-    { label: '設立', value: setting.established_date },
-    { label: '所在地', value: setting.address },
-    { label: '電話番号', value: setting.phone }
-  ];
+    { label: '会社名', value: settings.company_name },
+    { label: '代表', value: settings.representative },
+    { label: '設立', value: settings.established_date },
+    { label: '所在地', value: settings.address },
+    { label: '電話番号', value: settings.phone }
+  ].filter(item => item.value);
 
   return (
-    <section id="会社情報" className="px-4 md:px-8 py-16 max-w-6xl mx-auto">
-      {setting.company_banner_url && (
-        <div className="mb-12 rounded-lg overflow-hidden shadow-lg">
-          <img 
-            src={setting.company_banner_url} 
-            alt="Company" 
-            className="w-full h-64 object-cover"
-          />
+    <section id="company" className="py-16 md:py-24 px-4 md:px-8 bg-gray-50 notranslate" translate="no" lang="ja">
+      <div className="max-w-6xl mx-auto">
+        <h2 className="text-3xl md:text-4xl font-bold text-center mb-4 text-gray-900">
+          会社情報
+        </h2>
+
+        {settings?.company_banner_url && (
+          <div className="mb-12">
+            <img 
+              src={settings.company_banner_url} 
+              alt="Company" 
+              className="w-full h-48 md:h-64 object-cover rounded-lg shadow-lg"
+            />
+          </div>
+        )}
+
+        <div className="bg-white rounded-lg shadow-md p-6 md:p-8">
+          <div className="space-y-6">
+            {companyInfo.map((item, idx) => (
+              <div key={idx} className="border-b border-gray-200 pb-4 last:border-0 last:pb-0">
+                <div className="grid md:grid-cols-4 gap-4">
+                  <dt className="company-label text-gray-900">
+                    {item.label}
+                  </dt>
+                  <dd className="company-value md:col-span-3 text-gray-700">
+                    {item.value}
+                  </dd>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
-      )}
-
-      <h2 className="text-center mb-12">会社情報</h2>
-
-      <div className="bg-white rounded-lg shadow-lg overflow-hidden max-w-3xl mx-auto">
-        {companyInfo.map((item, index) => (
-          item.value && (
-            <div 
-              key={index}
-              className={`grid md:grid-cols-3 gap-4 p-6 ${
-                index !== companyInfo.length - 1 ? 'border-b' : ''
-              }`}
-            >
-              <div className="company-label">{item.label}</div>
-              <div className="md:col-span-2 company-value">{item.value}</div>
-            </div>
-          )
-        ))}
       </div>
     </section>
   );
