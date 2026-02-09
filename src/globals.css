@@ -73,6 +73,12 @@ h3 {
   }
 }
 
+/* ご挨拶と社長メッセージのテキストを通常フォントに */
+.greeting-text,
+.ceo-message {
+  font-weight: normal;
+}
+
 /* プライバシーポリシーのスタイル統一 */
 .privacy-policy-content {
   line-height: 1.75;
