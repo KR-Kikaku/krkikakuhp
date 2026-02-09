@@ -1,81 +1,110 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
-import { useQuery } from '@tanstack/react-query';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 
 export default function Footer({ onNavigate }) {
-  const { data: settings } = useQuery({
-    queryKey: ['siteSettings'],
-    queryFn: async () => {
-      const data = await base44.entities.SiteSettings.list();
-      return data.length > 0 ? data[0] : null;
-    },
-  });
+  const [settings, setSettings] = useState(null);
+  const navigate = useNavigate();
 
-  const menuItems = [
-    { label: 'ご挨拶', id: 'greeting' },
-    { label: '私たちの仕事', id: 'work' },
-    { label: 'お知らせ', id: 'news' },
-    { label: '会社情報', id: 'company' },
-    { label: 'お問い合わせ', id: 'contact' },
-  ];
-
-  const handleClick = (id) => {
-    if (onNavigate) {
-      onNavigate(id);
-    } else {
-      const element = document.getElementById(id);
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
+  useEffect(() => {
+    const fetchSettings = async () => {
+      const settingsList = await base44.entities.SiteSettings.list();
+      if (settingsList.length > 0) {
+        setSettings(settingsList[0]);
       }
-    }
+    };
+    fetchSettings();
+  }, []);
+
+  const handleLogoClick = () => {
+    navigate(createPageUrl('Home'));
   };
 
+  const menuItems = [
+    { id: 'greeting', label: 'ご挨拶' },
+    { id: 'business', label: '私たちの仕事' },
+    { id: 'news', label: 'お知らせ' },
+    { id: 'company', label: '会社情報' },
+    { id: 'contact', label: 'お問い合わせ' }
+  ];
+
   return (
-    <footer className="bg-gray-800 text-white py-12 notranslate" translate="no" lang="ja">
-      <div className="max-w-6xl mx-auto px-4">
-        {/* Menu */}
-        <nav className="flex flex-wrap justify-center items-center gap-8 pb-8">
-          {menuItems.map((item) => (
+    <footer className="w-full bg-gray-50 border-t border-gray-200 mt-16 md:mt-24">
+      <div className="max-w-[1280px] mx-auto px-4 py-12 md:py-16">
+        {/* Footer Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-16 mb-12">
+          {/* Logo and Company Info */}
+          <div className="space-y-4">
             <button
-              key={item.id}
-              onClick={() => handleClick(item.id)}
-              className="text-sm font-medium text-white hover:text-gray-300 transition-colors"
+              onClick={handleLogoClick}
+              className="hover:opacity-80 transition-opacity duration-200"
             >
-              {item.label}
+              {settings?.footer_logo_url ? (
+                <img
+                  src={settings.footer_logo_url}
+                  alt="ロゴ"
+                  className="h-12 object-contain"
+                />
+              ) : (
+                <div className="h-12 w-32 bg-gray-300 rounded"></div>
+              )}
             </button>
-          ))}
-        </nav>
-
-        {/* Logo */}
-        <div className="flex justify-center py-6">
-          {settings?.footer_logo_url ? (
-            <img src={settings.footer_logo_url} alt="KR企画" className="h-16 max-w-full object-contain" />
-          ) : settings?.logo_url ? (
-            <img src={settings.logo_url} alt="KR企画" className="h-16 max-w-full object-contain" />
-          ) : (
-            <div className="text-2xl font-semibold tracking-wider">
-              <span className="font-bold">KR</span>企画
+            <div className="space-y-2 text-sm text-gray-600">
+              {settings?.company_name && (
+                <p className="font-medium text-gray-900">{settings.company_name}</p>
+              )}
+              {settings?.address && (
+                <p>{settings.address}</p>
+              )}
+              {settings?.phone && (
+                <p>Tel: {settings.phone}</p>
+              )}
             </div>
-          )}
+          </div>
+
+          {/* Navigation Links */}
+          <div>
+            <h3 className="font-semibold text-gray-900 mb-4 text-sm">メニュー</h3>
+            <nav className="space-y-3">
+              {menuItems.map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => onNavigate(item.id)}
+                  className="block text-sm text-gray-600 hover:text-blue-600 transition-colors duration-200"
+                >
+                  {item.label}
+                </button>
+              ))}
+            </nav>
+          </div>
+
+          {/* Additional Links */}
+          <div>
+            <h3 className="font-semibold text-gray-900 mb-4 text-sm">その他</h3>
+            <nav className="space-y-3">
+              <button
+                onClick={() => navigate(createPageUrl('PrivacyPolicy'))}
+                className="block text-sm text-gray-600 hover:text-blue-600 transition-colors duration-200"
+              >
+                プライバシーポリシー
+              </button>
+              <button
+                onClick={() => navigate(createPageUrl('NewsList'))}
+                className="block text-sm text-gray-600 hover:text-blue-600 transition-colors duration-200"
+              >
+                お知らせ一覧
+              </button>
+            </nav>
+          </div>
         </div>
 
-        {/* Privacy Policy */}
-        <div className="text-center py-4">
-          <Link
-            to={createPageUrl('PrivacyPolicy')}
-            className="text-xs text-gray-300 hover:text-white transition-colors"
-          >
-            プライバシーポリシー
-          </Link>
-        </div>
-
-        {/* Copyright */}
-        <div className="text-center">
-          <p className="text-xs text-gray-400">
-            ©2025 合同会社 KR企画
-          </p>
+        {/* Bottom Section */}
+        <div className="border-t border-gray-200 pt-8">
+          <div className="flex flex-col md:flex-row justify-between items-center text-xs text-gray-500 space-y-4 md:space-y-0">
+            <p>&copy; {new Date().getFullYear()} {settings?.company_name || 'Company'}. All rights reserved.</p>
+            <p>Powered by Base44</p>
+          </div>
         </div>
       </div>
     </footer>
