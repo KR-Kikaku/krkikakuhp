@@ -17,8 +17,8 @@ export default function GreetingSection() {
         <h2 className="text-center mb-12">{settings.greeting_title}</h2>
         
         <div className="grid md:grid-cols-2 gap-12 items-start">
-          <div className="greeting-text">
-            <div dangerouslySetInnerHTML={{ __html: settings.greeting_text }} />
+          <div className="greeting-text whitespace-pre-wrap">
+            {settings.greeting_text}
           </div>
           
           {settings.greeting_image_url && (
