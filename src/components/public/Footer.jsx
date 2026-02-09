@@ -35,10 +35,10 @@ export default function Footer({ onNavigate }) {
         {/* Footer Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-16 mb-12">
           {/* Logo and Company Info */}
-          <div className="space-y-4">
+          <div className="space-y-4 flex flex-col items-center md:items-start">
             <button
               onClick={handleLogoClick}
-              className="hover:opacity-80 transition-opacity duration-200"
+              className="hover:opacity-70 transition-opacity duration-200 active:scale-95"
             >
               {settings?.footer_logo_url ? (
                 <img
@@ -50,7 +50,7 @@ export default function Footer({ onNavigate }) {
                 <div className="h-12 w-32 bg-gray-300 rounded"></div>
               )}
             </button>
-            <div className="space-y-2 text-sm text-gray-600">
+            <div className="space-y-2 text-sm text-gray-600 md:text-left text-center">
               {settings?.company_name && (
                 <p className="font-medium text-gray-900">{settings.company_name}</p>
               )}
@@ -64,14 +64,14 @@ export default function Footer({ onNavigate }) {
           </div>
 
           {/* Navigation Links */}
-          <div>
+          <div className="flex flex-col items-center md:items-start">
             <h3 className="font-semibold text-gray-900 mb-4 text-sm">メニュー</h3>
             <nav className="space-y-3">
               {menuItems.map((item) => (
                 <button
                   key={item.id}
                   onClick={() => onNavigate(item.id)}
-                  className="block text-sm text-gray-600 hover:text-blue-600 transition-colors duration-200"
+                  className="block text-sm text-gray-600 hover:text-blue-600 hover:translate-x-1 transition-all duration-200 active:scale-95"
                 >
                   {item.label}
                 </button>
@@ -80,20 +80,20 @@ export default function Footer({ onNavigate }) {
           </div>
 
           {/* Additional Links */}
-          <div>
+          <div className="flex flex-col items-center md:items-start">
             <h3 className="font-semibold text-gray-900 mb-4 text-sm">その他</h3>
             <nav className="space-y-3">
               <button
                 onClick={() => navigate(createPageUrl('PrivacyPolicy'))}
-                className="block text-sm text-gray-600 hover:text-blue-600 transition-colors duration-200"
+                className="block text-sm text-gray-600 hover:text-blue-600 hover:translate-x-1 transition-all duration-200 active:scale-95"
               >
                 プライバシーポリシー
               </button>
               <button
                 onClick={() => navigate(createPageUrl('NewsList'))}
-                className="block text-sm text-gray-600 hover:text-blue-600 transition-colors duration-200"
+                className="block text-sm text-gray-600 hover:text-blue-600 hover:translate-x-1 transition-all duration-200 active:scale-95"
               >
-                お知らせ一覧
+                お知らせ
               </button>
             </nav>
           </div>
@@ -101,9 +101,8 @@ export default function Footer({ onNavigate }) {
 
         {/* Bottom Section */}
         <div className="border-t border-gray-200 pt-8">
-          <div className="flex flex-col md:flex-row justify-between items-center text-xs text-gray-500 space-y-4 md:space-y-0">
+          <div className="text-center text-xs text-gray-500">
             <p>&copy; {new Date().getFullYear()} {settings?.company_name || 'Company'}. All rights reserved.</p>
-            <p>Powered by Base44</p>
           </div>
         </div>
       </div>
