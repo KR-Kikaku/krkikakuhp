@@ -14,7 +14,7 @@ export default function GreetingSection() {
   return (
     <section id="greeting" className="py-20 px-6">
       <div className="max-w-7xl mx-auto">
-        <h2 className="text-center mb-12">{settings.greeting_title}</h2>
+        <h2 className="text-center mb-12 font-semibold">{settings.greeting_title}</h2>
         
         <div className="grid md:grid-cols-2 gap-12 items-start">
           <div className="greeting-text whitespace-pre-wrap">

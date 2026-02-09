@@ -1,66 +1,52 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
+import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import { Link } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
-import { format } from 'date-fns';
-import { ja } from 'date-fns/locale';
 
 export default function NewsSection() {
+  const navigate = useNavigate();
   const { data: news } = useQuery({
-    queryKey: ['latestNews'],
+    queryKey: ['news'],
     queryFn: () => base44.entities.News.filter({ status: 'published' }, '-publish_date', 3),
     initialData: []
   });
 
-  if (news.length === 0) return null;
+  if (!news.length) return null;
 
   return (
-    <section id="news" className="py-16 md:py-24 px-4 md:px-8 notranslate" translate="no" lang="ja">
-      <div className="max-w-6xl mx-auto">
-        <div className="flex justify-between items-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-            ニュース
-          </h2>
-          <Link 
-            to={createPageUrl('NewsList')}
-            className="text-blue-600 hover:text-blue-700 flex items-center gap-2 text-sm font-medium"
-          >
-            すべて見る
-            <ArrowRight size={18} />
-          </Link>
-        </div>
-
-        <div className="grid md:grid-cols-3 gap-6">
+    <section id="news" className="py-20 px-6">
+      <div className="max-w-7xl mx-auto">
+        <h2 className="text-center mb-12 font-semibold">ニュース</h2>
+        
+        <div className="grid md:grid-cols-3 gap-8 mb-8">
           {news.map((item) => (
-            <Link
+            <div
               key={item.id}
-              to={createPageUrl('NewsDetail') + `?slug=${item.slug}`}
-              className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow"
+              onClick={() => navigate(createPageUrl('NewsDetail') + `?slug=${item.slug}`)}
+              className="bg-white rounded shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition"
             >
               {item.thumbnail_image && (
-                <img 
-                  src={item.thumbnail_image} 
-                  alt={item.title}
-                  className="w-full h-48 object-cover"
-                />
+                <img src={item.thumbnail_image} alt="" className="w-full h-48 object-cover" />
               )}
-              <div className="p-6">
-                <div className="flex items-center gap-3 mb-3">
-                  <span className="px-3 py-1 bg-blue-100 text-blue-700 text-xs rounded-full">
-                    {item.category}
-                  </span>
-                  <span className="text-sm text-gray-500">
-                    {format(new Date(item.publish_date), 'yyyy.MM.dd', { locale: ja })}
-                  </span>
+              <div className="p-4">
+                <div className="text-sm text-gray-500 mb-2">{item.category}</div>
+                <h3 className="mb-2 font-semibold">{item.title}</h3>
+                <div className="text-sm text-gray-500">
+                  {new Date(item.publish_date).toLocaleDateString('ja-JP')}
                 </div>
-                <h3 className="font-bold text-gray-900 line-clamp-2">
-                  {item.title}
-                </h3>
               </div>
-            </Link>
+            </div>
           ))}
+        </div>
+        
+        <div className="text-center">
+          <button
+            onClick={() => navigate(createPageUrl('NewsList'))}
+            className="bg-blue-600 text-white px-8 py-3 rounded hover:bg-blue-700 transition font-semibold"
+          >
+            ニュース一覧へ
+          </button>
         </div>
       </div>
     </section>

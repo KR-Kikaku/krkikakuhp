@@ -20,7 +20,7 @@ export default function BusinessSection() {
   return (
     <section id="business" className="py-20 px-6 bg-gray-50">
       <div className="max-w-7xl mx-auto">
-        <h2 className="text-center mb-6">私たちの仕事</h2>
+        <h2 className="text-center mb-6 font-semibold">私たちの仕事</h2>
         
         {settings?.work_banner_url && (
           <img src={settings.work_banner_url} alt="" className="w-full h-64 object-cover rounded shadow-lg mb-12" />
@@ -31,10 +31,10 @@ export default function BusinessSection() {
             <div key={business.id} className="bg-white rounded shadow-md p-8">
               {business.title_link ? (
                 <a href={business.title_link} target="_blank" rel="noopener noreferrer">
-                  <h3 className="mb-4 hover:text-blue-600 transition">{business.title}</h3>
+                  <h3 className="mb-4 font-semibold hover:text-blue-600 transition">{business.title}</h3>
                 </a>
               ) : (
-                <h3 className="mb-4">{business.title}</h3>
+                <h3 className="mb-4 font-semibold">{business.title}</h3>
               )}
               
               <p className="mb-6 whitespace-pre-wrap">{business.description}</p>
