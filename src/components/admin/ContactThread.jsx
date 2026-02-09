@@ -3,6 +3,10 @@ import { Label } from '@/components/ui/label';
 import { format } from 'date-fns';
 import { ja } from 'date-fns/locale';
 
+/**
+ * 連絡スレッド表示コンポーネント
+ * @param {Object} contact - お問い合わせデータ
+ */
 export default function ContactThread({ contact }) {
   const replies = contact.replies || [];
 

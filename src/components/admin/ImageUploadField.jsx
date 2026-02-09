@@ -4,6 +4,16 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Upload } from 'lucide-react';
 
+/**
+ * 画像アップロードフィールド
+ * @param {string} label - ラベルテキスト
+ * @param {string} value - 現在の画像URL
+ * @param {function} onChange - ファイル変更時のコールバック
+ * @param {boolean} isUploading - アップロード中フラグ
+ * @param {string} recommendedSize - 推奨サイズ表示
+ * @param {string} inputId - input要素のID
+ * @param {string} accept - 受け付けるファイル形式
+ */
 export default function ImageUploadField({
   label,
   value,
@@ -11,9 +21,9 @@ export default function ImageUploadField({
   isUploading,
   recommendedSize,
   inputId,
-  accept = 'image/*'
+  accept = 'image/*',
 }) {
-  const handleUploadClick = () => {
+  const handleUploadButtonClick = () => {
     document.getElementById(inputId).click();
   };
 
@@ -42,7 +52,7 @@ export default function ImageUploadField({
           <Button
             type="button"
             variant="outline"
-            onClick={handleUploadClick}
+            onClick={handleUploadButtonClick}
             disabled={isUploading}
           >
             {isUploading ? 'アップロード中...' : (

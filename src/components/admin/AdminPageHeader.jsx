@@ -2,12 +2,20 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Save, Loader2 } from 'lucide-react';
 
+/**
+ * 管理画面のページヘッダーコンポーネント
+ * @param {string} title - ページタイトル
+ * @param {string} description - ページ説明
+ * @param {function} onSave - 保存ボタンクリック時のコールバック
+ * @param {boolean} isSaving - 保存中フラグ
+ * @param {ReactNode} actionButton - カスタムアクションボタン
+ */
 export default function AdminPageHeader({
   title,
   description,
   onSave,
   isSaving,
-  actionButton = null
+  actionButton = null,
 }) {
   return (
     <div className="mb-8 flex justify-between items-center">
