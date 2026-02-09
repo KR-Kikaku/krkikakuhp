@@ -12,7 +12,7 @@ export default function GreetingSection() {
   if (!settings?.greeting_title) return null;
 
   return (
-    <section className="py-20 px-6">
+    <section id="greeting" className="py-20 px-6">
       <div className="max-w-7xl mx-auto">
         <h2 className="text-center mb-12">{settings.greeting_title}</h2>
         
