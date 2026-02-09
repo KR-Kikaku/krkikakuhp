@@ -1,37 +1,71 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { base44 } from '@/api/base44Client';
+import { useQuery } from '@tanstack/react-query';
 
 export default function GreetingSection() {
-  const [settings, setSettings] = useState(null);
-
-  useEffect(() => {
-    const fetchSettings = async () => {
+  const { data: settings, isLoading } = useQuery({
+    queryKey: ['siteSettings'],
+    queryFn: async () => {
       const data = await base44.entities.SiteSettings.list();
-      if (data.length > 0) {
-        setSettings(data[0]);
-      }
-    };
-    fetchSettings();
-  }, []);
+      return data.length > 0 ? data[0] : null;
+    },
+    staleTime: 0,
+    cacheTime: 0,
+  });
+
+  const defaultTitle = 'あなたの日常を明るく、楽しいものへ';
+  const defaultText = `合同会社KR企画のホームページをご覧いただき、心よりありがとうございます。
+私たちは、ITを軸にしながら、イベント企画や物販など、ジャンルにとらわれない企画やアイデアを形にする会社です。
+「挑戦するなら、とことん自分たち、みんなが楽しめるものをつくりたい」そんなシンプルな思いが、KR企画のスタートでした。
+楽しさを掘り起こし、技術と発想を組み合わせて、もっと身近に届けていきたい。
+そして、この事業を通じて、皆さまの日常が少し明るくなる瞬間を増やせたら、これほど嬉しいことはありません。`;
+
+  if (isLoading) {
+    return (
+      <section className="py-20 md:py-32 bg-white notranslate" translate="no" lang="ja">
+        <div className="max-w-4xl mx-auto px-4">
+          <div className="h-8 bg-gray-100 rounded animate-pulse mb-12" />
+          <div className="h-32 bg-gray-100 rounded animate-pulse" />
+        </div>
+      </section>
+    );
+  }
 
   return (
-    <section id="greeting" className="py-16 md:py-24 bg-gray-50 notranslate" translate="no" lang="ja">
-      <div className="max-w-6xl mx-auto px-4 md:px-8">
-        <h2 className="text-2xl md:text-3xl font-bold text-center mb-4">
-          {settings?.greeting_title || 'ご挨拶'}
-        </h2>
-
-        <p className="text-center text-sm md:text-base text-gray-600 mb-12">
-          あなたの日常を明るく、楽しいものへ
+    <section className="py-20 md:py-32 bg-white notranslate" translate="no" lang="ja">
+      <div className="max-w-4xl mx-auto px-4">
+        <p id="greeting" className="text-2xl md:text-3xl font-semibold text-center mb-6 tracking-wide text-gray-800">
+          ご挨拶
         </p>
-
-        <div className="bg-white rounded-lg p-8 md:p-12 border border-gray-200">
-          {settings?.greeting_text && (
-            <p className="text-gray-700 text-sm md:text-base leading-relaxed whitespace-pre-line">
-              {settings.greeting_text}
-            </p>
-          )}
+        <h2 className="text-xl md:text-2xl font-medium text-left mb-12 tracking-wide text-gray-700">
+          {settings?.greeting_title || defaultTitle}
+        </h2>
+        
+        <div className="max-w-4xl mx-auto">
+          <div className="text-gray-700 text-left whitespace-pre-line text-sm md:text-base font-medium tracking-wide" style={{ lineHeight: '2' }}>
+            {settings?.greeting_text || defaultText}
+          </div>
         </div>
+
+        {(settings?.greeting_image_url || !settings) && (
+          <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-4">
+            <img
+              src={settings?.greeting_image_url || "https://images.unsplash.com/photo-1497366216548-37526070297c?w=400&h=300&fit=crop"}
+              alt="Greeting"
+              className="w-full aspect-[4/3] object-cover rounded-lg"
+            />
+            <img
+              src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop"
+              alt="Office"
+              className="w-full aspect-[4/3] object-cover rounded-lg"
+            />
+            <img
+              src="https://images.unsplash.com/photo-1556761175-b413da4baf72?w=400&h=300&fit=crop"
+              alt="Team"
+              className="w-full aspect-[4/3] object-cover rounded-lg"
+            />
+          </div>
+        )}
       </div>
     </section>
   );

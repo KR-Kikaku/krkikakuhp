@@ -1,95 +1,75 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { base44 } from '@/api/base44Client';
+import { useQuery } from '@tanstack/react-query';
 
 export default function CompanySection() {
-  const [settings, setSettings] = useState(null);
-
-  useEffect(() => {
-    const fetchSettings = async () => {
+  const { data: settings } = useQuery({
+    queryKey: ['siteSettings'],
+    queryFn: async () => {
       const data = await base44.entities.SiteSettings.list();
-      if (data.length > 0) {
-        setSettings(data[0]);
-      }
-    };
-    fetchSettings();
-  }, []);
+      return data.length > 0 ? data[0] : null;
+    },
+  });
+
+  const defaultCeoTitle = '「何事も挑戦」';
+  const defaultCeoMessage = `私の信念は、「何事も挑戦」。
+新しい企画にも、未知の分野にも、まずは一歩踏み出すこと。
+その姿勢こそが、KR企画らしさであり、これからも変わらず大切にしていく想いです。
+これからも、皆さまに柔軟に、誠実に、そして楽しみながら挑戦を続けてまいります。
+どうぞ、今後の合同会社KR企画にご期待ください。`;
+  const defaultCeoName = '代表社員 兼 CEO　田中 恭平';
+
+  const companyInfo = [
+    { label: '会社名', value: settings?.company_name || '合同会社 KR企画' },
+    { label: '代表', value: settings?.representative || '田中 恭平' },
+    { label: '設立日', value: settings?.established_date || '2025年12月23日' },
+    { label: '所在地', value: settings?.address || '〒333-3333 岡山県岡山市XXXXXXXXXXXXXXX' },
+    { label: '電話番号', value: settings?.phone || '00-0000-0000' },
+  ];
 
   return (
-    <section id="company" className="py-16 md:py-24 notranslate" translate="no" lang="ja">
-      <div className="max-w-6xl mx-auto px-4 md:px-8">
-        <h2 className="text-2xl md:text-3xl font-bold text-center mb-12">
-          会社情報
-        </h2>
+    <section id="company" className="notranslate" translate="no" lang="ja">
+      {/* Banner */}
+      <div className="relative w-full aspect-[16/6] sm:aspect-[16/5] overflow-hidden">
+        <img
+          src={settings?.company_banner_url || "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1600&h=400&fit=crop"}
+          alt="会社情報"
+          className="w-full h-full object-cover"
+        />
+      </div>
 
-        {settings?.company_banner_url && (
-          <img
-            src={settings.company_banner_url}
-            alt="会社情報バナー"
-            className="w-full h-auto rounded-lg object-cover aspect-video mb-12"
-          />
-        )}
-
-        <div className="max-w-3xl mx-auto space-y-12">
-          {settings?.ceo_title && (
-            <div>
-              <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">
-                {settings.ceo_title}
-              </h3>
-              {settings?.ceo_message && (
-                <p className="text-gray-700 text-sm md:text-base leading-relaxed whitespace-pre-line">
-                  {settings.ceo_message}
-                </p>
-              )}
-              {settings?.ceo_name && (
-                <p className="text-gray-900 font-bold mt-8">
-                  {settings.ceo_name}
-                </p>
-              )}
+      <div className="py-20 md:py-32 bg-white">
+        <div className="max-w-4xl mx-auto px-4">
+          {/* CEO Message */}
+          <div className="mb-20">
+            <h3 className="text-xl md:text-2xl font-semibold text-left mb-8 text-gray-800 tracking-wide">
+              {settings?.ceo_title || defaultCeoTitle}
+            </h3>
+            <div className="max-w-4xl mx-auto">
+              <p className="text-gray-700 text-left whitespace-pre-line font-medium tracking-wide" style={{ lineHeight: '2' }}>
+                {settings?.ceo_message || defaultCeoMessage}
+              </p>
             </div>
-          )}
+            <p className="text-right mt-8 text-gray-800 font-semibold tracking-wide">
+              {settings?.ceo_name || defaultCeoName}
+            </p>
+          </div>
 
-          <div className="border-t pt-8">
-            <table className="w-full text-sm md:text-base">
-              <tbody className="space-y-4">
-                {settings?.company_name && (
-                  <tr>
-                    <td className="font-bold text-gray-900 pb-4 w-28">会社名</td>
-                    <td className="text-gray-700 pb-4">{settings.company_name}</td>
-                  </tr>
-                )}
-                {settings?.representative && (
-                  <tr>
-                    <td className="font-bold text-gray-900 pb-4">代表</td>
-                    <td className="text-gray-700 pb-4">{settings.representative}</td>
-                  </tr>
-                )}
-                {settings?.established_date && (
-                  <tr>
-                    <td className="font-bold text-gray-900 pb-4">設立日</td>
-                    <td className="text-gray-700 pb-4">{settings.established_date}</td>
-                  </tr>
-                )}
-                {settings?.address && (
-                  <tr>
-                    <td className="font-bold text-gray-900 pb-4">所在地</td>
-                    <td className="text-gray-700 pb-4">{settings.address}</td>
-                  </tr>
-                )}
-                {settings?.phone && (
-                  <tr>
-                    <td className="font-bold text-gray-900">電話番号</td>
-                    <td className="text-gray-700">
-                      <a
-                        href={`tel:${settings.phone}`}
-                        className="hover:text-blue-600 transition-colors"
-                      >
-                        {settings.phone}
-                      </a>
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
+          {/* Company Info Table */}
+          <div className="border-t border-gray-200">
+            {companyInfo.map((info, index) => (
+              <div
+                key={index}
+                className="flex flex-col md:flex-row border-b border-gray-200 py-4"
+              >
+                <div className="w-full md:w-1/4 font-medium text-gray-700 mb-2 md:mb-0">
+                  {info.label}
+                </div>
+                <div className="w-full md:w-3/4 text-gray-600">
+                  {info.value}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>

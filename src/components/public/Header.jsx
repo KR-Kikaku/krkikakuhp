@@ -1,83 +1,100 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { base44 } from '@/api/base44Client';
+import { useQuery } from '@tanstack/react-query';
 import { Menu, X } from 'lucide-react';
-import { createPageUrl } from '@/utils';
 
 export default function Header({ onNavigate }) {
-  const [isOpen, setIsOpen] = useState(false);
-  const [settings, setSettings] = useState(null);
-
-  useEffect(() => {
-    const fetchSettings = async () => {
+  const { data: settings } = useQuery({
+    queryKey: ['siteSettings'],
+    queryFn: async () => {
       const data = await base44.entities.SiteSettings.list();
-      if (data.length > 0) {
-        setSettings(data[0]);
-      }
-    };
-    fetchSettings();
-  }, []);
+      return data.length > 0 ? data[0] : null;
+    },
+  });
+  
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const handleNavClick = (id) => {
-    setIsOpen(false);
-    onNavigate(id);
-  };
-
-  const navLinks = [
+  const menuItems = [
     { label: 'ご挨拶', id: 'greeting' },
-    { label: '事業紹介', id: 'business' },
+    { label: '私たちの仕事', id: 'work' },
     { label: 'お知らせ', id: 'news' },
     { label: '会社情報', id: 'company' },
-    { label: 'お問い合わせ', id: 'contact' }
+    { label: 'お問い合わせ', id: 'contact' },
   ];
 
+  const handleClick = (id) => {
+    if (onNavigate) {
+      onNavigate(id);
+    } else {
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+    setIsMenuOpen(false);
+  };
+
   return (
-    <header className="sticky top-0 z-50 bg-white border-b border-gray-100 notranslate" translate="no" lang="ja">
-      <div className="flex items-center justify-between px-4 md:px-8 py-4 md:py-6">
-        {/* ロゴ */}
-        <div className="flex items-center">
-          {settings?.logo_url && (
-            <img src={settings.logo_url} alt="ロゴ" className="h-8 md:h-10" />
-          )}
-        </div>
-
-        {/* デスクトップナビゲーション */}
-        <nav className="hidden md:flex gap-8">
-          {navLinks.map((link) => (
-            <button
-              key={link.id}
-              onClick={() => handleNavClick(link.id)}
-              className="text-sm text-gray-700 hover:text-gray-900 transition-colors"
-            >
-              {link.label}
-            </button>
-          ))}
-        </nav>
-
-        {/* モバイルメニューボタン */}
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="md:hidden text-gray-700"
-        >
-          {isOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
-      </div>
-
-      {/* モバイルナビゲーション */}
-      {isOpen && (
-        <nav className="md:hidden border-t border-gray-100 bg-white">
-          <div className="px-4 py-4 space-y-4">
-            {navLinks.map((link) => (
+    <header className="bg-white notranslate" translate="no" lang="ja">
+      <div className="max-w-6xl mx-auto px-4">
+        {/* Logo and Mobile Menu - Desktop */}
+        <div className="hidden md:block">
+          <div className="flex justify-center py-6">
+            {settings?.logo_url ? (
+              <img src={settings.logo_url} alt="KR企画" className="h-16 max-w-full object-contain" />
+            ) : (
+              <div className="text-2xl font-semibold tracking-wider text-gray-800">
+                <span className="font-bold">KR</span>企画
+              </div>
+            )}
+          </div>
+          <nav className="flex items-center justify-center gap-12 w-full py-4">
+            {menuItems.map((item) => (
               <button
-                key={link.id}
-                onClick={() => handleNavClick(link.id)}
-                className="block w-full text-left text-gray-700 hover:text-gray-900 py-2"
+                key={item.id}
+                onClick={() => handleClick(item.id)}
+                className="text-sm font-semibold text-gray-700 hover:text-gray-900 transition-colors tracking-widest"
               >
-                {link.label}
+                {item.label}
               </button>
             ))}
+          </nav>
+        </div>
+
+        {/* Logo and Mobile Menu - Mobile */}
+        <div className="md:hidden flex items-center justify-between py-6">
+          <div>
+            {settings?.logo_url ? (
+              <img src={settings.logo_url} alt="KR企画" className="h-12 max-w-full object-contain" />
+            ) : (
+              <div className="text-xl font-semibold tracking-wider text-gray-800">
+                <span className="font-bold">KR</span>企画
+              </div>
+            )}
           </div>
-        </nav>
-      )}
+          <button
+            className="p-2"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          >
+            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
+
+        {/* Mobile Menu */}
+        {isMenuOpen && (
+          <nav className="md:hidden pb-4 border-t">
+            {menuItems.map((item) => (
+              <button
+                key={item.id}
+                onClick={() => handleClick(item.id)}
+                className="block w-full text-left py-3 font-semibold text-gray-700 hover:text-gray-900 transition-colors"
+              >
+                {item.label}
+              </button>
+            ))}
+          </nav>
+        )}
+      </div>
     </header>
   );
 }
