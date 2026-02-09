@@ -35,7 +35,6 @@ export default function AdminNews() {
     slug: '',
     content: '',
     cover_image: '',
-    thumbnail_image: '',
     category: 'お知らせ',
     status: 'draft',
     publish_date: ''
@@ -59,7 +58,6 @@ export default function AdminNews() {
         slug: news.slug || '',
         content: news.content || '',
         cover_image: news.cover_image || '',
-        thumbnail_image: news.thumbnail_image || '',
         category: news.category || 'お知らせ',
         status: news.status || 'draft',
         publish_date: news.publish_date ? news.publish_date.slice(0, 16) : ''
@@ -71,7 +69,6 @@ export default function AdminNews() {
         slug: '',
         content: '',
         cover_image: '',
-        thumbnail_image: '',
         category: 'お知らせ',
         status: 'draft',
         publish_date: ''
@@ -132,16 +129,6 @@ export default function AdminNews() {
     setIsUploading(false);
   };
 
-  const handleThumbnailUpload = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    setIsUploading(true);
-    const { file_url } = await base44.integrations.Core.UploadFile({ file });
-    setFormData(prev => ({ ...prev, thumbnail_image: file_url }));
-    setIsUploading(false);
-  };
-
   return (
     <AdminLayout currentPage="news">
       <div className="mb-8 flex justify-between items-center">
@@ -160,9 +147,9 @@ export default function AdminNews() {
           <Card key={news.id}>
             <CardContent className="p-4">
               <div className="flex items-center gap-4">
-                {(news.thumbnail_image || news.cover_image) && (
+                {news.cover_image && (
                   <img
-                    src={news.thumbnail_image || news.cover_image}
+                    src={news.cover_image}
                     alt=""
                     className="w-24 h-16 object-cover rounded"
                   />
@@ -297,68 +284,34 @@ export default function AdminNews() {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <Label>サムネイル画像（一覧表示用）</Label>
-                <p className="text-xs text-gray-500 mt-1">推奨サイズ: 400×400px（比率 1:1）</p>
-                <div className="mt-2 flex items-center gap-4">
-                  {formData.thumbnail_image && (
-                    <img src={formData.thumbnail_image} alt="" className="w-24 h-24 object-cover rounded" />
-                  )}
-                  <div>
-                    <input
-                      type="file"
-                      id="thumbnailImage"
-                      accept="image/*"
-                      onChange={handleThumbnailUpload}
-                      className="hidden"
-                    />
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => document.getElementById('thumbnailImage').click()}
-                      disabled={isUploading}
-                    >
-                      {isUploading ? 'アップロード中...' : (
-                        <>
-                          <Upload className="w-4 h-4 mr-2" />
-                          画像を選択
-                        </>
-                      )}
-                    </Button>
-                  </div>
-                </div>
-              </div>
-
-              <div>
-                <Label>カバー画像（記事詳細用）</Label>
-                <p className="text-xs text-gray-500 mt-1">推奨サイズ: 1200×600px（比率 2:1）</p>
-                <div className="mt-2 flex items-center gap-4">
-                  {formData.cover_image && (
-                    <img src={formData.cover_image} alt="" className="w-32 h-20 object-cover rounded" />
-                  )}
-                  <div>
-                    <input
-                      type="file"
-                      id="coverImage"
-                      accept="image/*"
-                      onChange={handleCoverUpload}
-                      className="hidden"
-                    />
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => document.getElementById('coverImage').click()}
-                      disabled={isUploading}
-                    >
-                      {isUploading ? 'アップロード中...' : (
-                        <>
-                          <Upload className="w-4 h-4 mr-2" />
-                          画像を選択
-                        </>
-                      )}
-                    </Button>
-                  </div>
+            <div>
+              <Label>カバー画像</Label>
+              <p className="text-xs text-gray-500 mt-1">推奨サイズ: 横 1200-1600px、縦 600-800px</p>
+              <div className="mt-2 flex items-center gap-4">
+                {formData.cover_image && (
+                  <img src={formData.cover_image} alt="" className="w-32 h-20 object-cover rounded" />
+                )}
+                <div>
+                  <input
+                    type="file"
+                    id="coverImage"
+                    accept="image/*"
+                    onChange={handleCoverUpload}
+                    className="hidden"
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => document.getElementById('coverImage').click()}
+                    disabled={isUploading}
+                  >
+                    {isUploading ? 'アップロード中...' : (
+                      <>
+                        <Upload className="w-4 h-4 mr-2" />
+                        画像を選択
+                      </>
+                    )}
+                  </Button>
                 </div>
               </div>
             </div>

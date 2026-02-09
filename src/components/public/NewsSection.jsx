@@ -1,53 +1,75 @@
-import React from 'react';
-import { useQuery } from '@tanstack/react-query';
+import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
+import { format } from 'date-fns';
+import { ja } from 'date-fns/locale';
 
 export default function NewsSection() {
-  const navigate = useNavigate();
-  const { data: news } = useQuery({
-    queryKey: ['news'],
-    queryFn: () => base44.entities.News.filter({ status: 'published' }, '-publish_date', 3),
-    initialData: []
-  });
+  const [news, setNews] = useState([]);
 
-  if (!news.length) return null;
+  useEffect(() => {
+    const fetchNews = async () => {
+      const data = await base44.entities.News.filter({ status: 'published' }, '-publish_date', 3);
+      setNews(data);
+    };
+    fetchNews();
+  }, []);
 
   return (
-    <section id="news" className="py-20 px-6">
-      <div className="max-w-7xl mx-auto">
-        <h2 className="text-center mb-12 font-semibold">ニュース</h2>
-        
-        <div className="grid md:grid-cols-3 gap-8 mb-8">
-          {news.map((item) => (
-            <div
-              key={item.id}
-              onClick={() => navigate(createPageUrl('NewsDetail') + `?slug=${item.slug}`)}
-              className="bg-white rounded shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition"
-            >
-              {item.thumbnail_image && (
-                <img src={item.thumbnail_image} alt="" className="w-full h-48 object-cover" />
-              )}
-              <div className="p-4">
-                <div className="text-sm text-gray-500 mb-2">{item.category}</div>
-                <h3 className="mb-2 font-semibold">{item.title}</h3>
-                <div className="text-sm text-gray-500">
-                  {new Date(item.publish_date).toLocaleDateString('ja-JP')}
+    <section id="news" className="py-20 md:py-32 bg-gray-50 notranslate" translate="no" lang="ja">
+      <div className="max-w-5xl mx-auto px-4">
+        <h2 className="text-2xl md:text-3xl font-semibold text-center mb-12 tracking-wide text-gray-800">
+          お知らせ
+        </h2>
+
+        <div className="space-y-6">
+          {news.length > 0 ? (
+            news.map((item) => (
+              <Link
+                key={item.id}
+                to={createPageUrl(`NewsDetail?slug=${item.slug}`)}
+                className="block bg-white rounded-lg p-4 md:p-6 hover:shadow-lg transition-shadow"
+              >
+                <div className="flex flex-col md:flex-row gap-4">
+                  {item.cover_image && (
+                    <img
+                      src={item.cover_image}
+                      alt={item.title}
+                      className="w-full md:w-32 h-48 md:h-32 object-cover rounded-lg flex-shrink-0"
+                    />
+                  )}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex flex-wrap items-center gap-2 md:gap-3 mb-2">
+                      <span className="text-xs px-2 py-1 bg-gray-100 rounded text-gray-600">
+                        {item.category}
+                      </span>
+                      <span className="text-xs text-gray-400">
+                        {item.publish_date && format(new Date(item.publish_date), 'yyyy.MM.dd', { locale: ja })}
+                      </span>
+                    </div>
+                    <h3 className="text-base md:text-lg font-medium text-gray-800 break-words">{item.title}</h3>
+                  </div>
                 </div>
-              </div>
+              </Link>
+            ))
+          ) : (
+            <div className="text-center text-gray-500 py-12">
+              お知らせはまだありません
             </div>
-          ))}
+          )}
         </div>
-        
-        <div className="text-center">
-          <button
-            onClick={() => navigate(createPageUrl('NewsList'))}
-            className="bg-blue-600 text-white px-8 py-3 rounded hover:bg-blue-700 transition font-semibold"
-          >
-            ニュース一覧へ
-          </button>
-        </div>
+
+        {news.length >= 3 && (
+          <div className="text-center mt-12">
+            <Link
+              to={createPageUrl('NewsList')}
+              className="inline-flex items-center gap-2 px-8 py-3 border-2 border-gray-800 rounded-full text-sm font-semibold text-gray-800 hover:bg-gray-800 hover:text-white transition-all"
+            >
+              more <span className="text-lg">+</span>
+            </Link>
+          </div>
+        )}
       </div>
     </section>
   );
