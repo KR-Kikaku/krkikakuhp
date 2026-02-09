@@ -29,21 +29,17 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-white notranslate" translate="no" lang="ja">
-      <div className="max-w-[1280px] mx-auto">
-        <Header onNavigate={handleNavigate} />
-        <div className="mt-8 md:mt-12"></div>
-        <main>
-          <Carousel />
-          <div className="-mt-12 md:-mt-16"></div>
-          <GreetingSection />
-          <BusinessSection />
-          <NewsSection />
-          <CompanySection />
-          <ContactSection />
-        </main>
-        <Footer onNavigate={handleNavigate} />
+    <div className="min-h-screen bg-white">
+      <Header onNavigate={handleNavigate} />
+      <div className="pt-20">
+        <Carousel />
+        <GreetingSection />
+        <BusinessSection />
+        <NewsSection />
+        <CompanySection />
+        <ContactSection />
       </div>
+      <Footer onNavigate={handleNavigate} />
     </div>
   );
 }
