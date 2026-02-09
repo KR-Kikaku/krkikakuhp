@@ -65,6 +65,7 @@ export default function AdminNews() {
         slug: news.slug || '',
         content: news.content || '',
         cover_image: news.cover_image || '',
+        thumbnail_image: news.thumbnail_image || '',
         category: news.category || 'お知らせ',
         status: news.status || 'draft',
         publish_date: news.publish_date ? news.publish_date.slice(0, 16) : '',
