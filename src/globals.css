@@ -87,8 +87,12 @@ button {
 
 /* ご挨拶と社長メッセージの本文は通常ウェイト */
 .greeting-text,
-.ceo-message {
-  font-weight: 400;
+.ceo-message,
+.greeting-text p,
+.ceo-message p,
+.greeting-text div,
+.ceo-message div {
+  font-weight: 400 !important;
 }
 
 /* 会社情報のラベルは太字、値は通常 */
