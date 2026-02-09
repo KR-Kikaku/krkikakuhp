@@ -56,10 +56,10 @@ import AdminNews from './pages/AdminNews';
 import AdminPrivacyPolicy from './pages/AdminPrivacyPolicy';
 import AdminSettings from './pages/AdminSettings';
 import AdminUsers from './pages/AdminUsers';
-import Home from './pages/Home';
 import NewsDetail from './pages/NewsDetail';
 import NewsList from './pages/NewsList';
 import PrivacyPolicy from './pages/PrivacyPolicy';
+import Home from './pages/Home';
 import __Layout from './Layout.jsx';
 
 
@@ -73,10 +73,10 @@ export const PAGES = {
     "AdminPrivacyPolicy": AdminPrivacyPolicy,
     "AdminSettings": AdminSettings,
     "AdminUsers": AdminUsers,
-    "Home": Home,
     "NewsDetail": NewsDetail,
     "NewsList": NewsList,
     "PrivacyPolicy": PrivacyPolicy,
+    "Home": Home,
 }
 
 export const pagesConfig = {

@@ -41,12 +41,12 @@ export default function NewsList() {
               >
                 <div className="flex flex-col md:flex-row gap-4 items-center md:items-start">
                    {item.thumbnail_image && (
-                     <img
-                       src={item.thumbnail_image}
-                       alt={item.title}
-                       className="w-32 h-32 md:w-24 md:h-24 object-cover rounded-lg flex-shrink-0 sm:w-20 sm:h-20"
-                     />
-                   )}
+                      <img
+                        src={item.thumbnail_image}
+                        alt={item.title}
+                        className="w-20 h-20 md:w-24 md:h-24 object-cover rounded-lg flex-shrink-0"
+                      />
+                    )}
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
                       <span className="text-xs px-2 py-1 bg-gray-100 rounded text-gray-600">
