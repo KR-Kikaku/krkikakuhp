@@ -33,9 +33,9 @@ export default function Footer({ onNavigate }) {
     <footer className="w-full bg-gray-50 border-t border-gray-200 mt-16 md:mt-24">
       <div className="py-12 md:py-16 px-4 md:px-12 max-w-[1280px] mx-auto">
         {/* Footer Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-16 mb-12">
+        <div className="flex flex-col md:flex-row gap-12 md:gap-16 mb-12">
           {/* Logo and Company Info */}
-          <div className="space-y-4">
+          <div className="flex-1 space-y-4">
             <button
               onClick={handleLogoClick}
               className="hover:opacity-70 transition-opacity duration-200 active:scale-95"
@@ -64,7 +64,7 @@ export default function Footer({ onNavigate }) {
           </div>
 
           {/* Navigation Links */}
-          <div>
+          <div className="flex-1">
             <h3 className="font-semibold text-gray-900 mb-4 text-sm">メニュー</h3>
             <nav className="space-y-3">
               {menuItems.map((item) => (
@@ -80,7 +80,7 @@ export default function Footer({ onNavigate }) {
           </div>
 
           {/* Additional Links */}
-          <div>
+          <div className="flex-1">
             <h3 className="font-semibold text-gray-900 mb-4 text-sm">その他</h3>
             <nav className="space-y-3">
               <button
