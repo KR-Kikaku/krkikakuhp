@@ -300,7 +300,7 @@ export default function AdminNews() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <Label>サムネイル画像（一覧表示用）</Label>
-                <p className="text-xs text-gray-500 mt-1">推奨サイズ: 正方形 400×400px または 横長 600×400px</p>
+                <p className="text-xs text-gray-500 mt-1">推奨サイズ: 400×400px（比率 1:1）</p>
                 <div className="mt-2 flex items-center gap-4">
                   {formData.thumbnail_image && (
                     <img src={formData.thumbnail_image} alt="" className="w-24 h-24 object-cover rounded" />
@@ -332,7 +332,7 @@ export default function AdminNews() {
 
               <div>
                 <Label>カバー画像（記事詳細用）</Label>
-                <p className="text-xs text-gray-500 mt-1">推奨サイズ: 横 1200-1600px、縦 600-800px</p>
+                <p className="text-xs text-gray-500 mt-1">推奨サイズ: 1200×600px（比率 2:1）</p>
                 <div className="mt-2 flex items-center gap-4">
                   {formData.cover_image && (
                     <img src={formData.cover_image} alt="" className="w-32 h-20 object-cover rounded" />
