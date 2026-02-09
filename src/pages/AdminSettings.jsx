@@ -192,7 +192,7 @@ export default function AdminSettings() {
                 value={settings?.logo_url}
                 onChange={(e) => handleImageUpload(e, 'logo_url')}
                 isUploading={isUploading.logo_url}
-                recommendedSize="推奨サイズ: 横 200-400px、縦 50-100px"
+                recommendedSize="横 200-400px、縦 50-100px（比率 4:1）"
                 inputId="logoUpload"
               />
               <ImageUploadField
@@ -200,7 +200,7 @@ export default function AdminSettings() {
                 value={settings?.footer_logo_url}
                 onChange={(e) => handleImageUpload(e, 'footer_logo_url')}
                 isUploading={isUploading.footer_logo_url}
-                recommendedSize="推奨サイズ: 横 200-400px、縦 50-100px"
+                recommendedSize="横 200-400px、縦 50-100px（比率 4:1）"
                 inputId="footerLogoUpload"
               />
             </CardContent>
@@ -234,7 +234,7 @@ export default function AdminSettings() {
                 value={settings?.greeting_image_url}
                 onChange={(e) => handleImageUpload(e, 'greeting_image_url')}
                 isUploading={isUploading.greeting_image_url}
-                recommendedSize="推奨サイズ: 横 800-1200px、縦 600-800px"
+                recommendedSize="横 800-1200px、縦 600-800px（比率 4:3）"
                 inputId="greetingImageUpload"
               />
             </CardContent>
@@ -252,7 +252,7 @@ export default function AdminSettings() {
                 value={settings?.company_banner_url}
                 onChange={(e) => handleImageUpload(e, 'company_banner_url')}
                 isUploading={isUploading.company_banner_url}
-                recommendedSize="推奨サイズ: 横 1280px、縦 320px"
+                recommendedSize="横 1280px、縦 320px（比率 4:1）"
                 inputId="companyBannerUpload"
               />
               
