@@ -39,7 +39,7 @@ export default function NewsList() {
                 to={createPageUrl(`NewsDetail?slug=${item.slug}`)}
                 className="block bg-white rounded-lg p-6 border border-gray-100 hover:shadow-lg transition-shadow"
               >
-                <div className="flex flex-col md:flex-row gap-4">
+                <div className="flex flex-col md:flex-row gap-4 items-center md:items-start">
                    {item.thumbnail_image && (
                      <img
                        src={item.thumbnail_image}
