@@ -35,7 +35,7 @@ export default function Footer({ onNavigate }) {
         {/* Footer Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-16 mb-12">
           {/* Logo and Company Info */}
-          <div className="space-y-4 flex flex-col items-center md:items-start">
+          <div className="space-y-4 flex flex-col items-center">
             <button
               onClick={handleLogoClick}
               className="hover:opacity-70 transition-opacity duration-200 active:scale-95"
@@ -50,7 +50,7 @@ export default function Footer({ onNavigate }) {
                 <div className="h-12 w-32 bg-gray-300 rounded"></div>
               )}
             </button>
-            <div className="space-y-2 text-sm text-gray-600 md:text-left text-center">
+            <div className="space-y-2 text-sm text-gray-600 text-center">
               {settings?.company_name && (
                 <p className="font-medium text-gray-900">{settings.company_name}</p>
               )}
@@ -64,7 +64,7 @@ export default function Footer({ onNavigate }) {
           </div>
 
           {/* Navigation Links */}
-          <div className="flex flex-col items-center md:items-start">
+          <div className="flex flex-col items-center">
             <h3 className="font-semibold text-gray-900 mb-4 text-sm">メニュー</h3>
             <nav className="space-y-3">
               {menuItems.map((item) => (
@@ -80,7 +80,7 @@ export default function Footer({ onNavigate }) {
           </div>
 
           {/* Additional Links */}
-          <div className="flex flex-col items-center md:items-start">
+          <div className="flex flex-col items-center">
             <h3 className="font-semibold text-gray-900 mb-4 text-sm">その他</h3>
             <nav className="space-y-3">
               <button
