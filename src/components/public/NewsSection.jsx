@@ -32,7 +32,7 @@ export default function NewsSection() {
               to={createPageUrl(`NewsDetail?slug=${item.slug}`)}
               className="block bg-white rounded-lg p-4 md:p-6 border border-gray-100 hover:shadow-lg transition-shadow"
             >
-              <div className="flex flex-col md:flex-row gap-4 items-start md:items-center">
+              <div className="flex flex-col items-center md:flex-row md:items-start gap-4">
                 {item.thumbnail_image && (
                   <img
                     src={item.thumbnail_image}
@@ -40,8 +40,8 @@ export default function NewsSection() {
                     className="w-32 h-32 md:w-32 md:h-32 object-cover rounded-lg flex-shrink-0"
                   />
                 )}
-                <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-2">
+                <div className="flex-1 text-center md:text-left">
+                  <div className="flex flex-col md:flex-row items-center md:items-center gap-3 mb-2 justify-center md:justify-start">
                     <span className="text-xs px-2 py-1 bg-gray-100 rounded text-gray-600">
                       {item.category}
                     </span>
