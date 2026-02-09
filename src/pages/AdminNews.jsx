@@ -131,6 +131,19 @@ export default function AdminNews() {
     }
   };
 
+  const handleThumbnailUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsUploading(true);
+    try {
+      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+      updateField('thumbnail_image', file_url);
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
   return (
     <AdminLayout currentPage="news">
       <AdminPageHeader
