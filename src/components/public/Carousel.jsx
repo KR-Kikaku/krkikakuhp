@@ -34,7 +34,7 @@ export default function Carousel() {
 
   return (
     <div className="relative w-full overflow-hidden bg-gray-100">
-      <div className="relative w-full" style={{ paddingBottom: '40%' }}>
+      <div className="relative w-full" style={{ paddingBottom: '60%' }}>
         <div className="absolute inset-0">
           {images.map((image, index) => (
             <div
