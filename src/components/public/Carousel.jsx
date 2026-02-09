@@ -10,34 +10,26 @@ export default function HomeCarousel() {
     initialData: []
   });
 
-  if (images.length === 0) return null;
+  if (!images.length) return null;
 
   return (
-    <div className="px-4 md:px-8">
-      <Carousel className="w-full max-w-6xl mx-auto">
+    <div className="w-full max-w-7xl mx-auto px-6 mb-12">
+      <Carousel>
         <CarouselContent>
           {images.map((image) => (
             <CarouselItem key={image.id}>
               {image.link_url ? (
                 <a href={image.link_url} target="_blank" rel="noopener noreferrer">
-                  <img 
-                    src={image.image_url} 
-                    alt="Carousel" 
-                    className="w-full h-64 md:h-96 object-cover rounded-lg"
-                  />
+                  <img src={image.image_url} alt="" className="w-full aspect-[1280/500] object-cover rounded" />
                 </a>
               ) : (
-                <img 
-                  src={image.image_url} 
-                  alt="Carousel" 
-                  className="w-full h-64 md:h-96 object-cover rounded-lg"
-                />
+                <img src={image.image_url} alt="" className="w-full aspect-[1280/500] object-cover rounded" />
               )}
             </CarouselItem>
           ))}
         </CarouselContent>
-        <CarouselPrevious className="left-4" />
-        <CarouselNext className="right-4" />
+        <CarouselPrevious />
+        <CarouselNext />
       </Carousel>
     </div>
   );
