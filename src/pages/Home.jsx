@@ -35,7 +35,6 @@ export default function Home() {
         <main>
           <Carousel />
           <div className="-mt-12 md:-mt-16"></div>
-          <GreetingSection />
           <BusinessSection />
           <NewsSection />
           <CompanySection />
