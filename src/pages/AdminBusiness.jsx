@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import AdminLayout from '@/components/admin/AdminLayout';
+import AdminPageHeader from '@/components/admin/AdminPageHeader';
+import ImageUploadField from '@/components/admin/ImageUploadField';
+import EmptyState from '@/components/admin/EmptyState';
+import { useAdminForm } from '@/components/admin/useAdminForm';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -11,22 +15,24 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '
 import { toast } from 'sonner';
 import { Plus, Trash2, Pencil, Upload, X } from 'lucide-react';
 
+const INITIAL_FORM_STATE = {
+  title: '',
+  title_link: '',
+  description: '',
+  images: [],
+  order: 0,
+  is_active: true,
+};
+
 export default function AdminBusiness() {
   const [businesses, setBusinesses] = useState([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingBusiness, setEditingBusiness] = useState(null);
-  const [formData, setFormData] = useState({
-    title: '',
-    title_link: '',
-    description: '',
-    images: [],
-    order: 0,
-    is_active: true
-  });
   const [isUploading, setIsUploading] = useState(false);
   const [bannerUrl, setBannerUrl] = useState('');
   const [settingsId, setSettingsId] = useState(null);
   const [isSavingBanner, setIsSavingBanner] = useState(false);
+  const { formData, updateField, setFormData } = useAdminForm(INITIAL_FORM_STATE);
 
   const fetchBusinesses = async () => {
     const data = await base44.entities.Business.list('order');
@@ -47,26 +53,18 @@ export default function AdminBusiness() {
   }, []);
 
   const openDialog = (business = null) => {
+    setEditingBusiness(business || null);
     if (business) {
-      setEditingBusiness(business);
       setFormData({
         title: business.title || '',
         title_link: business.title_link || '',
         description: business.description || '',
         images: business.images || [],
         order: business.order || 0,
-        is_active: business.is_active !== false
+        is_active: business.is_active !== false,
       });
     } else {
-      setEditingBusiness(null);
-      setFormData({
-        title: '',
-        title_link: '',
-        description: '',
-        images: [],
-        order: businesses.length,
-        is_active: true
-      });
+      setFormData({ ...INITIAL_FORM_STATE, order: businesses.length });
     }
     setIsDialogOpen(true);
   };
@@ -97,7 +95,7 @@ export default function AdminBusiness() {
   };
 
   const handleImageUpload = async (e) => {
-    const file = e.target.files[0];
+    const file = e.target.files?.[0];
     if (!file) return;
 
     if (formData.images.length >= 3) {
@@ -106,63 +104,67 @@ export default function AdminBusiness() {
     }
 
     setIsUploading(true);
-    const { file_url } = await base44.integrations.Core.UploadFile({ file });
-    
-    setFormData(prev => ({
-      ...prev,
-      images: [...prev.images, { url: file_url, link: '' }]
-    }));
-    setIsUploading(false);
+    try {
+      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+      updateField('images', [...formData.images, { url: file_url, link: '' }]);
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   const updateImageLink = (index, link) => {
     const newImages = [...formData.images];
     newImages[index].link = link;
-    setFormData(prev => ({ ...prev, images: newImages }));
+    updateField('images', newImages);
   };
 
   const removeImage = (index) => {
-    setFormData(prev => ({
-      ...prev,
-      images: prev.images.filter((_, i) => i !== index)
-    }));
+    updateField(
+      'images',
+      formData.images.filter((_, i) => i !== index)
+    );
   };
 
   const handleBannerUpload = async (e) => {
-    const file = e.target.files[0];
+    const file = e.target.files?.[0];
     if (!file) return;
 
     setIsSavingBanner(true);
     try {
       const { file_url } = await base44.integrations.Core.UploadFile({ file });
       setBannerUrl(file_url);
-      
-      if (settingsId) {
-        await base44.entities.SiteSettings.update(settingsId, { work_banner_url: file_url });
-      } else {
-        const newSettings = await base44.entities.SiteSettings.create({ work_banner_url: file_url });
-        setSettingsId(newSettings.id);
-      }
-      
+
+      const method = settingsId
+        ? () => base44.entities.SiteSettings.update(settingsId, { work_banner_url: file_url })
+        : () =>
+            base44.entities.SiteSettings.create({ work_banner_url: file_url }).then(
+              (r) => {
+                setSettingsId(r.id);
+                return r;
+              }
+            );
+
+      await method();
       toast.success('バナー画像を更新しました');
     } catch (error) {
       toast.error('アップロードに失敗しました');
+    } finally {
+      setIsSavingBanner(false);
     }
-    setIsSavingBanner(false);
   };
 
   return (
     <AdminLayout currentPage="business">
-      <div className="mb-8 flex justify-between items-center">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-800">私たちの仕事管理</h1>
-          <p className="text-gray-500 mt-1">事業・サービスの紹介</p>
-        </div>
-        <Button onClick={() => openDialog()} className="bg-gray-900 hover:bg-gray-800">
-          <Plus className="w-4 h-4 mr-2" />
-          事業を追加
-        </Button>
-      </div>
+      <AdminPageHeader
+        title="私たちの仕事管理"
+        description="事業・サービスの紹介"
+        actionButton={
+          <Button onClick={() => openDialog()} className="bg-gray-900 hover:bg-gray-800">
+            <Plus className="w-4 h-4 mr-2" />
+            事業を追加
+          </Button>
+        }
+      />
 
       <Card className="mb-6">
         <CardContent className="p-6">
@@ -242,11 +244,7 @@ export default function AdminBusiness() {
         ))}
 
         {businesses.length === 0 && (
-          <Card>
-            <CardContent className="py-12 text-center text-gray-500">
-              事業がありません。「事業を追加」ボタンから追加してください。
-            </CardContent>
-          </Card>
+          <EmptyState message="事業がありません。「事業を追加」ボタンから追加してください。" />
         )}
       </div>
 
@@ -263,7 +261,7 @@ export default function AdminBusiness() {
               <Label>タイトル *</Label>
               <Input
                 value={formData.title}
-                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                onChange={(e) => updateField('title', e.target.value)}
                 className="mt-1"
                 placeholder="マッチングサービス「スキピ」"
               />
@@ -273,7 +271,7 @@ export default function AdminBusiness() {
               <Label>タイトルリンク（任意）</Label>
               <Input
                 value={formData.title_link}
-                onChange={(e) => setFormData({ ...formData, title_link: e.target.value })}
+                onChange={(e) => updateField('title_link', e.target.value)}
                 className="mt-1"
                 placeholder="https://example.com"
               />
@@ -283,7 +281,7 @@ export default function AdminBusiness() {
               <Label>説明文</Label>
               <Textarea
                 value={formData.description}
-                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                onChange={(e) => updateField('description', e.target.value)}
                 className="mt-1 min-h-24"
               />
             </div>
@@ -308,7 +306,7 @@ export default function AdminBusiness() {
                     </Button>
                   </div>
                 ))}
-                
+
                 {formData.images.length < 3 && (
                   <div>
                     <input
@@ -340,7 +338,7 @@ export default function AdminBusiness() {
             <div className="flex items-center gap-2">
               <Switch
                 checked={formData.is_active}
-                onCheckedChange={(checked) => setFormData({ ...formData, is_active: checked })}
+                onCheckedChange={(checked) => updateField('is_active', checked)}
               />
               <Label>サイトに表示する</Label>
             </div>
