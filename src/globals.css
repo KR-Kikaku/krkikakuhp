@@ -34,20 +34,41 @@ p, div, span, h1, h2, h3, h4, h5, h6, li {
   word-break: break-word;
 }
 
-/* スマートフォン表示でのフォントサイズ調整 */
+/* フォントサイズをemで統一調整 */
+/* PC表示 */
+#greeting h2 {
+  font-size: 2em;
+}
+
+#news h2,
+#contact h2 {
+  font-size: 2em;
+}
+
+#greeting h3,
+#business h3,
+.business-title {
+  font-size: 1em;
+}
+
+/* スマートフォン表示 */
 @media (max-width: 768px) {
-  /* ご挨拶、お知らせ、お問い合わせのタイトル */
-  #greeting h2,
-  #news h2,
-  #contact h2 {
-    font-size: 1.2rem !important;
+  /* ご挨拶を80%縮小 */
+  #greeting h2 {
+    font-size: 1.6em !important;
   }
   
-  /* あなたの日常を明るく、楽しいものへ */
+  /* お知らせ、お問い合わせをご挨拶と同じサイズに */
+  #news h2,
+  #contact h2 {
+    font-size: 1.6em !important;
+  }
+  
+  /* あなたの日常を明るく、楽しいものへ、01Webサイト運営、何事も挑戦を80%縮小して統一 */
   #greeting h3,
   #business h3,
   .business-title {
-    font-size: 0.8rem !important;
+    font-size: 0.8em !important;
   }
 }
 
