@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import AdminLayout from '@/components/admin/AdminLayout';
+import AdminPageHeader from '@/components/admin/AdminPageHeader';
+import ImageUploadField from '@/components/admin/ImageUploadField';
+import EmptyState from '@/components/admin/EmptyState';
+import { useAdminForm } from '@/components/admin/useAdminForm';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -8,38 +12,40 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { toast } from 'sonner';
-import { Plus, Trash2, Pencil, Upload, Eye, EyeOff } from 'lucide-react';
+import { Plus, Trash2, Pencil, Eye, EyeOff } from 'lucide-react';
 import { format } from 'date-fns';
 import { ja } from 'date-fns/locale';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
-const modules = {
+const QUILL_MODULES = {
   toolbar: [
-    [{ 'header': [1, 2, 3, false] }],
-    [{ 'size': ['small', false, 'large', 'huge'] }],
+    [{ header: [1, 2, 3, false] }],
+    [{ size: ['small', false, 'large', 'huge'] }],
     ['bold', 'italic', 'underline', 'strike'],
-    [{ 'color': [] }, { 'background': [] }],
-    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+    [{ color: [] }, { background: [] }],
+    [{ list: 'ordered' }, { list: 'bullet' }],
     ['link', 'image'],
-    ['clean']
+    ['clean'],
   ],
+};
+
+const INITIAL_FORM_STATE = {
+  title: '',
+  slug: '',
+  content: '',
+  cover_image: '',
+  category: 'お知らせ',
+  status: 'draft',
+  publish_date: '',
 };
 
 export default function AdminNews() {
   const [newsList, setNewsList] = useState([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingNews, setEditingNews] = useState(null);
-  const [formData, setFormData] = useState({
-    title: '',
-    slug: '',
-    content: '',
-    cover_image: '',
-    category: 'お知らせ',
-    status: 'draft',
-    publish_date: ''
-  });
   const [isUploading, setIsUploading] = useState(false);
+  const { formData, updateField, setFormData } = useAdminForm(INITIAL_FORM_STATE);
 
   const fetchNews = async () => {
     const data = await base44.entities.News.list('-created_date');
@@ -51,8 +57,8 @@ export default function AdminNews() {
   }, []);
 
   const openDialog = (news = null) => {
+    setEditingNews(news || null);
     if (news) {
-      setEditingNews(news);
       setFormData({
         title: news.title || '',
         slug: news.slug || '',
@@ -60,19 +66,10 @@ export default function AdminNews() {
         cover_image: news.cover_image || '',
         category: news.category || 'お知らせ',
         status: news.status || 'draft',
-        publish_date: news.publish_date ? news.publish_date.slice(0, 16) : ''
+        publish_date: news.publish_date ? news.publish_date.slice(0, 16) : '',
       });
     } else {
-      setEditingNews(null);
-      setFormData({
-        title: '',
-        slug: '',
-        content: '',
-        cover_image: '',
-        category: 'お知らせ',
-        status: 'draft',
-        publish_date: ''
-      });
+      setFormData(INITIAL_FORM_STATE);
     }
     setIsDialogOpen(true);
   };
@@ -120,27 +117,30 @@ export default function AdminNews() {
   };
 
   const handleCoverUpload = async (e) => {
-    const file = e.target.files[0];
+    const file = e.target.files?.[0];
     if (!file) return;
 
     setIsUploading(true);
-    const { file_url } = await base44.integrations.Core.UploadFile({ file });
-    setFormData(prev => ({ ...prev, cover_image: file_url }));
-    setIsUploading(false);
+    try {
+      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+      updateField('cover_image', file_url);
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   return (
     <AdminLayout currentPage="news">
-      <div className="mb-8 flex justify-between items-center">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-800">お知らせ管理</h1>
-          <p className="text-gray-500 mt-1">ニュース・お知らせの投稿</p>
-        </div>
-        <Button onClick={() => openDialog()} className="bg-gray-900 hover:bg-gray-800">
-          <Plus className="w-4 h-4 mr-2" />
-          記事を追加
-        </Button>
-      </div>
+      <AdminPageHeader
+        title="お知らせ管理"
+        description="ニュース・お知らせの投稿"
+        actionButton={
+          <Button onClick={() => openDialog()} className="bg-gray-900 hover:bg-gray-800">
+            <Plus className="w-4 h-4 mr-2" />
+            記事を追加
+          </Button>
+        }
+      />
 
       <div className="space-y-4">
         {newsList.map((news) => (
@@ -203,11 +203,7 @@ export default function AdminNews() {
         ))}
 
         {newsList.length === 0 && (
-          <Card>
-            <CardContent className="py-12 text-center text-gray-500">
-              記事がありません。「記事を追加」ボタンから追加してください。
-            </CardContent>
-          </Card>
+          <EmptyState message="記事がありません。「記事を追加」ボタンから追加してください。" />
         )}
       </div>
 
@@ -225,7 +221,7 @@ export default function AdminNews() {
                 <Label>タイトル *</Label>
                 <Input
                   value={formData.title}
-                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                  onChange={(e) => updateField('title', e.target.value)}
                   className="mt-1"
                 />
               </div>
@@ -233,7 +229,7 @@ export default function AdminNews() {
                 <Label>Slug（自動生成可）</Label>
                 <Input
                   value={formData.slug}
-                  onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
+                  onChange={(e) => updateField('slug', e.target.value)}
                   className="mt-1"
                   placeholder="auto-generated"
                 />
@@ -243,10 +239,7 @@ export default function AdminNews() {
             <div className="grid grid-cols-3 gap-4">
               <div>
                 <Label>カテゴリー</Label>
-                <Select
-                  value={formData.category}
-                  onValueChange={(value) => setFormData({ ...formData, category: value })}
-                >
+                <Select value={formData.category} onValueChange={(value) => updateField('category', value)}>
                   <SelectTrigger className="mt-1">
                     <SelectValue />
                   </SelectTrigger>
@@ -260,10 +253,7 @@ export default function AdminNews() {
               </div>
               <div>
                 <Label>ステータス</Label>
-                <Select
-                  value={formData.status}
-                  onValueChange={(value) => setFormData({ ...formData, status: value })}
-                >
+                <Select value={formData.status} onValueChange={(value) => updateField('status', value)}>
                   <SelectTrigger className="mt-1">
                     <SelectValue />
                   </SelectTrigger>
@@ -278,43 +268,20 @@ export default function AdminNews() {
                 <Input
                   type="datetime-local"
                   value={formData.publish_date}
-                  onChange={(e) => setFormData({ ...formData, publish_date: e.target.value })}
+                  onChange={(e) => updateField('publish_date', e.target.value)}
                   className="mt-1"
                 />
               </div>
             </div>
 
-            <div>
-              <Label>カバー画像</Label>
-              <p className="text-xs text-gray-500 mt-1">推奨サイズ: 横 1200-1600px、縦 600-800px</p>
-              <div className="mt-2 flex items-center gap-4">
-                {formData.cover_image && (
-                  <img src={formData.cover_image} alt="" className="w-32 h-20 object-cover rounded" />
-                )}
-                <div>
-                  <input
-                    type="file"
-                    id="coverImage"
-                    accept="image/*"
-                    onChange={handleCoverUpload}
-                    className="hidden"
-                  />
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => document.getElementById('coverImage').click()}
-                    disabled={isUploading}
-                  >
-                    {isUploading ? 'アップロード中...' : (
-                      <>
-                        <Upload className="w-4 h-4 mr-2" />
-                        画像を選択
-                      </>
-                    )}
-                  </Button>
-                </div>
-              </div>
-            </div>
+            <ImageUploadField
+              label="カバー画像"
+              value={formData.cover_image}
+              onChange={handleCoverUpload}
+              isUploading={isUploading}
+              recommendedSize="推奨サイズ: 横 1200-1600px、縦 600-800px"
+              inputId="coverImage"
+            />
 
             <div>
               <Label>本文</Label>
@@ -322,8 +289,8 @@ export default function AdminNews() {
                 <ReactQuill
                   theme="snow"
                   value={formData.content}
-                  onChange={(value) => setFormData({ ...formData, content: value })}
-                  modules={modules}
+                  onChange={(value) => updateField('content', value)}
+                  modules={QUILL_MODULES}
                   className="bg-white"
                   style={{ height: '300px', marginBottom: '50px' }}
                 />

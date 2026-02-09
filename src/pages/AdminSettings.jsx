@@ -3,6 +3,9 @@ import { base44 } from '@/api/base44Client';
 import { useQueryClient } from '@tanstack/react-query';
 import { useLocation } from 'react-router-dom';
 import AdminLayout from '@/components/admin/AdminLayout';
+import AdminPageHeader from '@/components/admin/AdminPageHeader';
+import ImageUploadField from '@/components/admin/ImageUploadField';
+import { useAdminForm } from '@/components/admin/useAdminForm';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -10,17 +13,17 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from 'sonner';
-import { Upload, Save, Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import ReactQuill from 'react-quill';
 
 export default function AdminSettings() {
   const queryClient = useQueryClient();
   const location = useLocation();
-  const [settings, setSettings] = useState(null);
   const [settingsId, setSettingsId] = useState(null);
   const [isSaving, setIsSaving] = useState(false);
   const [isUploading, setIsUploading] = useState({});
   const [activeTab, setActiveTab] = useState('logo');
+  const { formData: settings, updateField: updateSettings, setFormData: setSettings } = useAdminForm(null);
 
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
@@ -39,7 +42,7 @@ export default function AdminSettings() {
         setSettings(data[0]);
         setSettingsId(data[0].id);
       } else {
-        const defaultPrivacyPolicy = `<div style="line-height: 2;">
+        const DEFAULT_PRIVACY_POLICY = `<div style="line-height: 2;">
 
 <h2 style="font-size: 1.5rem; font-weight: 600; margin-top: 3rem; margin-bottom: 1rem; color: #1f2937;">1. 個人情報の定義</h2>
 <p style="margin-bottom: 1.5rem; color: #4b5563;">「個人情報」とは、生存する個人に関する情報であって、当該情報に含まれる氏名、生年月日その他の記述等により特定の個人を識別することができるもの、及び他の情報と容易に照合することができ、それにより特定の個人を識別することができることとなるものをいいます。</p>
@@ -99,7 +102,7 @@ export default function AdminSettings() {
           established_date: '2025年12月23日',
           address: '〒333-3333 岡山県岡山市XXXXXXXXXXXXXXX',
           phone: '00-0000-0000',
-          privacy_policy: defaultPrivacyPolicy
+          privacy_policy: DEFAULT_PRIVACY_POLICY
         });
       }
     };
@@ -108,28 +111,17 @@ export default function AdminSettings() {
 
   const handleSave = async () => {
     if (isSaving) return;
-    
+
     setIsSaving(true);
-    
     try {
-      console.log('保存開始:', { settingsId, settings });
-      
-      let result;
-      if (settingsId) {
-        result = await base44.entities.SiteSettings.update(settingsId, settings);
-      } else {
-        result = await base44.entities.SiteSettings.create(settings);
-        setSettingsId(result.id);
-      }
+      const method = settingsId
+        ? () => base44.entities.SiteSettings.update(settingsId, settings)
+        : () => base44.entities.SiteSettings.create(settings).then(r => { setSettingsId(r.id); return r; });
 
-      console.log('保存成功:', result);
-
-      // キャッシュを無効化（awaitなし）
+      await method();
       queryClient.invalidateQueries({ queryKey: ['siteSettings'] });
-
       toast.success('変更が完了しました');
     } catch (error) {
-      console.error('保存エラー詳細:', error);
       toast.error('保存に失敗しました');
     } finally {
       setIsSaving(false);
@@ -137,18 +129,16 @@ export default function AdminSettings() {
   };
 
   const handleImageUpload = async (e, field) => {
-    try {
-      const file = e.target.files[0];
-      if (!file) return;
+    const file = e.target.files?.[0];
+    if (!file) return;
 
-      setIsUploading(prev => ({ ...prev, [field]: true }));
-      
+    setIsUploading(prev => ({ ...prev, [field]: true }));
+    try {
       const { file_url } = await base44.integrations.Core.UploadFile({ file });
-      setSettings(prev => ({ ...prev, [field]: file_url }));
+      updateSettings(field, file_url);
       toast.success('画像をアップロードしました');
     } catch (error) {
-      console.error('アップロードエラー:', error);
-      toast.error('アップロードに失敗しました: ' + (error?.message || ''));
+      toast.error('アップロードに失敗しました');
     } finally {
       setIsUploading(prev => ({ ...prev, [field]: false }));
     }
@@ -164,47 +154,25 @@ export default function AdminSettings() {
     );
   }
 
-  const getPageTitle = () => {
-    switch (activeTab) {
-      case 'logo': return 'ロゴ設定';
-      case 'greeting': return 'ご挨拶';
-      case 'company': return '会社情報';
-      default: return 'サイト設定';
-    }
+  const getPageMeta = () => {
+    const meta = {
+      logo: { title: 'ロゴ設定', description: 'ヘッダーとフッターのロゴを管理' },
+      greeting: { title: 'ご挨拶', description: 'トップページのご挨拶セクションを管理' },
+      company: { title: '会社情報', description: '会社の基本情報を管理' },
+    };
+    return meta[activeTab] || meta.logo;
   };
 
-  const getPageDescription = () => {
-    switch (activeTab) {
-      case 'logo': return 'ヘッダーとフッターのロゴを管理';
-      case 'greeting': return 'トップページのご挨拶セクションを管理';
-      case 'company': return '会社の基本情報を管理';
-      default: return 'サイト全体の設定';
-    }
-  };
-
-  const currentPageId = activeTab === 'logo' ? 'logo' : activeTab === 'greeting' ? 'greeting' : 'settings';
+  const pageMeta = getPageMeta();
 
   return (
-    <AdminLayout currentPage={currentPageId}>
-      <div className="mb-8 flex justify-between items-center">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-800">{getPageTitle()}</h1>
-          <p className="text-gray-500 mt-1">{getPageDescription()}</p>
-        </div>
-        <Button type="button" onClick={handleSave} disabled={isSaving} className="bg-gray-900 hover:bg-gray-800">
-          {isSaving ? (
-            <>
-              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-              保存中...
-            </>
-          ) : (
-            <>
-              <Save className="w-4 h-4 mr-2" />
-              設定を保存
-            </>
-          )}
-        </Button>
-      </div>
+    <AdminLayout currentPage={activeTab}>
+      <AdminPageHeader
+        title={pageMeta.title}
+        description={pageMeta.description}
+        onSave={handleSave}
+        isSaving={isSaving}
+      />
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
         {activeTab === 'company' && (
@@ -219,68 +187,22 @@ export default function AdminSettings() {
               <CardTitle>ロゴ設定</CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div>
-                <Label>ヘッダーロゴ</Label>
-                <p className="text-xs text-gray-500 mt-1">推奨サイズ: 横 200-400px、縦 50-100px</p>
-                <div className="mt-2 flex items-center gap-4">
-                  {settings.logo_url && (
-                    <img src={settings.logo_url} alt="Logo" className="max-w-full h-auto max-h-12 object-contain" />
-                  )}
-                  <div>
-                    <input
-                      type="file"
-                      id="logoUpload"
-                      accept="image/*"
-                      onChange={(e) => handleImageUpload(e, 'logo_url')}
-                      className="hidden"
-                    />
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => document.getElementById('logoUpload').click()}
-                      disabled={isUploading.logo_url}
-                    >
-                      {isUploading.logo_url ? 'アップロード中...' : (
-                        <>
-                          <Upload className="w-4 h-4 mr-2" />
-                          ロゴを変更
-                        </>
-                      )}
-                    </Button>
-                  </div>
-                </div>
-              </div>
-              <div>
-                <Label>フッターロゴ</Label>
-                <p className="text-xs text-gray-500 mt-1">推奨サイズ: 横 200-400px、縦 50-100px</p>
-                <div className="mt-2 flex items-center gap-4">
-                  {settings.footer_logo_url && (
-                    <img src={settings.footer_logo_url} alt="Footer Logo" className="max-w-full h-auto max-h-12 object-contain" />
-                  )}
-                  <div>
-                    <input
-                      type="file"
-                      id="footerLogoUpload"
-                      accept="image/*"
-                      onChange={(e) => handleImageUpload(e, 'footer_logo_url')}
-                      className="hidden"
-                    />
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => document.getElementById('footerLogoUpload').click()}
-                      disabled={isUploading.footer_logo_url}
-                    >
-                      {isUploading.footer_logo_url ? 'アップロード中...' : (
-                        <>
-                          <Upload className="w-4 h-4 mr-2" />
-                          ロゴを変更
-                        </>
-                      )}
-                    </Button>
-                  </div>
-                </div>
-              </div>
+              <ImageUploadField
+                label="ヘッダーロゴ"
+                value={settings?.logo_url}
+                onChange={(e) => handleImageUpload(e, 'logo_url')}
+                isUploading={isUploading.logo_url}
+                recommendedSize="推奨サイズ: 横 200-400px、縦 50-100px"
+                inputId="logoUpload"
+              />
+              <ImageUploadField
+                label="フッターロゴ"
+                value={settings?.footer_logo_url}
+                onChange={(e) => handleImageUpload(e, 'footer_logo_url')}
+                isUploading={isUploading.footer_logo_url}
+                recommendedSize="推奨サイズ: 横 200-400px、縦 50-100px"
+                inputId="footerLogoUpload"
+              />
             </CardContent>
           </Card>
         </TabsContent>
@@ -294,45 +216,27 @@ export default function AdminSettings() {
               <div>
                 <Label>タイトル</Label>
                 <Input
-                  value={settings.greeting_title || ''}
-                  onChange={(e) => setSettings({ ...settings, greeting_title: e.target.value })}
+                  value={settings?.greeting_title || ''}
+                  onChange={(e) => updateSettings('greeting_title', e.target.value)}
                   className="mt-1"
                 />
               </div>
               <div>
                 <Label>挨拶文</Label>
                 <Textarea
-                  value={settings.greeting_text || ''}
-                  onChange={(e) => setSettings({ ...settings, greeting_text: e.target.value })}
+                  value={settings?.greeting_text || ''}
+                  onChange={(e) => updateSettings('greeting_text', e.target.value)}
                   className="mt-1 min-h-40"
                 />
               </div>
-              <div>
-                <Label>ご挨拶画像</Label>
-                <p className="text-xs text-gray-500 mt-1">推奨サイズ: 横 800-1200px、縦 600-800px</p>
-                <div className="mt-2 flex items-center gap-4">
-                  {settings.greeting_image_url && (
-                    <img src={settings.greeting_image_url} alt="" className="w-full sm:w-32 h-auto object-cover rounded" />
-                  )}
-                  <div>
-                    <input
-                      type="file"
-                      id="greetingImageUpload"
-                      accept="image/*"
-                      onChange={(e) => handleImageUpload(e, 'greeting_image_url')}
-                      className="hidden"
-                    />
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => document.getElementById('greetingImageUpload').click()}
-                      disabled={isUploading.greeting_image_url}
-                    >
-                      {isUploading.greeting_image_url ? 'アップロード中...' : '画像を変更'}
-                    </Button>
-                  </div>
-                </div>
-              </div>
+              <ImageUploadField
+                label="ご挨拶画像"
+                value={settings?.greeting_image_url}
+                onChange={(e) => handleImageUpload(e, 'greeting_image_url')}
+                isUploading={isUploading.greeting_image_url}
+                recommendedSize="推奨サイズ: 横 800-1200px、縦 600-800px"
+                inputId="greetingImageUpload"
+              />
             </CardContent>
           </Card>
         </TabsContent>
@@ -343,107 +247,86 @@ export default function AdminSettings() {
               <CardTitle>会社情報</CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div>
-                <Label>バナー画像</Label>
-                <p className="text-xs text-gray-500 mt-1">推奨サイズ: 横 1280px、縦 320px</p>
-                {settings?.company_banner_url && (
-                  <div className="mt-2 mb-4">
-                    <img src={settings.company_banner_url} alt="バナー" className="w-full h-auto object-cover rounded-lg" />
-                  </div>
-                )}
-                <input
-                  type="file"
-                  id="companyBannerUpload"
-                  accept="image/*"
-                  onChange={(e) => handleImageUpload(e, 'company_banner_url')}
-                  className="hidden"
-                />
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => document.getElementById('companyBannerUpload').click()}
-                  disabled={isUploading.company_banner_url}
-                >
-                  {isUploading.company_banner_url ? 'アップロード中...' : (
-                    <>
-                      <Upload className="w-4 h-4 mr-2" />
-                      バナー画像を{settings?.company_banner_url ? '変更' : 'アップロード'}
-                    </>
-                  )}
-                </Button>
-              </div>
+              <ImageUploadField
+                label="バナー画像"
+                value={settings?.company_banner_url}
+                onChange={(e) => handleImageUpload(e, 'company_banner_url')}
+                isUploading={isUploading.company_banner_url}
+                recommendedSize="推奨サイズ: 横 1280px、縦 320px"
+                inputId="companyBannerUpload"
+              />
               
               <div className="border-t pt-6 space-y-4">
-              <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label>社長の言葉タイトル</Label>
+                    <Input
+                      value={settings?.ceo_title || ''}
+                      onChange={(e) => updateSettings('ceo_title', e.target.value)}
+                      className="mt-1"
+                    />
+                  </div>
+                  <div>
+                    <Label>代表者名</Label>
+                    <Input
+                      value={settings?.ceo_name || ''}
+                      onChange={(e) => updateSettings('ceo_name', e.target.value)}
+                      className="mt-1"
+                    />
+                  </div>
+                </div>
                 <div>
-                  <Label>社長の言葉タイトル</Label>
+                  <Label>社長の言葉本文</Label>
+                  <Textarea
+                    value={settings?.ceo_message || ''}
+                    onChange={(e) => updateSettings('ceo_message', e.target.value)}
+                    className="mt-1 min-h-32"
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label>会社名</Label>
+                    <Input
+                      value={settings?.company_name || ''}
+                      onChange={(e) => updateSettings('company_name', e.target.value)}
+                      className="mt-1"
+                    />
+                  </div>
+                  <div>
+                    <Label>代表</Label>
+                    <Input
+                      value={settings?.representative || ''}
+                      onChange={(e) => updateSettings('representative', e.target.value)}
+                      className="mt-1"
+                    />
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label>設立日</Label>
+                    <Input
+                      value={settings?.established_date || ''}
+                      onChange={(e) => updateSettings('established_date', e.target.value)}
+                      className="mt-1"
+                    />
+                  </div>
+                  <div>
+                    <Label>電話番号</Label>
+                    <Input
+                      value={settings?.phone || ''}
+                      onChange={(e) => updateSettings('phone', e.target.value)}
+                      className="mt-1"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <Label>所在地</Label>
                   <Input
-                    value={settings.ceo_title || ''}
-                    onChange={(e) => setSettings({ ...settings, ceo_title: e.target.value })}
+                    value={settings?.address || ''}
+                    onChange={(e) => updateSettings('address', e.target.value)}
                     className="mt-1"
                   />
                 </div>
-                <div>
-                  <Label>代表者名</Label>
-                  <Input
-                    value={settings.ceo_name || ''}
-                    onChange={(e) => setSettings({ ...settings, ceo_name: e.target.value })}
-                    className="mt-1"
-                  />
-                </div>
-              </div>
-              <div>
-                <Label>社長の言葉本文</Label>
-                <Textarea
-                  value={settings.ceo_message || ''}
-                  onChange={(e) => setSettings({ ...settings, ceo_message: e.target.value })}
-                  className="mt-1 min-h-32"
-                />
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label>会社名</Label>
-                  <Input
-                    value={settings.company_name || ''}
-                    onChange={(e) => setSettings({ ...settings, company_name: e.target.value })}
-                    className="mt-1"
-                  />
-                </div>
-                <div>
-                  <Label>代表</Label>
-                  <Input
-                    value={settings.representative || ''}
-                    onChange={(e) => setSettings({ ...settings, representative: e.target.value })}
-                    className="mt-1"
-                  />
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label>設立日</Label>
-                  <Input
-                    value={settings.established_date || ''}
-                    onChange={(e) => setSettings({ ...settings, established_date: e.target.value })}
-                    className="mt-1"
-                  />
-                </div>
-                <div>
-                  <Label>電話番号</Label>
-                  <Input
-                    value={settings.phone || ''}
-                    onChange={(e) => setSettings({ ...settings, phone: e.target.value })}
-                    className="mt-1"
-                  />
-                </div>
-              </div>
-              <div>
-                <Label>所在地</Label>
-                <Input
-                  value={settings.address || ''}
-                  onChange={(e) => setSettings({ ...settings, address: e.target.value })}
-                  className="mt-1"
-                />
-              </div>
               </div>
             </CardContent>
           </Card>
