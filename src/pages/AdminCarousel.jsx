@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import AdminLayout from '@/components/admin/AdminLayout';
+import AdminPageHeader from '@/components/admin/AdminPageHeader';
+import EmptyState from '@/components/admin/EmptyState';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -23,7 +25,7 @@ export default function AdminCarousel() {
   }, []);
 
   const handleFileUpload = async (e) => {
-    const file = e.target.files[0];
+    const file = e.target.files?.[0];
     if (!file) return;
 
     if (images.length >= 5) {
@@ -32,18 +34,21 @@ export default function AdminCarousel() {
     }
 
     setIsUploading(true);
-    const { file_url } = await base44.integrations.Core.UploadFile({ file });
-    
-    await base44.entities.CarouselImage.create({
-      image_url: file_url,
-      link_url: '',
-      order: images.length,
-      is_active: true
-    });
+    try {
+      const { file_url } = await base44.integrations.Core.UploadFile({ file });
 
-    toast.success('画像を追加しました');
-    fetchImages();
-    setIsUploading(false);
+      await base44.entities.CarouselImage.create({
+        image_url: file_url,
+        link_url: '',
+        order: images.length,
+        is_active: true,
+      });
+
+      toast.success('画像を追加しました');
+      fetchImages();
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   const handleUpdate = async (id, field, value) => {
@@ -60,36 +65,35 @@ export default function AdminCarousel() {
 
   return (
     <AdminLayout currentPage="carousel">
-      <div className="mb-8 flex justify-between items-center">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-800">TOP画像管理</h1>
-          <p className="text-gray-500 mt-1">カルーセル画像（最大5枚）</p>
-          <p className="text-xs text-gray-400 mt-1">推奨サイズ: 横 1280px、縦 500px</p>
-        </div>
-        <div>
-          <input
-            type="file"
-            id="upload"
-            accept="image/*"
-            onChange={handleFileUpload}
-            className="hidden"
-          />
-          <Button
-            onClick={() => document.getElementById('upload').click()}
-            disabled={isUploading || images.length >= 5}
-            className="bg-gray-900 hover:bg-gray-800"
-          >
-            {isUploading ? (
-              'アップロード中...'
-            ) : (
-              <>
-                <Plus className="w-4 h-4 mr-2" />
-                画像を追加
-              </>
-            )}
-          </Button>
-        </div>
-      </div>
+      <AdminPageHeader
+        title="TOP画像管理"
+        description="カルーセル画像（最大5枚・推奨サイズ: 横 1280px、縦 500px）"
+        actionButton={
+          <div>
+            <input
+              type="file"
+              id="upload"
+              accept="image/*"
+              onChange={handleFileUpload}
+              className="hidden"
+            />
+            <Button
+              onClick={() => document.getElementById('upload').click()}
+              disabled={isUploading || images.length >= 5}
+              className="bg-gray-900 hover:bg-gray-800"
+            >
+              {isUploading ? (
+                'アップロード中...'
+              ) : (
+                <>
+                  <Plus className="w-4 h-4 mr-2" />
+                  画像を追加
+                </>
+              )}
+            </Button>
+          </div>
+        }
+      />
 
       <div className="space-y-4">
         {images.map((image, index) => (
@@ -138,11 +142,7 @@ export default function AdminCarousel() {
         ))}
 
         {images.length === 0 && (
-          <Card>
-            <CardContent className="py-12 text-center text-gray-500">
-              画像がありません。「画像を追加」ボタンから追加してください。
-            </CardContent>
-          </Card>
+          <EmptyState message="画像がありません。「画像を追加」ボタンから追加してください。" />
         )}
       </div>
     </AdminLayout>
