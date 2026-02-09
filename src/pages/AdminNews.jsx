@@ -303,7 +303,7 @@ export default function AdminNews() {
               value={formData.thumbnail_image}
               onChange={handleThumbnailUpload}
               isUploading={isUploading}
-              recommendedSize="推奨サイズ: 横 400-500px、縦 300-400px"
+              recommendedSize="推奨サイズ: 400px×400px（正方形）"
               inputId="thumbnailImage"
             />
 
