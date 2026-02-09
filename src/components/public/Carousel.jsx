@@ -1,99 +1,54 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
+import Autoplay from 'embla-carousel-autoplay';
 
-export default function Carousel() {
-  const [images, setImages] = useState([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
+export default function HomeCarousel() {
+  const { data: images } = useQuery({
+    queryKey: ['carouselImages'],
+    queryFn: () => base44.entities.CarouselImage.filter({ is_active: true }, 'order'),
+    initialData: []
+  });
 
-  useEffect(() => {
-    const fetchImages = async () => {
-      const data = await base44.entities.CarouselImage.filter({ is_active: true }, 'order');
-      setImages(data);
-    };
-    fetchImages();
-  }, []);
-
-  useEffect(() => {
-    if (images.length <= 1) return;
-    const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % images.length);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, [images.length]);
-
-  const goToPrevious = () => {
-    setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
-  };
-
-  const goToNext = () => {
-    setCurrentIndex((prev) => (prev + 1) % images.length);
-  };
+  const plugin = React.useRef(
+    Autoplay({ delay: 4000, stopOnInteraction: true })
+  );
 
   if (images.length === 0) return null;
 
   return (
-    <div className="relative w-full overflow-hidden bg-gray-100">
-      <div className="relative w-full" style={{ paddingBottom: '60%' }}>
-        <div className="absolute inset-0">
-          {images.map((image, index) => (
-            <div
-              key={image.id}
-              className={`absolute inset-0 transition-opacity duration-500 ${
-                index === currentIndex ? 'opacity-100' : 'opacity-0'
-              }`}
-            >
+    <div className="px-4 md:px-8">
+      <Carousel
+        plugins={[plugin.current]}
+        className="w-full max-w-6xl mx-auto"
+        onMouseEnter={plugin.current.stop}
+        onMouseLeave={plugin.current.reset}
+      >
+        <CarouselContent>
+          {images.map((image) => (
+            <CarouselItem key={image.id}>
               {image.link_url ? (
-                <a href={image.link_url} target="_blank" rel="noopener noreferrer" className="block w-full h-full">
-                  <img
-                    src={image.image_url}
-                    alt={`Slide ${index + 1}`}
-                    className="w-full h-full object-cover"
+                <a href={image.link_url} target="_blank" rel="noopener noreferrer">
+                  <img 
+                    src={image.image_url} 
+                    alt="Carousel" 
+                    className="w-full h-64 md:h-96 object-cover rounded-lg"
                   />
                 </a>
               ) : (
-                <img
-                  src={image.image_url}
-                  alt={`Slide ${index + 1}`}
-                  className="w-full h-full object-cover"
+                <img 
+                  src={image.image_url} 
+                  alt="Carousel" 
+                  className="w-full h-64 md:h-96 object-cover rounded-lg"
                 />
               )}
-            </div>
+            </CarouselItem>
           ))}
-        </div>
-
-        {images.length > 1 && (
-          <>
-            <button
-              onClick={goToPrevious}
-              className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors z-10"
-              aria-label="前へ"
-            >
-              <ChevronLeft className="w-6 h-6" />
-            </button>
-            <button
-              onClick={goToNext}
-              className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors z-10"
-              aria-label="次へ"
-            >
-              <ChevronRight className="w-6 h-6" />
-            </button>
-
-            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
-              {images.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => setCurrentIndex(index)}
-                  className={`w-2 h-2 rounded-full transition-colors ${
-                    index === currentIndex ? 'bg-white' : 'bg-white/50'
-                  }`}
-                  aria-label={`スライド ${index + 1}`}
-                />
-              ))}
-            </div>
-          </>
-        )}
-      </div>
+        </CarouselContent>
+        <CarouselPrevious className="left-4" />
+        <CarouselNext className="right-4" />
+      </Carousel>
     </div>
   );
 }

@@ -1,74 +1,55 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
+import { format } from 'date-fns';
+import { ja } from 'date-fns/locale';
 
 export default function NewsSection() {
-  const [news, setNews] = useState([]);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const fetchNews = async () => {
-      const data = await base44.entities.News.filter(
-        { status: 'published' },
-        '-publish_date',
-        3
-      );
-      setNews(data);
-    };
-    fetchNews();
-  }, []);
-
-  const handleNewsClick = (slug) => {
-    navigate(createPageUrl('NewsDetail') + `?slug=${slug}`);
-  };
-
-  if (news.length === 0) return null;
+  const { data: news } = useQuery({
+    queryKey: ['latestNews'],
+    queryFn: () => base44.entities.News.filter({ status: 'published' }, '-publish_date', 6),
+    initialData: []
+  });
 
   return (
-    <section id="news" className="py-12 md:py-16 px-4 md:px-8 bg-gray-50">
-      <div className="max-w-6xl mx-auto">
-        <h2 className="font-bold text-center mb-8 md:mb-12">お知らせ</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-          {news.map((item) => (
-            <div
-              key={item.id}
-              onClick={() => handleNewsClick(item.slug)}
-              className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition-shadow"
-            >
-              <div className="w-[36%] md:w-full mx-auto">
-                <div className="relative w-full" style={{ paddingBottom: '100%' }}>
-                  <img
-                    src={item.thumbnail_image || item.cover_image}
-                    alt={item.title}
-                    className="absolute inset-0 w-full h-full object-cover"
-                  />
-                </div>
-              </div>
-              <div className="p-4">
-                <div className="flex items-center gap-2 text-xs text-gray-500 mb-2">
-                  <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded">
-                    {item.category}
-                  </span>
-                  <span>
-                    {new Date(item.publish_date).toLocaleDateString('ja-JP')}
-                  </span>
-                </div>
-                <h3 className="text-xs md:text-lg font-semibold line-clamp-2">
-                  {item.title}
-                </h3>
-              </div>
-            </div>
-          ))}
-        </div>
-        <div className="text-center mt-8">
-          <button
-            onClick={() => navigate(createPageUrl('NewsList'))}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-colors"
+    <section id="お知らせ" className="px-4 md:px-8 py-16 max-w-6xl mx-auto">
+      <div className="flex justify-between items-center mb-12">
+        <h2>お知らせ</h2>
+        <Link 
+          to={createPageUrl('NewsList')} 
+          className="text-blue-600 hover:text-blue-700 transition-colors"
+        >
+          すべて見る →
+        </Link>
+      </div>
+
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {news.map((item) => (
+          <Link 
+            key={item.id}
+            to={createPageUrl(`NewsDetail?slug=${item.slug}`)}
+            className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
           >
-            一覧を見る
-          </button>
-        </div>
+            <img 
+              src={item.thumbnail_image || item.cover_image} 
+              alt={item.title}
+              className="w-full h-48 object-cover"
+            />
+            <div className="p-4">
+              <div className="flex items-center gap-2 mb-2 text-sm text-gray-600">
+                <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded">
+                  {item.category}
+                </span>
+                <span>
+                  {format(new Date(item.publish_date), 'yyyy年M月d日', { locale: ja })}
+                </span>
+              </div>
+              <h3 className="line-clamp-2">{item.title}</h3>
+            </div>
+          </Link>
+        ))}
       </div>
     </section>
   );

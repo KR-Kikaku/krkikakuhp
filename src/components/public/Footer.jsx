@@ -1,81 +1,58 @@
 import React from 'react';
-import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
+import { base44 } from '@/api/base44Client';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 
 export default function Footer({ onNavigate }) {
   const { data: settings } = useQuery({
     queryKey: ['siteSettings'],
-    queryFn: async () => {
-      const data = await base44.entities.SiteSettings.list();
-      return data.length > 0 ? data[0] : null;
-    },
+    queryFn: () => base44.entities.SiteSettings.list(),
+    initialData: []
   });
 
-  const menuItems = [
-    { label: 'ご挨拶', id: 'greeting' },
-    { label: '私たちの仕事', id: 'work' },
-    { label: 'お知らせ', id: 'news' },
-    { label: '会社情報', id: 'company' },
-    { label: 'お問い合わせ', id: 'contact' },
-  ];
-
-  const handleClick = (id) => {
-    if (onNavigate) {
-      onNavigate(id);
-    } else {
-      const element = document.getElementById(id);
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
-      }
-    }
-  };
+  const setting = settings[0] || {};
 
   return (
-    <footer className="bg-gray-800 text-white py-12 notranslate" translate="no" lang="ja">
-      <div className="max-w-6xl mx-auto px-4">
-        {/* Menu */}
-        <nav className="flex flex-wrap justify-center items-center gap-8 pb-8">
-          {menuItems.map((item) => (
-            <button
-              key={item.id}
-              onClick={() => handleClick(item.id)}
-              className="text-sm font-medium text-white hover:text-gray-300 transition-colors"
-            >
-              {item.label}
-            </button>
-          ))}
-        </nav>
+    <footer className="bg-gray-900 text-white px-4 md:px-8 py-12">
+      <div className="max-w-6xl mx-auto">
+        <div className="grid md:grid-cols-3 gap-8 mb-8">
+          <div>
+            <img 
+              src={setting.footer_logo_url || setting.logo_url || '/placeholder-logo.png'} 
+              alt="Logo" 
+              className="h-12 object-contain mb-4 brightness-0 invert"
+            />
+            <p className="text-sm text-gray-400">{setting.company_name}</p>
+          </div>
 
-        {/* Logo */}
-        <div className="flex justify-center py-6">
-          {settings?.footer_logo_url ? (
-            <img src={settings.footer_logo_url} alt="KR企画" className="h-16 max-w-full object-contain" />
-          ) : settings?.logo_url ? (
-            <img src={settings.logo_url} alt="KR企画" className="h-16 max-w-full object-contain" />
-          ) : (
-            <div className="text-2xl font-semibold tracking-wider">
-              <span className="font-bold">KR</span>企画
+          <div>
+            <h3 className="mb-4">サイトマップ</h3>
+            <div className="flex flex-col gap-2 text-sm">
+              {['ご挨拶', '私たちの仕事', 'お知らせ', '会社情報', 'お問い合わせ'].map(item => (
+                <button 
+                  key={item}
+                  onClick={() => onNavigate(item)} 
+                  className="text-left text-gray-400 hover:text-white transition-colors"
+                >
+                  {item}
+                </button>
+              ))}
             </div>
-          )}
+          </div>
+
+          <div>
+            <h3 className="mb-4">お問い合わせ</h3>
+            <p className="text-sm text-gray-400 mb-2">{setting.address}</p>
+            <p className="text-sm text-gray-400">TEL: {setting.phone}</p>
+          </div>
         </div>
 
-        {/* Privacy Policy */}
-        <div className="text-center py-4">
-          <Link
-            to={createPageUrl('PrivacyPolicy')}
-            className="text-xs text-gray-300 hover:text-white transition-colors"
-          >
+        <div className="border-t border-gray-700 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-400">
+          <p>&copy; {new Date().getFullYear()} {setting.company_name}. All rights reserved.</p>
+          <Link to={createPageUrl('PrivacyPolicy')} className="hover:text-white transition-colors">
             プライバシーポリシー
           </Link>
-        </div>
-
-        {/* Copyright */}
-        <div className="text-center">
-          <p className="text-xs text-gray-400">
-            ©2025 合同会社 KR企画
-          </p>
         </div>
       </div>
     </footer>
