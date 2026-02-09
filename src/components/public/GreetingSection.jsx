@@ -15,26 +15,22 @@ export default function GreetingSection() {
   }, []);
 
   return (
-    <section id="greeting" className="py-12 md:py-20 notranslate" translate="no" lang="ja">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
-        {settings?.greeting_image_url && (
-          <img
-            src={settings.greeting_image_url}
-            alt="ご挨拶"
-            className="w-full h-auto rounded-lg object-cover aspect-square"
-          />
-        )}
-        <div>
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            {settings?.greeting_title || 'ご挨拶'}
-          </h2>
-          <div className="text-gray-600 text-sm md:text-base leading-relaxed">
-            {settings?.greeting_text?.split('\n').map((line, idx) => (
-              <p key={idx} className="mb-4">
-                {line}
-              </p>
-            ))}
-          </div>
+    <section id="greeting" className="py-16 md:py-24 bg-gray-50 notranslate" translate="no" lang="ja">
+      <div className="max-w-6xl mx-auto px-4 md:px-8">
+        <h2 className="text-2xl md:text-3xl font-bold text-center mb-4">
+          {settings?.greeting_title || 'ご挨拶'}
+        </h2>
+
+        <p className="text-center text-sm md:text-base text-gray-600 mb-12">
+          あなたの日常を明るく、楽しいものへ
+        </p>
+
+        <div className="bg-white rounded-lg p-8 md:p-12 border border-gray-200">
+          {settings?.greeting_text && (
+            <p className="text-gray-700 text-sm md:text-base leading-relaxed whitespace-pre-line">
+              {settings.greeting_text}
+            </p>
+          )}
         </div>
       </div>
     </section>
