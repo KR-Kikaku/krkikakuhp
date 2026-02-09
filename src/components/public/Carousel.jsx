@@ -5,103 +5,122 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 export default function Carousel() {
   const [images, setImages] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isLoading, setIsLoading] = useState(true);
+  const [autoPlay, setAutoPlay] = useState(true);
 
   useEffect(() => {
-    setIsLoading(true);
-    setImages([]);
     const fetchImages = async () => {
-      const data = await base44.entities.CarouselImage.filter({ is_active: true }, 'order');
-      setImages(data.slice(0, 5));
-      setIsLoading(false);
+      try {
+        const carouselImages = await base44.entities.CarouselImage.list('-order');
+        const activeImages = carouselImages.filter(img => img.is_active);
+        setImages(activeImages.sort((a, b) => a.order - b.order));
+      } catch (error) {
+        console.error('カルーセル画像の取得に失敗:', error);
+      }
     };
+
     fetchImages();
   }, []);
 
   useEffect(() => {
-    if (images.length > 1) {
-      const interval = setInterval(() => {
-        setCurrentIndex((prev) => (prev + 1) % images.length);
-      }, 5000);
-      return () => clearInterval(interval);
-    }
-  }, [images.length]);
+    if (!autoPlay || images.length === 0) return;
 
-  const goTo = (index) => setCurrentIndex(index);
-  const goPrev = () => setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
-  const goNext = () => setCurrentIndex((prev) => (prev + 1) % images.length);
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % images.length);
+    }, 5000);
 
-  if (isLoading) {
-    return (
-      <div className="w-full aspect-[16/9] sm:aspect-[16/8] md:aspect-[16/7] bg-gray-100" />
-    );
-  }
+    return () => clearInterval(interval);
+  }, [autoPlay, images.length]);
+
+  const handlePrev = () => {
+    setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
+    setAutoPlay(false);
+  };
+
+  const handleNext = () => {
+    setCurrentIndex((prev) => (prev + 1) % images.length);
+    setAutoPlay(false);
+  };
 
   if (images.length === 0) {
     return (
-      <div className="w-full aspect-[16/9] sm:aspect-[16/8] md:aspect-[16/7] bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center overflow-hidden">
-        <img 
-          src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=1600&h=900&fit=crop" 
-          alt="TOP"
-          className="w-full h-full object-cover"
-        />
+      <div className="relative w-full overflow-hidden bg-gray-200" style={{ aspectRatio: '16 / 9.6' }}>
+        <div className="flex items-center justify-center h-full text-gray-400">
+          カルーセル画像がありません
+        </div>
       </div>
     );
   }
 
-  const handleImageClick = (link) => {
-    if (link) {
-      window.open(link, '_blank');
-    }
-  };
-
   return (
-    <div className="relative w-full aspect-[16/9] sm:aspect-[16/8] md:aspect-[16/7] overflow-hidden notranslate" translate="no" lang="ja">
-      {images.map((image, index) => (
-        <div
-          key={image.id}
-          className={`absolute inset-0 transition-opacity duration-700 ${
-            index === currentIndex ? 'opacity-100' : 'opacity-0'
-          }`}
-        >
-          <img
-            src={image.image_url}
-            alt={`Slide ${index + 1}`}
-            className={`w-full h-full object-cover ${image.link_url ? 'cursor-pointer' : ''}`}
-            onClick={() => handleImageClick(image.link_url)}
-          />
-        </div>
-      ))}
+    <div className="relative w-full overflow-hidden" style={{ aspectRatio: '16 / 9.6' }}>
+      {/* スライドコンテナ */}
+      <div className="relative w-full h-full">
+        {images.map((image, index) => (
+          <div
+            key={image.id}
+            className={`absolute inset-0 transition-opacity duration-500 ${
+              index === currentIndex ? 'opacity-100' : 'opacity-0'
+            }`}
+          >
+            <a
+              href={image.link_url || '#'}
+              className={image.link_url ? 'block w-full h-full cursor-pointer' : 'block w-full h-full'}
+              target={image.link_url ? '_blank' : undefined}
+              rel={image.link_url ? 'noopener noreferrer' : undefined}
+            >
+              <img
+                src={image.image_url}
+                alt={`スライド ${index + 1}`}
+                className="w-full h-full object-cover"
+              />
+            </a>
+          </div>
+        ))}
+      </div>
 
+      {/* ナビゲーションボタン */}
       {images.length > 1 && (
         <>
-          {/* Navigation Arrows */}
           <button
-            onClick={goPrev}
-            className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full transition-all shadow-lg"
+            onClick={handlePrev}
+            className="absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors"
+            aria-label="前へ"
           >
-            <ChevronLeft size={24} />
-          </button>
-          <button
-            onClick={goNext}
-            className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full transition-all shadow-lg"
-          >
-            <ChevronRight size={24} />
+            <ChevronLeft className="w-6 h-6" />
           </button>
 
-          {/* Dots */}
-          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2">
+          <button
+            onClick={handleNext}
+            className="absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors"
+            aria-label="次へ"
+          >
+            <ChevronRight className="w-6 h-6" />
+          </button>
+
+          {/* インジケーター */}
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 flex gap-2">
             {images.map((_, index) => (
               <button
                 key={index}
-                onClick={() => goTo(index)}
+                onClick={() => {
+                  setCurrentIndex(index);
+                  setAutoPlay(false);
+                }}
                 className={`w-2 h-2 rounded-full transition-all ${
-                  index === currentIndex ? 'bg-white w-6' : 'bg-white/50'
+                  index === currentIndex ? 'bg-white w-8' : 'bg-white/50'
                 }`}
+                aria-label={`スライド ${index + 1} に移動`}
               />
             ))}
           </div>
         </>
+      )}
+
+      {/* スライド数表示 */}
+      {images.length > 1 && (
+        <div className="absolute top-4 right-4 z-10 bg-black/50 text-white px-3 py-1 rounded text-sm">
+          {currentIndex + 1} / {images.length}
+        </div>
       )}
     </div>
   );
