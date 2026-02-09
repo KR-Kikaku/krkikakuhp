@@ -34,7 +34,7 @@ export default function NewsSection() {
             <div
               key={item.id}
               onClick={() => handleNewsClick(item.slug)}
-              className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition-shadow"
+              className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition-shadow max-w-[60%] md:max-w-none mx-auto"
             >
               <div className="relative w-full" style={{ paddingBottom: '100%' }}>
                 <img
