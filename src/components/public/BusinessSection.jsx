@@ -1,144 +1,93 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { base44 } from '@/api/base44Client';
 
 export default function BusinessSection() {
-  const [settings, setSettings] = useState(null);
   const [businesses, setBusinesses] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [bannerUrl, setBannerUrl] = useState('');
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setIsLoading(true);
-    setSettings(null);
-    setBusinesses([]);
     const fetchData = async () => {
-      const [settingsData, businessData] = await Promise.all([
-        base44.entities.SiteSettings.list(),
-        base44.entities.Business.filter({ is_active: true }, 'order')
-      ]);
-      if (settingsData.length > 0) setSettings(settingsData[0]);
-      setBusinesses(businessData);
-      setIsLoading(false);
+      try {
+        const [businessData, settingsData] = await Promise.all([
+          base44.entities.Business.list('order'),
+          base44.entities.SiteSettings.list()
+        ]);
+
+        const activeBusiness = businessData.filter(b => b.is_active !== false);
+        setBusinesses(activeBusiness);
+
+        if (settingsData.length > 0) {
+          setBannerUrl(settingsData[0].work_banner_url || '');
+        }
+      } finally {
+        setLoading(false);
+      }
     };
     fetchData();
   }, []);
 
-  if (isLoading) {
-    return (
-      <section id="work" className="notranslate" translate="no" lang="ja">
-        <div className="relative w-full aspect-[16/6] sm:aspect-[16/5] bg-gray-100" />
-        <div className="py-20 md:py-32 bg-white">
-          <div className="max-w-5xl mx-auto px-4">
-            <div className="h-32 bg-gray-100 rounded animate-pulse" />
-          </div>
-        </div>
-      </section>
-    );
-  }
+  if (loading) return <div className="h-96 bg-gray-100" />;
 
   return (
-    <section id="work" className="notranslate" translate="no" lang="ja">
-      {/* Banner */}
-      <div className="relative w-full aspect-[16/6] sm:aspect-[16/5] overflow-hidden">
-        <img
-          src={settings?.work_banner_url || "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1600&h=400&fit=crop"}
-          alt="私たちの仕事"
-          className="w-full h-full object-cover"
-        />
-      </div>
+    <section id="business" className="py-16 md:py-24 bg-white">
+      <div className="max-w-[1280px] mx-auto px-4 md:px-6">
+        {/* バナー */}
+        {bannerUrl && (
+          <div className="mb-12 rounded-lg overflow-hidden">
+            <img src={bannerUrl} alt="事業バナー" className="w-full h-auto object-cover" />
+          </div>
+        )}
 
-      {/* Business Items */}
-      <div className="py-20 md:py-32 bg-white">
-        <div className="max-w-5xl mx-auto px-4">
-          {businesses.length > 0 ? (
-            businesses.map((business, index) => (
-              <div key={business.id} className="mb-20 last:mb-0">
-                <div className="flex items-start gap-6 mb-8">
-                  <span className="text-4xl md:text-5xl font-light text-gray-300">
-                    {String(index + 1).padStart(2, '0')}
-                  </span>
-                  <div>
-                    {business.title_link ? (
-                      <a
-                        href={business.title_link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-xl md:text-2xl font-medium text-gray-800 hover:text-blue-600 transition-colors"
-                      >
-                        {business.title}
-                      </a>
-                    ) : (
-                      <h3 className="text-xl md:text-2xl font-medium text-gray-800">
-                        {business.title}
-                      </h3>
-                    )}
-                    <p className="mt-4 text-gray-600 leading-relaxed whitespace-pre-wrap">
-                      {business.description}
-                    </p>
-                  </div>
-                </div>
+        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-12">私たちの仕事</h2>
 
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+          {businesses.map((business, index) => (
+            <div key={business.id} className="flex gap-6">
+              {/* 番号 */}
+              <div className="flex-shrink-0">
+                <span className="text-5xl font-light text-gray-200">
+                  {String(index + 1).padStart(2, '0')}
+                </span>
+              </div>
+
+              {/* コンテンツ */}
+              <div className="flex-1">
+                <h3 className="text-xl font-bold text-gray-900 mb-2">
+                  {business.title_link ? (
+                    <a href={business.title_link} target="_blank" rel="noopener noreferrer" className="hover:text-blue-600 transition">
+                      {business.title}
+                    </a>
+                  ) : (
+                    business.title
+                  )}
+                </h3>
+                <p className="text-gray-600 text-sm leading-relaxed mb-4">
+                  {business.description}
+                </p>
+
+                {/* 画像 */}
                 {business.images && business.images.length > 0 && (
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 ml-0 md:ml-16">
-                    {business.images.slice(0, 3).map((img, imgIndex) => (
-                      img.link ? (
-                        <a
-                          key={imgIndex}
-                          href={img.link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="block"
-                        >
-                          <img
-                            src={img.url}
-                            alt={`${business.title} ${imgIndex + 1}`}
-                            className="w-full aspect-[4/3] object-cover rounded-lg hover:opacity-90 transition-opacity"
-                          />
-                        </a>
-                      ) : (
+                  <div className="flex gap-3">
+                    {business.images.map((img, i) => (
+                      <a
+                        key={i}
+                        href={img.link || '#'}
+                        target={img.link ? '_blank' : undefined}
+                        rel={img.link ? 'noopener noreferrer' : undefined}
+                      >
                         <img
-                          key={imgIndex}
                           src={img.url}
-                          alt={`${business.title} ${imgIndex + 1}`}
-                          className="w-full aspect-[4/3] object-cover rounded-lg"
+                          alt={`${business.title} ${i + 1}`}
+                          className="w-24 h-24 object-cover rounded cursor-pointer hover:opacity-80 transition"
                         />
-                      )
+                      </a>
                     ))}
                   </div>
                 )}
               </div>
-            ))
-          ) : (
-            <div className="mb-20">
-              <div className="flex items-start gap-6 mb-8">
-                <span className="text-4xl md:text-5xl font-light text-gray-300">01</span>
-                <div>
-                  <h3 className="text-xl md:text-2xl font-medium text-gray-800">
-                    マッチングサービス「スキピ」
-                  </h3>
-                  <p className="mt-4 text-gray-600 leading-relaxed">
-                    2025年12月より、マッチングサービス「スキピ」の運営を引き継いでおります。人生を一緒に楽しめる相手と巡りあうお手伝いが出来るように、日々改善しながら、心を込めて運営しております。
-                  </p>
-                </div>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 ml-0 md:ml-16">
-                <img
-                  src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400&h=300&fit=crop"
-                  alt="Service 1"
-                  className="w-full aspect-[4/3] object-cover rounded-lg"
-                />
-                <img
-                  src="https://images.unsplash.com/photo-1551434678-e076c223a692?w=400&h=300&fit=crop"
-                  alt="Service 2"
-                  className="w-full aspect-[4/3] object-cover rounded-lg"
-                />
-                <img
-                  src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=400&h=300&fit=crop"
-                  alt="Service 3"
-                  className="w-full aspect-[4/3] object-cover rounded-lg"
-                />
-              </div>
             </div>
-          )}
+          ))}
         </div>
       </div>
     </section>
