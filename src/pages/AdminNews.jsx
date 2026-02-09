@@ -298,6 +298,15 @@ export default function AdminNews() {
               inputId="coverImage"
             />
 
+            <ImageUploadField
+              label="サムネイル画像"
+              value={formData.thumbnail_image}
+              onChange={handleThumbnailUpload}
+              isUploading={isUploading}
+              recommendedSize="推奨サイズ: 横 400-500px、縦 300-400px"
+              inputId="thumbnailImage"
+            />
+
             <div>
               <Label>本文</Label>
               <div className="mt-2">
