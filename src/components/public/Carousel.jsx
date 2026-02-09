@@ -115,13 +115,6 @@ export default function Carousel() {
           </div>
         </>
       )}
-
-      {/* スライド数表示 */}
-      {images.length > 1 && (
-        <div className="absolute top-4 right-4 z-10 bg-black/50 text-white px-3 py-1 rounded text-sm">
-          {currentIndex + 1} / {images.length}
-        </div>
-      )}
     </div>
   );
 }
