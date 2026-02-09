@@ -34,14 +34,16 @@ export default function NewsSection() {
             <div
               key={item.id}
               onClick={() => handleNewsClick(item.slug)}
-              className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition-shadow max-w-[60%] md:max-w-none mx-auto"
+              className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition-shadow"
             >
-              <div className="relative w-full" style={{ paddingBottom: '100%' }}>
-                <img
-                  src={item.thumbnail_image || item.cover_image}
-                  alt={item.title}
-                  className="absolute inset-0 w-full h-full object-cover"
-                />
+              <div className="w-[60%] md:w-full mx-auto">
+                <div className="relative w-full" style={{ paddingBottom: '100%' }}>
+                  <img
+                    src={item.thumbnail_image || item.cover_image}
+                    alt={item.title}
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                </div>
               </div>
               <div className="p-4">
                 <div className="flex items-center gap-2 text-xs text-gray-500 mb-2">
