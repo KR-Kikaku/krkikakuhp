@@ -31,11 +31,11 @@ export default function Footer({ onNavigate }) {
 
   return (
     <footer className="w-full bg-gray-50 border-t border-gray-200 mt-16 md:mt-24">
-      <div className="max-w-[1280px] mx-auto px-4 py-12 md:py-16">
+      <div className="py-12 md:py-16">
         {/* Footer Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-16 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-16 mb-12 px-4 md:px-0 md:max-w-[1280px] md:mx-auto">
           {/* Logo and Company Info */}
-          <div className="space-y-4">
+          <div className="space-y-4 md:pl-12">
             <button
               onClick={handleLogoClick}
               className="hover:opacity-70 transition-opacity duration-200 active:scale-95"
@@ -80,7 +80,7 @@ export default function Footer({ onNavigate }) {
           </div>
 
           {/* Additional Links */}
-          <div>
+          <div className="md:pr-12">
             <h3 className="font-semibold text-gray-900 mb-4 text-sm">その他</h3>
             <nav className="space-y-3">
               <button
@@ -100,7 +100,7 @@ export default function Footer({ onNavigate }) {
         </div>
 
         {/* Bottom Section */}
-        <div className="border-t border-gray-200 pt-8">
+        <div className="border-t border-gray-200 pt-8 px-4 md:max-w-[1280px] md:mx-auto">
           <div className="text-center text-xs text-gray-500">
             <p>&copy; {new Date().getFullYear()} {settings?.company_name || 'Company'}. All rights reserved.</p>
           </div>
