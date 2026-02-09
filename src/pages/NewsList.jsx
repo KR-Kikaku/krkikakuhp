@@ -44,7 +44,7 @@ export default function NewsList() {
                     <img
                       src={item.cover_image}
                       alt={item.title}
-                      className="w-full md:w-40 h-32 object-cover rounded-lg"
+                      className="w-32 h-24 md:w-40 md:h-32 object-cover rounded-lg flex-shrink-0"
                     />
                   )}
                   <div className="flex-1">
