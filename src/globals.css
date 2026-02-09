@@ -39,19 +39,19 @@ p, div, span, h1, h2, h3, h4, h5, h6, li {
 /* 1. 大見出し (h1) - 太字 */
 h1 {
   font-size: 2.5em;
-  font-weight: 600;
+  font-weight: 600 !important;
 }
 
 /* 2. 中見出し (h2) - セクションタイトル - 太字 */
 h2 {
   font-size: 2em;
-  font-weight: 600;
+  font-weight: 600 !important;
 }
 
 /* 3. 小見出し (h3) - サブタイトル - 太字 */
 h3 {
   font-size: 1.25em;
-  font-weight: 600;
+  font-weight: 600 !important;
 }
 
 /* 4. 本文テキスト (body/p) - デフォルト 1em - 通常 */
