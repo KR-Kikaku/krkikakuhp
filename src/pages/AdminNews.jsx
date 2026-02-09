@@ -35,6 +35,7 @@ const INITIAL_FORM_STATE = {
   slug: '',
   content: '',
   cover_image: '',
+  thumbnail_image: '',
   category: 'お知らせ',
   status: 'draft',
   publish_date: '',
