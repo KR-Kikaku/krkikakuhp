@@ -20,10 +20,10 @@ export default function HomeCarousel() {
             <CarouselItem key={image.id}>
               {image.link_url ? (
                 <a href={image.link_url} target="_blank" rel="noopener noreferrer">
-                  <img src={image.image_url} alt="" className="w-full aspect-[1280/500] object-cover rounded" />
+                  <img src={image.image_url} alt="" className="w-full aspect-[1280/750] object-cover rounded" />
                 </a>
               ) : (
-                <img src={image.image_url} alt="" className="w-full aspect-[1280/500] object-cover rounded" />
+                <img src={image.image_url} alt="" className="w-full aspect-[1280/750] object-cover rounded" />
               )}
             </CarouselItem>
           ))}
