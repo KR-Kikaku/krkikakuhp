@@ -34,6 +34,16 @@ p, div, span, h1, h2, h3, h4, h5, h6, li {
   word-break: break-word;
 }
 
+/* スマートフォン表示でのh2, h3フォントサイズ調整 */
+@media (max-width: 768px) {
+  h2 {
+    font-size: 75% !important;
+  }
+  h3 {
+    font-size: 75% !important;
+  }
+}
+
 /* プライバシーポリシーのスタイル統一 */
 .privacy-policy-content {
   line-height: 1.75;

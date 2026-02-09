@@ -28,7 +28,7 @@ export default function NewsSection() {
   return (
     <section id="news" className="py-12 md:py-16 px-4 md:px-8 bg-gray-50">
       <div className="max-w-6xl mx-auto">
-        <h2 className="text-2xl md:text-3xl font-bold text-center mb-8 md:mb-12">お知らせ</h2>
+        <h2 className="text-lg md:text-3xl font-bold text-center mb-8 md:mb-12">お知らせ</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
           {news.map((item) => (
             <div
@@ -36,7 +36,7 @@ export default function NewsSection() {
               onClick={() => handleNewsClick(item.slug)}
               className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition-shadow"
             >
-              <div className="w-[60%] md:w-full mx-auto">
+              <div className="w-[36%] md:w-full mx-auto">
                 <div className="relative w-full" style={{ paddingBottom: '100%' }}>
                   <img
                     src={item.thumbnail_image || item.cover_image}
@@ -54,7 +54,7 @@ export default function NewsSection() {
                     {new Date(item.publish_date).toLocaleDateString('ja-JP')}
                   </span>
                 </div>
-                <h3 className="text-base md:text-lg font-semibold line-clamp-2">
+                <h3 className="text-xs md:text-lg font-semibold line-clamp-2">
                   {item.title}
                 </h3>
               </div>
